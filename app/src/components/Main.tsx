@@ -2,16 +2,17 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import PageNotFound from './NotFountComponent';
 import Home from './Home';
+import Nav from './Nav';
 
 
-const Main = () =>
+const Main: React.FC = () =>
 {
 
     const [ navVisibility, setNavVisibility ] = useState( true );
 
     return (
         <Router>
-            <nav style={ navVisibility ? {} : { display: 'none' } }>Navbar here</nav>
+            <Nav isVisible={ navVisibility } />
             <Switch>
                 <Route exact path='/' component={ Home } />
                 <Route>
