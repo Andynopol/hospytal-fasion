@@ -11,10 +11,10 @@ import DrowerMenu from './DrowerMenu';
 import Spacer from './Spacer';
 
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles( ( theme ) => ( {
   relative: {
     position: 'relative',
-    [theme.breakpoints.up('lg')]: {
+    [ theme.breakpoints.up( 'lg' ) ]: {
       minHeight: '48px'
     },
   },
@@ -23,62 +23,75 @@ const useStyles = makeStyles((theme) => ({
   },
   growMobile: {
     display: 'flex',
-    [theme.breakpoints.up('lg')]: {
+    [ theme.breakpoints.up( 'lg' ) ]: {
       display: 'none',
     },
     flexGrow: 1,
   },
   menuButton: {
-    marginRight: theme.spacing(2),
+    marginRight: theme.spacing( 2 ),
   },
 
   sectionDesktop: {
     display: 'none',
-    [theme.breakpoints.up('md')]: {
+    [ theme.breakpoints.up( 'md' ) ]: {
       display: 'flex',
     },
   },
   sectionMobile: {
     display: 'flex',
-    [theme.breakpoints.up('md')]: {
+    [ theme.breakpoints.up( 'md' ) ]: {
       display: 'none',
     },
   },
-}));
+  invisible: {
+    display: 'none',
+  }
+} ) );
 
-const GoldAppBar = withStyles((theme) => ({
+const GoldAppBar = withStyles( ( theme ) => ( {
   root: {
     color: '#fafafa',
     backgroundColor: '#02203c',
     boxShadow: 'none',
   },
-}))(AppBar);
+} ) )( AppBar );
 
-export default function ButtonAppBar() {
+interface Props
+{
+  isVisible: boolean;
+}
+
+const ButtonAppBar: React.FC<Props> = ( props: Props ) =>
+{
   const classes = useStyles();
-  // const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const { isVisible } = props;
+  const [ open, setOpen ] = React.useState( false );
 
-  const handleDrawerOpen = () => {
-    setOpen(true);
+  const handleDrawerOpen = () =>
+  {
+    setOpen( true );
   };
 
-  const handleDrawerClose = () => {
-    setOpen(false);
+  const handleDrawerClose = () =>
+  {
+    setOpen( false );
   };
 
   return (
-    <div color="primary">
+    <div className={ isVisible ? '' : classes.invisible } color="primary">
       <GoldAppBar position="sticky">
-        <Toolbar className={classes.relative}>
-          <DrowerMenuButton open={open} onClick={handleDrawerOpen} />
+        <Toolbar className={ classes.relative }>
+          <DrowerMenuButton open={ open } onClick={ handleDrawerOpen } />
           <Logo />
           <NavMenu />
           <Spacer />
           <Account />
         </Toolbar>
-        <DrowerMenu open={open} closeMenu={handleDrawerClose} />
+        <DrowerMenu open={ open } closeMenu={ handleDrawerClose } />
       </GoldAppBar>
     </div >
   );
-}
+};
+
+export default ButtonAppBar;

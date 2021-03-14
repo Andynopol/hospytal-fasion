@@ -15,11 +15,12 @@ const useStyles = makeStyles( ( theme ) => ( {
     },
 } ) );
 
-const Logo = () => {
+const Logo = () =>
+{
     const classes = useStyles();
     return (
-        <Typography variant="h5" className={classes.title}>
-            Hot Web House
+        <Typography variant="h5" className={ classes.title }>
+            Logo
         </Typography>
     );
 };

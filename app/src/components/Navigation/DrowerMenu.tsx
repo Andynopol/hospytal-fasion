@@ -13,6 +13,8 @@ import { Link } from 'react-router-dom';
 
 const drawerWidth = 240;
 
+
+
 const useStyles = makeStyles( ( theme ) => ( {
     root: {
         display: 'flex',
@@ -75,27 +77,36 @@ const useStyles = makeStyles( ( theme ) => ( {
     }
 } ) );
 
-const DrowerMenu = ( props ) => {
+interface Props
+{
+    open: boolean;
+    closeMenu: () => void;
+}
+
+const DrowerMenu: React.FC<Props> = ( props: Props ) =>
+{
     const classes = useStyles();
     const theme = useTheme();
+    const { open, closeMenu } = props;
     return (
         <Drawer
-            className={classes.drawer}
+            className={ classes.drawer }
             variant="persistent"
             anchor="left"
-            open={props.open}
-            classes={{
+            open={ open }
+            classes={ {
                 paper: classes.drawerPaper,
-            }}
+            } }
         >
-            <div className={classes.drawerHeader}>
-                <IconButton onClick={props.closeMenu}>
-                    {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+            <div className={ classes.drawerHeader }>
+                <IconButton onClick={ closeMenu }>
+                    { theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon /> }
                 </IconButton>
             </div>
             <Divider />
             <List>
-                {[ 'Home', 'Services', 'Websites' ].map( ( text ) => {
+                { [ 'Home', 'Services', 'Websites' ].map( ( text ) =>
+                {
                     let path = '';
                     switch ( text )
                     {
@@ -113,21 +124,21 @@ const DrowerMenu = ( props ) => {
                         }
                     }
                     return (
-                        <Link className={classes.Link} to={path} key={text}>
-                            <ListItem button key={text}>
-                                <ListItemText primary={text} />
+                        <Link className={ classes.Link } to={ path } key={ text }>
+                            <ListItem button key={ text }>
+                                <ListItemText primary={ text } />
                             </ListItem>
                         </Link>
                     );
-                } )}
+                } ) }
             </List>
             <Divider />
             <List>
-                {[ 'Send mail', 'Account' ].map( ( text ) => (
-                    <ListItem button key={text}>
-                        <ListItemText primary={text} />
+                { [ 'Send mail', 'Account' ].map( ( text ) => (
+                    <ListItem button key={ text }>
+                        <ListItemText primary={ text } />
                     </ListItem>
-                ) )}
+                ) ) }
             </List>
         </Drawer>
     );

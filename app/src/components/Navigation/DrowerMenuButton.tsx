@@ -5,11 +5,11 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles( ( theme ) => ( {
     menuButton: {
-        marginRight: theme.spacing(2),
+        marginRight: theme.spacing( 2 ),
         display: 'block',
-        [theme.breakpoints.up('md')]: {
+        [ theme.breakpoints.up( 'md' ) ]: {
             display: 'none'
         }
     },
@@ -17,21 +17,28 @@ const useStyles = makeStyles((theme) => ({
         display: 'none',
     },
 
-}));
+} ) );
 
-const DrowerMenuButton = (props) => {
+interface Props
+{
+    onClick: () => void;
+    open: boolean;
+}
+
+const DrowerMenuButton: React.FC<Props> = ( props: Props ) =>
+{
     const classes = useStyles();
     return (
         <IconButton
             color="inherit"
             aria-label="open drawer"
-            onClick={props.onClick}
+            onClick={ props.onClick }
             edge="start"
-            className={clsx(classes.menuButton, props.open && classes.hide)}
+            className={ clsx( classes.menuButton, props.open && classes.hide ) }
         >
             <MenuIcon />
         </IconButton>
-    )
-}
+    );
+};
 
 export default DrowerMenuButton;
