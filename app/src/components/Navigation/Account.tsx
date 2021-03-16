@@ -1,9 +1,11 @@
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
+import { authentificationAction } from '../../actions';
 
 interface StyleMenuProps
 {
@@ -16,21 +18,27 @@ interface StyleMenuProps
 
 }
 
+type OptionsInterface = [ string, string ];
+
 const useStyles = makeStyles( ( theme ) => ( {
   icon: {
     color: '#fafafa',
   }
 } ) );
 
-const options = [
-  'Tube',
-  'Cams'
-];
+
 
 const ITEM_HEIGHT = 48;
 
+
 const LongMenu: React.FC = () =>
 {
+
+  const isLogged = useSelector( ( state: any ) => state.isLogged );
+  const dispatch = useDispatch();
+
+  const options: OptionsInterface = isLogged ? [ 'Account', 'Logout' ] : [ 'Login', 'Sign up' ];
+
   const [ anchorEl, setAnchorEl ] = React.useState( null );
   const open = Boolean( anchorEl );
 
@@ -38,8 +46,22 @@ const LongMenu: React.FC = () =>
 
   const handleClick = ( event: any ) =>
   {
-    console.log( typeof event.currentTarget );
     setAnchorEl( event.currentTarget );
+  };
+
+
+  const handleAccountMenuClick = ( event: any ) =>
+  {
+    handleClose();
+    // switch ( event.target.innerText )
+    // {
+    //   case 'Login':
+    //     dispatch( authentificationAction.login() );
+    //     break;
+    //   case 'Logout':
+    //     dispatch( authentificationAction.logout() );
+    //     break;
+    // }
   };
 
   const handleClose = () =>
@@ -92,7 +114,7 @@ const LongMenu: React.FC = () =>
         } }
       >
         { options.map( ( option ) => (
-          <MenuItem key={ option } selected={ option === 'Pyxis' } onClick={ handleClose }>
+          <MenuItem value={ option } key={ option } selected={ option === 'Pyxis' } onClick={ handleAccountMenuClick }>
             {option }
           </MenuItem>
         ) ) }

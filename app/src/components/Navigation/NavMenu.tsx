@@ -33,20 +33,21 @@ const useStyles = makeStyles( ( theme ) => ( {
     },
 } ) );
 
-const NavMenu = () => {
+const NavMenu = () =>
+{
     const classes = useStyles();
     return (
         <Grid container>
-            <ul className={classes.List}>
-                <Link className={classes.Link} to='/'>
+            <ul className={ classes.List }>
+                <Link className={ classes.Link } to='/'>
                     <li>Home</li>
                 </Link>
-                <Link className={classes.Link} to='/services'>
+                {/* <Link className={classes.Link} to='/services'>
                     <li>Services</li>
                 </Link>
                 <Link className={classes.Link} to='/websites'>
                     <li>Websites</li>
-                </Link>
+                </Link> */}
             </ul >
         </Grid>
     );
