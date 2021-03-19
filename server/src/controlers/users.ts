@@ -7,7 +7,7 @@ export const getUser = async ( req: any, res: any ) =>
     const user = Users.find();
     try
     {
-
+        
     } catch ( error )
     {
         res.status( 501 ).json( { status: 'fail', message: 'Server error', error: error.message } );
