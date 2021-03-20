@@ -4,6 +4,7 @@ import { Grid } from '@material-ui/core';
 import PageNotFound from './NotFountComponent';
 import Home from './Home';
 import Nav from './Navigation';
+import AddProduct from './AddProduct';
 
 
 const Main: React.FC = () =>
@@ -19,6 +20,7 @@ const Main: React.FC = () =>
                 <Grid item xs={ 12 } md={ 10 } lg={ 8 }>
                     <Switch>
                         <Route exact path='/' component={ Home } />
+                        <Route exact path='/admin/add-product' component={ AddProduct } />
                         <Route>
                             <PageNotFound showNav={ setNavVisibility } />
                         </Route>

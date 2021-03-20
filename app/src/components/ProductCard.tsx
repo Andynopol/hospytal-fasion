@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import { useSelector } from 'react-redux';
-import {
+import
+{
     Grid,
     Card,
     Avatar,
@@ -17,16 +18,16 @@ import {
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import { makeStyles } from '@material-ui/core/styles';
 // import ShareIcon from '@material-ui/icons/Share';
-import ShoppingCartSharpIcon from '@material-ui/icons/ShoppingCartSharp';
+import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { red } from '@material-ui/core/colors';
 import CropOriginalIcon from '@material-ui/icons/CropOriginal';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles( ( theme ) => ( {
     root: {
         width: '100%',
-        [theme.breakpoints.up('md')]: {
+        [ theme.breakpoints.up( 'md' ) ]: {
             maxWidth: 345,
         }
     },
@@ -40,87 +41,95 @@ const useStyles = makeStyles((theme) => ({
     expand: {
         transform: 'rotate(0deg)',
         marginLeft: 'auto',
-        transition: theme.transitions.create('transform', {
+        transition: theme.transitions.create( 'transform', {
             duration: theme.transitions.duration.shortest,
-        }),
+        } ),
     },
     expandOpen: {
         transform: 'rotate(180deg)',
     },
     avatar: {
-        backgroundColor: red[500],
+        backgroundColor: red[ 500 ],
     },
-}));
+    description: {
+        overflow: 'hidden',
+        // wordWrap: 'normal'
+    }
+} ) );
 
-interface Props {
+interface Props
+{
     name: string;
     description?: string;
     details?: string;
     promotion?: string | number;
     price: number;
-    currency: string[];
     piecesLeft?: number;
     src?: string;
 }
 
-const ProductCard = (props: Props) => {
+const ProductCard = ( props: Props ) =>
+{
 
-    const isLogged = useSelector((state: any) => state.isLogged);
+    const isLogged = useSelector( ( state: any ) => state.isLogged );
     const classes = useStyles();
-    const { name, description, details, promotion, price, currency, piecesLeft, src } = props;
-    const [expanded, setExpanded] = useState(false);
+    const { name, description, details, promotion, price, piecesLeft, src } = props;
+    const [ expanded, setExpanded ] = useState( false );
 
 
-    const handleExpandClick = () => {
-        setExpanded(!expanded);
+    const handleExpandClick = () =>
+    {
+        setExpanded( !expanded );
     };
 
     return (
-        <Card className={classes.root}>
+        <Card className={ classes.root }>
             <CardHeader
                 action={
                     <IconButton aria-label="settings">
                         <MoreVertIcon />
                     </IconButton>
                 }
-                title={name}
-                subheader={`${price} ${currency[0]}`}
+                title={ name }
+                subheader={ `${ price } RON` }
             />
             <CardMedia
-                className={classes.media}
-                children={<CropOriginalIcon />}
-                image={src}
-                title="Paella dish"
+                className={ classes.media }
+                children={ <CropOriginalIcon /> }
+                image={ src }
+                title="asd"
             />
-            <CardContent>
-                <Typography variant="body2" color="textSecondary" component="p">
-                    {description}
+            <CardContent className={ classes.description }>
+                <Typography variant="body2" display='block' color="textSecondary" component="p">
+                    { description }
                 </Typography>
             </CardContent>
             <CardActions disableSpacing>
-                {isLogged ?
+                { isLogged ?
                     <IconButton aria-label="add to favorites">
                         <FavoriteIcon />
                     </IconButton> :
-                    null}
+                    null }
                 <IconButton aria-label="share">
-                    <ShoppingCartSharpIcon />
+                    <AddShoppingCartIcon />
                 </IconButton>
-                {details ?
+                { details ?
                     <IconButton
-                        className={clsx(classes.expand, {
-                            [classes.expandOpen]: expanded,
-                        })}
-                        onClick={handleExpandClick}
-                        aria-expanded={expanded}
+                        className={ clsx( classes.expand, {
+                            [ classes.expandOpen ]: expanded,
+                        } ) }
+                        onClick={ handleExpandClick }
+                        aria-expanded={ expanded }
                         aria-label="show more"
                     >
                         <ExpandMoreIcon />
-                    </IconButton> : null}
+                    </IconButton> : null }
             </CardActions>
-            <Collapse in={expanded} timeout="auto" unmountOnExit>
+            <Collapse in={ expanded } timeout="auto" unmountOnExit>
                 <CardContent>
-                    {details}
+                    <Typography variant="body2" component='p' gutterBottom display='block' color="textSecondary">
+                        { details }
+                    </Typography>
                 </CardContent>
             </Collapse>
         </Card>
