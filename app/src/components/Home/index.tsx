@@ -1,12 +1,10 @@
 import React from 'react';
 
-interface Props
-{
+interface Props {
 
 }
 
-const Home = ( props: Props ) =>
-{
+const Home = (props: Props) => {
     return (
         <div>
             Home
