@@ -37,7 +37,15 @@ const ProductAdder = ( props: Props ) =>
     const handleSubmit = ( ev: any ) =>
     {
         ev.preventDefault();
-        const newProduct = { name: cardName, details: cardDetails, description: cardDescription, price: cardPrice, promotion: cardPromotion, piecesLeft: cardPieces, src: cardSrc };
+        const newProduct = {
+            name: cardName,
+            price: cardPrice,
+            description: cardDescription,
+            details: cardDetails,
+            sale: cardPromotion,
+            stock: cardPieces,
+            src: cardSrc,
+        };
 
         dispatch( productsActions.post( newProduct ) );
     };

@@ -4,24 +4,17 @@ interface Product
 {
     name: string;
     price: number;
-    src: string;
-    promotion?: number;
-    piecesLeft?: number;
     description?: string;
     details?: string;
+    sale?: number;
+    stock?: number;
+    src: string;
 }
 
 const url = 'http://localhost:5000/products';
 
-export const fetchProducts = () => axios.get( 'http://localhost:5000/products' );
-export const postProduct = ( newProduct: any ) =>
+export const fetchProducts = () => axios.get( '/products' );
+export const postProduct = ( newProduct: Product ) =>
 {
-    const options = {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify( newProduct )
-    };
-    return axios.post( `http://localhost:5000/products/add-product`, options );
+    return axios.post( `/products/add-product`, newProduct );
 };

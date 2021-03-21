@@ -5,9 +5,10 @@ interface ProductData extends Document
     name: string,
     price: string,
     description?: string,
+    details?: string,
     sale?: number,
     stock: number,
-    details?: string,
+    src: string,
 }
 
 const productSchema: mongoose.Schema = new mongoose.Schema( {
@@ -16,7 +17,8 @@ const productSchema: mongoose.Schema = new mongoose.Schema( {
     description: { type: String, default: '' },
     details: { type: String, default: '' },
     sale: { type: Number, default: 0 },
-    stock: { type: Number, default: 0, require: true }
+    stock: { type: Number, default: 0, require: true },
+    src: { type: String, default: '', require: true }
 } );
 
 

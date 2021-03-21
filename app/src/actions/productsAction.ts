@@ -7,6 +7,17 @@ interface Action
     payload: [];
 }
 
+interface Product
+{
+    name: string;
+    price: number;
+    description?: string;
+    details?: string;
+    sale?: number;
+    stock?: number;
+    src: string;
+}
+
 const fetchProducts = () => async ( dispatch: any ) =>
 {
 
@@ -23,7 +34,7 @@ const fetchProducts = () => async ( dispatch: any ) =>
 
 };
 
-const postProduct = ( product: any ) => async ( dispatch: any ) =>
+const postProduct = ( product: Product ) => async ( dispatch: any ) =>
 {
     try
     {

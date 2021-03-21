@@ -5,7 +5,8 @@ const productSchema = new mongoose.Schema({
     description: { type: String, default: '' },
     details: { type: String, default: '' },
     sale: { type: Number, default: 0 },
-    stock: { type: Number, default: 0, require: true }
+    stock: { type: Number, default: 0, require: true },
+    src: { type: String, default: '', require: true }
 });
 export default mongoose.model("product", productSchema);
 //# sourceMappingURL=product-schema.js.map
