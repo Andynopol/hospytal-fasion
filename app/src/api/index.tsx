@@ -13,8 +13,9 @@ interface Product
 
 const url = 'http://localhost:5000/products';
 
+
+//get products
 export const fetchProducts = () => axios.get( '/products' );
-export const postProduct = ( newProduct: Product ) =>
-{
-    return axios.post( `/products/add-product`, newProduct );
-};
+
+//send new product
+export const postProduct = ( newProduct: Product ) => axios.post( `/products/add-product`, newProduct );

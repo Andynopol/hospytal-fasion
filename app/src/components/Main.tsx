@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { Grid } from '@material-ui/core';
 import PageNotFound from './NotFountComponent';
@@ -9,6 +9,7 @@ import AddProduct from './AddProduct';
 
 const Main: React.FC = () =>
 {
+
 
     const [ navVisibility, setNavVisibility ] = useState( true );
 

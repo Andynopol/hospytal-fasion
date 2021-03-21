@@ -3,7 +3,7 @@ import mongoose, { Document } from 'mongoose';
 interface ProductData extends Document
 {
     name: string,
-    price: string,
+    price: number,
     description?: string,
     details?: string,
     sale?: number,
