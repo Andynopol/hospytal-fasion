@@ -20,15 +20,15 @@ const ENTRYPOINT = 'mongodb+srv://andy95:14karate@main-server.stch8.mongodb.net/
 app.use( express.static( path.join( __dirname, 'public' ) ) );
 
 
-// app.get( '/', function ( req, res )
-// {
-//     res.sendFile( path.join( __dirname, '../public', 'index.html' ) );
-// } );
-
-app.get( '/*', function ( req, res )
+app.get( '/', function ( req, res )
 {
     res.sendFile( path.join( __dirname, '../public', 'index.html' ) );
 } );
+
+// app.get( '/*', function ( req, res )
+// {
+//     res.sendFile( path.join( __dirname, '../public', 'index.html' ) );
+// } );
 
 
 
