@@ -6,13 +6,15 @@ interface ProductData extends Document
     price: string,
     description?: string,
     sale?: number,
-    inStock: boolean,
+    stock: number,
+    details?: string,
 }
 
 const productSchema: mongoose.Schema = new mongoose.Schema( {
     name: { type: String, require: true, unique: true },
     price: { type: Number, require: true, unique: false },
     description: { type: String, default: '' },
+    details: { type: String, default: '' },
     sale: { type: Number, default: 0 },
     stock: { type: Number, default: 0, require: true }
 } );

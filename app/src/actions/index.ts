@@ -1,4 +1,5 @@
 import { authentificationAction } from './authentificationAction';
+import { productsActions } from './productsAction';
 
-export { authentificationAction };
+export { authentificationAction, productsActions };
 

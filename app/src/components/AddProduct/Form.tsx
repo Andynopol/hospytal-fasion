@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { Dispatch } from 'react';
 import { TextField, Grid, Button } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SaveIcon from '@material-ui/icons/Save';
-import Icon from '@material-ui/core/Icon';
 
 
 const useStyles = makeStyles( ( theme: Theme ) => ( {
@@ -36,16 +35,33 @@ interface Props
     price: number;
     pieces: number;
     src: string;
-    change: ( ev: any, id: 'NAME' | 'DESCRIPTION' | 'DETAILS' | 'PROMOTION' | 'PIECES' | 'PRICE' | 'SRC' ) => void;
+    change: ( ev: any, id: 'NAME' | 'DESCRIPTION' | 'DETAILS' | 'PROMOTION' | 'PIECES' | 'PRICE' | 'SRC', forced?: boolean ) => void;
     clear: () => void;
+    send: ( ev: any ) => void;
 
 }
 
 const Form = ( props: Props ) =>
 {
-    const { name, description, details, promotion, pieces, price, src, change, clear } = props;
+    const { name, description, details, promotion, pieces, price, change, clear, send } = props;
 
     const classes = useStyles();
+
+
+    const setSrc = ( file: any ) =>
+    {
+        const reader = new FileReader();
+        if ( file )
+        {
+            reader.readAsDataURL( file );
+            reader.onload = () =>
+            {
+                const base64 = reader.result;
+                change( base64, "SRC", true );
+            };
+
+        }
+    };
 
 
     return (
@@ -141,8 +157,8 @@ const Form = ( props: Props ) =>
                     <input
                         type="file"
                         accept="image/*"
-                        onChange={ ev => change( ev, 'SRC' ) }
-                    // hidden
+                        onChange={ ev => setSrc( ev.target.files[ 0 ] ) }
+                        hidden
                     />
                 </Button>
             </Grid>
@@ -154,6 +170,7 @@ const Form = ( props: Props ) =>
                         color="primary"
                         className={ classes.button }
                         startIcon={ <SaveIcon /> }
+                        onClick={ ( ev ) => { send( ev ); } }
                     >
                         Save
                     </Button>

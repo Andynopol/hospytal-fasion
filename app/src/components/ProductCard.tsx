@@ -1,11 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import clsx from 'clsx';
 import { useSelector } from 'react-redux';
 import
 {
-    Grid,
     Card,
-    Avatar,
     CardHeader,
     IconButton,
     CardMedia,
@@ -73,7 +71,13 @@ const ProductCard = ( props: Props ) =>
 
     const isLogged = useSelector( ( state: any ) => state.isLogged );
     const classes = useStyles();
-    const { name, description, details, promotion, price, piecesLeft, src } = props;
+    const { name,
+        description,
+        details,
+        promotion,
+        price,
+        piecesLeft,
+        src } = props;
     const [ expanded, setExpanded ] = useState( false );
 
 

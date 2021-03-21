@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Grid } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import Item from './Item';
 import Form from './Form';
 import ProductCard from '../ProductCard';
+import { useDispatch } from 'react-redux';
+import { productsActions } from '../../actions';
 
 
 const useStyles = makeStyles( ( theme: Theme ) => ( {
@@ -21,6 +23,7 @@ const ProductAdder = ( props: Props ) =>
 {
 
     const classes = useStyles();
+    const dispatch = useDispatch();
 
     // const [ items, setItems ] = useState( [] );
     const [ cardName, setCardName ] = useState( '' );
@@ -30,6 +33,14 @@ const ProductAdder = ( props: Props ) =>
     const [ cardPrice, setCardPrice ] = useState( 0 );
     const [ cardPieces, setCardPieces ] = useState( 0 );
     const [ cardSrc, setCardSrc ] = useState( '' );
+
+    const handleSubmit = ( ev: any ) =>
+    {
+        ev.preventDefault();
+        const newProduct = { name: cardName, details: cardDetails, description: cardDescription, price: cardPrice, promotion: cardPromotion, piecesLeft: cardPieces, src: cardSrc };
+
+        dispatch( productsActions.post( newProduct ) );
+    };
 
 
     // TODO try to scale this shit!
@@ -50,7 +61,7 @@ const ProductAdder = ( props: Props ) =>
     //     );
     // };
 
-    const handleChanges = ( ev: any, identifier: string ) =>
+    const handleChanges = ( ev: any, identifier: string, forced?: boolean ) =>
     {
         switch ( identifier )
         {
@@ -88,9 +99,16 @@ const ProductAdder = ( props: Props ) =>
                 setCardPieces( parseInt( ev.target.value ) );
                 break;
             case 'SRC':
-                console.log( ev.target.value );
-                setCardSrc( ev.target.value );
+                if ( forced )
+                {
+                    if ( ev )
+                        setCardSrc( ev );
+                    break;
+                }
+                if ( ev.target.value )
+                    setCardSrc( ev.target.value );
                 break;
+
         }
 
     };
@@ -105,6 +123,11 @@ const ProductAdder = ( props: Props ) =>
         setCardDetails( '' );
         setCardSrc( '' );
     };
+
+    // useEffect( () =>
+    // {
+    //     console.log( cardSrc );
+    // }, [ cardSrc ] );
 
     return (
         <Grid container spacing={ 3 } className={ classes.root }>
@@ -130,6 +153,7 @@ const ProductAdder = ( props: Props ) =>
                     src={ cardSrc }
                     change={ handleChanges }
                     clear={ clearProductDetails }
+                    send={ handleSubmit }
                 />
             </Grid>
 
