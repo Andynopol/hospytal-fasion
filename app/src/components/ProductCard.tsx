@@ -95,7 +95,7 @@ const ProductCard = ( props: Props ) =>
             />
             <CardMedia
                 className={ classes.media }
-                children={ <CropOriginalIcon /> }
+                children={ src ? null : <CropOriginalIcon /> }
                 image={ src }
                 title="asd"
             />

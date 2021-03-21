@@ -88,6 +88,7 @@ const ProductAdder = ( props: Props ) =>
                 setCardPieces( parseInt( ev.target.value ) );
                 break;
             case 'SRC':
+                console.log( ev.target.value );
                 setCardSrc( ev.target.value );
                 break;
         }

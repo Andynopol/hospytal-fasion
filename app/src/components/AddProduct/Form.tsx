@@ -68,6 +68,7 @@ const Form = ( props: Props ) =>
                         shrink: true,
                     } }
                     value={ price }
+                    onFocus={ ( ev ) => ev.target.select() }
                     onChange={ ev => change( ev, 'PRICE' ) }
                 />
             </Grid>
@@ -81,6 +82,7 @@ const Form = ( props: Props ) =>
                     InputLabelProps={ {
                         shrink: true,
                     } }
+                    onFocus={ ( ev ) => ev.target.select() }
                     onChange={ ev => change( ev, 'PROMOTION' ) }
                 />
             </Grid>
@@ -94,6 +96,7 @@ const Form = ( props: Props ) =>
                     InputLabelProps={ {
                         shrink: true,
                     } }
+                    onFocus={ ( ev ) => ev.target.select() }
                     onChange={ ev => change( ev, 'PIECES' ) }
                 />
             </Grid>
@@ -122,13 +125,26 @@ const Form = ( props: Props ) =>
             </Grid>
 
             <Grid item xs={ 12 } className={ classes.textFieldWrapper }>
-                <TextField
+                {/* <TextField
                     className={ classes.textField }
                     label="Image"
                     type="text"
                     value={ src }
                     onChange={ ev => change( ev, 'SRC' ) }
-                />
+                /> */}
+
+                <Button
+                    variant="contained"
+                    component="label"
+                >
+                    Upload File
+                    <input
+                        type="file"
+                        accept="image/*"
+                        onChange={ ev => change( ev, 'SRC' ) }
+                    // hidden
+                    />
+                </Button>
             </Grid>
 
             <Grid container>
