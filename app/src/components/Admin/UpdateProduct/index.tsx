@@ -1,38 +1,37 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Grid } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
-import Item from './Item';
-import Form from './Form';
-import ProductCard from '../ProductCard';
-import { useDispatch } from 'react-redux';
-import { productsActions } from '../../actions';
 
+import Card from '../../ProductCard';
 
 const useStyles = makeStyles( ( theme: Theme ) => ( {
     root: {
-        paddingTop: '3rem',
+        marginTop: '4rem'
     }
 } ) );
 
 interface Props
 {
-
+    match: any;
 }
 
-const ProductAdder = ( props: Props ) =>
+const UpdateProduct = ( props: Props ) =>
 {
-
+    const { match } = props;
+    const product = useSelector( ( state: any ) => state.products.filter( ( item: any ) => item._id === match.params.id )[ 0 ] );
     const classes = useStyles();
     const dispatch = useDispatch();
 
-    // const [ items, setItems ] = useState( [] );
-    const [ cardName, setCardName ] = useState( '' );
-    const [ cardDescription, setCardDescription ] = useState( '' );
-    const [ cardDetails, setCardDetails ] = useState( '' );
-    const [ cardPromotion, setCardPromotion ] = useState( 0 );
-    const [ cardPrice, setCardPrice ] = useState( 0 );
-    const [ cardPieces, setCardPieces ] = useState( 0 );
-    const [ cardSrc, setCardSrc ] = useState( '' );
+    const [ cardName, setCardName ] = useState( product.name );
+    const [ cardPrice, setCardPrice ] = useState( product.price );
+    const [ cardDescription, setCardDescription ] = useState( product.description );
+    const [ cardDetails, setCardDetails ] = useState( product.details );
+    const [ cardPromotion, setCardPromotion ] = useState( product.sale );
+    const [ cardPieces, setCardPieces ] = useState( product.stock );
+    const [ cardSrc, setCardSrc ] = useState( product.src );
+
+
 
     const handleSubmit = ( ev: any ) =>
     {
@@ -47,27 +46,8 @@ const ProductAdder = ( props: Props ) =>
             src: cardSrc,
         };
 
-        dispatch( productsActions.post( newProduct ) );
+        // dispatch( productsActions.multipost( [ newProduct ] ) );
     };
-
-
-    // TODO try to scale this shit!
-    // const addNewItem = () =>
-    // {
-    //     items.push(
-    //         <Grid item xs={ 12 } md={ 6 }>
-    //             <ProductCard
-    //                 name={ cardName }
-    //                 description={ cardDescription }
-    //                 details={ cardDetails }
-    //                 promotion={ cardPromotion }
-    //                 price={ cardPrice }
-    //                 piecesLeft={ cardPieces }
-    //                 src={ cardSrc }
-    //             />
-    //         </Grid>
-    //     );
-    // };
 
     const handleChanges = ( ev: any, identifier: string, forced?: boolean ) =>
     {
@@ -123,50 +103,32 @@ const ProductAdder = ( props: Props ) =>
 
     const clearProductDetails = () =>
     {
-        setCardName( '' );
-        setCardPrice( 0 );
-        setCardPieces( 0 );
-        setCardPromotion( 0 );
-        setCardDescription( '' );
-        setCardDetails( '' );
-        setCardSrc( '' );
+        setCardName( product.name );
+        setCardPrice( product.price );
+        setCardPieces( product.stock );
+        setCardPromotion( product.sale );
+        setCardDescription( product.description );
+        setCardDetails( product.details );
+        setCardSrc( product.src );
     };
 
-    // useEffect( () =>
-    // {
-    //     console.log( cardSrc );
-    // }, [ cardSrc ] );
 
     return (
-        <Grid container spacing={ 3 } className={ classes.root }>
+        <Grid container spacing={ 2 } className={ classes.root }>
             <Grid item xs={ 12 } md={ 7 }>
-                <ProductCard
+                <Card
+                    _id={ product._id }
                     name={ cardName }
+                    price={ cardPrice }
                     description={ cardDescription }
                     details={ cardDetails }
-                    promotion={ cardPromotion }
-                    price={ cardPrice }
                     piecesLeft={ cardPieces }
-                    src={ cardSrc }
-                />
-            </Grid>
-            <Grid item xs={ 12 } md={ 5 }>
-                <Form
-                    name={ cardName }
-                    description={ cardDescription }
-                    details={ cardDetails }
                     promotion={ cardPromotion }
-                    price={ cardPrice }
-                    pieces={ cardPieces }
                     src={ cardSrc }
-                    change={ handleChanges }
-                    clear={ clearProductDetails }
-                    send={ handleSubmit }
                 />
             </Grid>
-
         </Grid>
     );
 };
 
-export default ProductAdder;
+export default UpdateProduct;

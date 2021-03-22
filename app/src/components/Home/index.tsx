@@ -51,6 +51,7 @@ const Home = () =>
     const items = products.map( ( product: Product ) =>
         <Grid item xs={ 12 } md={ 4 } key={ product._id }>
             <Card
+                _id={ product._id }
                 name={ product.name }
                 price={ product.price }
                 description={ product.description }

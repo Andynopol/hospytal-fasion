@@ -11,7 +11,7 @@ const productsReducer = ( state: any[] = [], action: Action ) =>
     {
         case 'GET':
             return action.payload;
-        case 'ADD-PRODUCT':
+        case 'ADD-PRODUCT' || 'ADD-PRODUCTS':
             return [ ...state, action.payload ];
         default:
             return state;

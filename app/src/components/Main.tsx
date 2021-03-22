@@ -4,7 +4,8 @@ import { Grid } from '@material-ui/core';
 import PageNotFound from './NotFountComponent';
 import Home from './Home';
 import Nav from './Navigation';
-import AddProduct from './AddProduct';
+import AddProduct from './Admin/AddProduct';
+import UpdateProduct from './Admin/UpdateProduct';
 
 
 const Main: React.FC = () =>
@@ -22,7 +23,8 @@ const Main: React.FC = () =>
                     <Switch>
                         <Route exact path='/' component={ Home } />
                         <Route exact path='/admin/add-product' component={ AddProduct } />
-                        <Route>
+                        <Route path='/admin/product/:id' component={ UpdateProduct } />
+                        <Route path='*'>
                             <PageNotFound showNav={ setNavVisibility } />
                         </Route>
                     </Switch>

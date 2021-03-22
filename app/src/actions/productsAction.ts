@@ -48,6 +48,20 @@ const postProduct = ( product: Product ) => async ( dispatch: any ) =>
     }
 };
 
-const productsActions = { get: fetchProducts, post: postProduct };
+const postProducts = ( products: Product[] ) => async ( dispatch: any ) =>
+{
+    try
+    {
+        const { data } = await API.postProducts( products );
+        console.log( data );
+
+        dispatch( { type: "ADD-PRODUCTS", payload: data } );
+    } catch ( error )
+    {
+        console.log( error );
+    }
+};
+
+const productsActions = { get: fetchProducts, post: postProduct, multipost: postProducts };
 
 export { productsActions };

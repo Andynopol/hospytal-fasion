@@ -19,3 +19,7 @@ export const fetchProducts = () => axios.get( '/products' );
 
 //send new product
 export const postProduct = ( newProduct: Product ) => axios.post( `/products/add-product`, newProduct );
+
+export const postProducts = ( newProducts: Product[] ) => axios.post( `/products/add-products`, newProducts );
+
+// export const deleteProduct = ( product: Product ) => axios.;

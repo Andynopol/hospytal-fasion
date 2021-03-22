@@ -21,6 +21,8 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { red } from '@material-ui/core/colors';
 import CropOriginalIcon from '@material-ui/icons/CropOriginal';
+import DeleteIcon from '@material-ui/icons/Delete';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles( ( theme ) => ( {
     root: {
@@ -57,6 +59,7 @@ const useStyles = makeStyles( ( theme ) => ( {
 
 interface Props
 {
+    _id: string;
     name: string;
     description?: string;
     details?: string;
@@ -71,7 +74,9 @@ const ProductCard = ( props: Props ) =>
 
     const isLogged = useSelector( ( state: any ) => state.isLogged );
     const classes = useStyles();
-    const { name,
+    const {
+        _id,
+        name,
         description,
         details,
         promotion,
@@ -86,13 +91,20 @@ const ProductCard = ( props: Props ) =>
         setExpanded( !expanded );
     };
 
+    const deteleItemHandler = ( id: string ) =>
+    {
+        console.log( id );
+    };
+
     return (
         <Card className={ classes.root }>
             <CardHeader
                 action={
-                    <IconButton aria-label="settings">
-                        <MoreVertIcon />
-                    </IconButton>
+                    <Link to={ `/admin/product/${ _id }` }>
+                        <IconButton aria-label="settings">
+                            <MoreVertIcon />
+                        </IconButton>
+                    </Link>
                 }
                 title={ name }
                 subheader={ `${ price } RON` }
@@ -114,6 +126,9 @@ const ProductCard = ( props: Props ) =>
                         <FavoriteIcon />
                     </IconButton> :
                     null }
+                <IconButton aria-label="delete" onClick={ () => deteleItemHandler( _id ) }>
+                    <DeleteIcon />
+                </IconButton>
                 <IconButton aria-label="share">
                     <AddShoppingCartIcon />
                 </IconButton>
