@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import
 {
     Card,
@@ -15,14 +15,15 @@ import
 } from '@material-ui/core';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import { makeStyles } from '@material-ui/core/styles';
-// import ShareIcon from '@material-ui/icons/Share';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { red } from '@material-ui/core/colors';
-import CropOriginalIcon from '@material-ui/icons/CropOriginal';
+import BrokenImageIcon from '@material-ui/icons/BrokenImage';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { Link } from 'react-router-dom';
+
+import { productsActions } from '../actions';
 
 const useStyles = makeStyles( ( theme ) => ( {
     root: {
@@ -56,8 +57,8 @@ const useStyles = makeStyles( ( theme ) => ( {
         // wordWrap: 'normal'
     },
     icon: {
+        top: '-90px',
         position: 'relative',
-        top: '-30%',
     }
 } ) );
 
@@ -77,6 +78,7 @@ interface Props
 const ProductCard = ( props: Props ) =>
 {
 
+    const dispatch = useDispatch();
     const isLogged = useSelector( ( state: any ) => state.isLogged );
     const classes = useStyles();
     const {
@@ -102,7 +104,7 @@ const ProductCard = ( props: Props ) =>
     {
         if ( active )
         {
-            console.log( id );
+            dispatch( productsActions.delete( id ) );
         }
     };
 
@@ -125,7 +127,7 @@ const ProductCard = ( props: Props ) =>
             />
             <CardMedia
                 className={ classes.media }
-                children={ src ? null : <CropOriginalIcon className={ classes.icon } /> }
+                children={ src ? null : <BrokenImageIcon className={ classes.icon } /> }
                 image={ src }
                 title="asd"
             />

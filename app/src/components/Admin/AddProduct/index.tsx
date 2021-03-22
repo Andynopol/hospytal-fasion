@@ -35,22 +35,9 @@ const ProductAdder = ( props: Props ) =>
     const [ cardSrc, setCardSrc ] = useState( '' );
 
 
-    // TODO make it abe to send multiple items
-    const handleSubmit = ( ev: any ) =>
-    {
-        ev.preventDefault();
-        const newProduct = {
-            name: cardName,
-            price: cardPrice,
-            description: cardDescription,
-            details: cardDetails,
-            sale: cardPromotion,
-            stock: cardPieces,
-            src: cardSrc,
-        };
 
-        dispatch( productsActions.multipost( [ newProduct ] ) );
-    };
+
+    // handles all changes in the form and updates the fake product card
 
     const handleChanges = ( ev: any, identifier: string, forced?: boolean ) =>
     {
@@ -104,6 +91,23 @@ const ProductAdder = ( props: Props ) =>
 
     };
 
+    // TODO make it abe to send multiple items
+    const handleSubmit = ( ev: any ) =>
+    {
+        ev.preventDefault();
+        const newProduct = {
+            name: cardName,
+            price: cardPrice,
+            description: cardDescription,
+            details: cardDetails,
+            sale: cardPromotion,
+            stock: cardPieces,
+            src: cardSrc,
+        };
+
+        dispatch( productsActions.multipost( [ newProduct ] ) );
+    };
+
     const clearProductDetails = () =>
     {
         setCardName( '' );
@@ -115,10 +119,6 @@ const ProductAdder = ( props: Props ) =>
         setCardSrc( '' );
     };
 
-    // useEffect( () =>
-    // {
-    //     console.log( cardSrc );
-    // }, [ cardSrc ] );
 
     return (
         <Grid container spacing={ 3 } className={ classes.root }>

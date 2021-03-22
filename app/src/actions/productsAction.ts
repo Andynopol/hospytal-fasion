@@ -62,6 +62,37 @@ const postProducts = ( products: Product[] ) => async ( dispatch: any ) =>
     }
 };
 
-const productsActions = { get: fetchProducts, post: postProduct, multipost: postProducts };
+const updateProduct = ( id: 'string', product: Product ) => async ( dispatch: any ) =>
+{
+    try
+    {
+        const { data } = await API.patchProduct( id, product );
+        console.log( data );
+        dispatch( { type: 'UPDATE', payload: data } );
+    } catch ( error )
+    {
+        console.log( error );
+    }
+};
+
+const deleteProduct = ( id: string ) => async ( dispatch: any ) =>
+{
+    try
+    {
+        const { data } = await API.deleteProduct( id );
+        console.log( data );
+        if ( data.status !== 'success' )
+        {
+            alert( "Something whent whrong!" );
+            return;
+        }
+        dispatch( { type: 'DELETE', payload: id } );
+    } catch ( error )
+    {
+        console.log( error );
+    }
+};
+
+const productsActions = { get: fetchProducts, post: postProduct, multipost: postProducts, update: updateProduct, delete: deleteProduct };
 
 export { productsActions };

@@ -37,13 +37,13 @@ interface Props
     src: string;
     change: ( ev: any, id: 'NAME' | 'DESCRIPTION' | 'DETAILS' | 'PROMOTION' | 'PIECES' | 'PRICE' | 'SRC', forced?: boolean ) => void;
     reset: () => void;
-    send: ( ev: any ) => void;
+    update: ( ev: any ) => void;
 
 }
 
 const Form = ( props: Props ) =>
 {
-    const { name, description, details, promotion, pieces, price, change, reset, send } = props;
+    const { name, description, details, promotion, pieces, price, change, reset, update } = props;
 
     const classes = useStyles();
 
@@ -170,7 +170,7 @@ const Form = ( props: Props ) =>
                         color="primary"
                         className={ classes.button }
                         startIcon={ <SaveIcon /> }
-                        onClick={ ( ev ) => { send( ev ); } }
+                        onClick={ ( ev ) => { update( ev ); } }
                     >
                         Save
                     </Button>

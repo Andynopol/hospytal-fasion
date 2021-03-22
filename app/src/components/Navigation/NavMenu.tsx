@@ -2,6 +2,8 @@ import React from 'react';
 import { Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
+import HomeRoundedIcon from '@material-ui/icons/HomeRounded';
+import QueueRoundedIcon from '@material-ui/icons/QueueRounded';
 
 const useStyles = makeStyles( ( theme ) => ( {
     List: {
@@ -31,6 +33,11 @@ const useStyles = makeStyles( ( theme ) => ( {
             cursor: 'pointer',
         }
     },
+
+    icon: {
+        position: 'relative',
+        top: '5px',
+    }
 } ) );
 
 const NavMenu = () =>
@@ -40,14 +47,11 @@ const NavMenu = () =>
         <Grid container>
             <ul className={ classes.List }>
                 <Link className={ classes.Link } to='/'>
-                    <li>Home</li>
+                    <li><span><HomeRoundedIcon className={ classes.icon } /></span> Home</li>
                 </Link>
-                {/* <Link className={classes.Link} to='/services'>
-                    <li>Services</li>
+                <Link className={ classes.Link } to='/admin/add-product'>
+                    <li><span><QueueRoundedIcon className={ classes.icon } /></span> Add Product</li>
                 </Link>
-                <Link className={classes.Link} to='/websites'>
-                    <li>Websites</li>
-                </Link> */}
             </ul >
         </Grid>
     );

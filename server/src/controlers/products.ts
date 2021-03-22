@@ -2,7 +2,7 @@
 import mongoose, { Mongoose } from 'mongoose';
 import ProductMessage from '../models/product-schema.js';
 
-// users root products request
+
 export const getProducts = async ( req: any, res: any ) =>
 {
     // res.send( 'THIS POSTS IS WORKING' );
@@ -15,6 +15,7 @@ export const getProducts = async ( req: any, res: any ) =>
         res.status( 404 ).json( { status: "fail", message: "Something went wrong", error: error.message } );
     }
 };
+
 
 export const addProduct = async ( req: any, res: any ) =>
 {
@@ -30,6 +31,7 @@ export const addProduct = async ( req: any, res: any ) =>
         res.status( 409 ).json( { status: 'fail', message: 'Unsuccesfull save', error: error.message } );
     }
 };
+
 
 export const addProducts = async ( req: any, res: any ) =>
 {
@@ -51,6 +53,7 @@ export const addProducts = async ( req: any, res: any ) =>
 
 };
 
+
 export const updateProducts = async ( req: any, res: any ) =>
 {
     const { id: _id } = req.params;
@@ -66,6 +69,7 @@ export const updateProducts = async ( req: any, res: any ) =>
     res.status( 200 ).json( { status: 'success', product: updatedProduct } );
 };
 
+
 export const getSpecificProduct = async ( req: any, res: any ) =>
 {
     const { id: _id } = req.params;
@@ -80,4 +84,20 @@ export const getSpecificProduct = async ( req: any, res: any ) =>
     console.log( selectedProduct );
 
     res.status( 200 ).json( { status: 'success', product: selectedProduct } );
+};
+
+
+export const deleteProduct = async ( req: any, res: any ) =>
+{
+    const { id: _id } = req.params;
+
+    if ( !mongoose.Types.ObjectId.isValid( _id ) )
+    {
+        res.status( 404 ).send( { status: 'fail', message: 'id not found' } );
+    }
+
+    await ProductMessage.findByIdAndDelete( _id );
+
+    res.status( 201 ).send( { status: 'success', message: `item ${ _id } was deleted` } );
+
 };

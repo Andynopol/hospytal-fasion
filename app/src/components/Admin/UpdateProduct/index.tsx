@@ -8,12 +8,27 @@ import axios from 'axios';
 import Form from './Form';
 import Card from '../../ProductCard';
 
+
+interface Product
+{
+    name: string;
+    price: number;
+    description?: string;
+    details?: string;
+    sale?: number;
+    stock?: number;
+    src: string;
+}
+
 const useStyles = makeStyles( ( theme: Theme ) => ( {
     root: {
         marginTop: '4rem'
     },
     loading: {
         height: '90vh',
+        justifyContent: 'center',
+        alignItems: 'center',
+        display: 'flex',
     }
 } ) );
 
@@ -65,22 +80,8 @@ const UpdateProduct = ( props: Props ) =>
 
 
 
-    const handleSubmit = ( ev: any ) =>
-    {
-        ev.preventDefault();
-        const newProduct = {
-            name: cardName,
-            price: cardPrice,
-            description: cardDescription,
-            details: cardDetails,
-            sale: cardPromotion,
-            stock: cardPieces,
-            src: cardSrc,
-        };
 
-        // dispatch( productsActions.multipost( [ newProduct ] ) );
-    };
-
+    // handles all changes in the form and updates the fake product card
     const handleChanges = ( ev: any, identifier: string, forced?: boolean ) =>
     {
         switch ( identifier )
@@ -133,6 +134,29 @@ const UpdateProduct = ( props: Props ) =>
 
     };
 
+
+    const handleUpdate = ( ev: any ) =>
+    {
+        ev.preventDefault();
+        const updatedProduct: Product = {
+            name: cardName,
+            price: cardPrice,
+            description: cardDescription,
+            details: cardDetails,
+            sale: cardPromotion,
+            stock: cardPieces,
+            src: cardSrc,
+        };
+
+        if ( product )
+        {
+            dispatch( productsActions.update( product._id, updatedProduct ) );
+        } else
+        {
+            dispatch( productsActions.post( updatedProduct ) );
+        }
+    };
+
     const resetProduct = () =>
     {
         setCardName( product.name );
@@ -175,7 +199,7 @@ const UpdateProduct = ( props: Props ) =>
                                 src={ cardSrc }
                                 change={ handleChanges }
                                 reset={ resetProduct }
-                                send={ handleSubmit }
+                                update={ handleUpdate }
                             />
                         </Grid>
                     </Grid> :

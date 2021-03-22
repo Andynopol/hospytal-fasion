@@ -51,4 +51,12 @@ export const getSpecificProduct = async (req, res) => {
     console.log(selectedProduct);
     res.status(200).json({ status: 'success', product: selectedProduct });
 };
+export const deleteProduct = async (req, res) => {
+    const { id: _id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(_id)) {
+        res.status(404).send({ status: 'fail', message: 'id not found' });
+    }
+    await ProductMessage.findByIdAndDelete(_id);
+    res.status(201).send({ status: 'success', message: `item ${_id} was deleted` });
+};
 //# sourceMappingURL=products.js.map
