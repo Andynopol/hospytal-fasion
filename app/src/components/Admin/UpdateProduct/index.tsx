@@ -1,13 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Grid } from '@material-ui/core';
+import { Grid, CircularProgress } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
+import { productsActions } from '../../../actions';
+import axios from 'axios';
 
+import Form from './Form';
 import Card from '../../ProductCard';
 
 const useStyles = makeStyles( ( theme: Theme ) => ( {
     root: {
         marginTop: '4rem'
+    },
+    loading: {
+        height: '90vh',
     }
 } ) );
 
@@ -19,17 +25,43 @@ interface Props
 const UpdateProduct = ( props: Props ) =>
 {
     const { match } = props;
-    const product = useSelector( ( state: any ) => state.products.filter( ( item: any ) => item._id === match.params.id )[ 0 ] );
+    // const product = useSelector( ( state: any ) => state.products.filter( ( item: any ) => item._id === match.params.id )[ 0 ] );
     const classes = useStyles();
     const dispatch = useDispatch();
 
-    const [ cardName, setCardName ] = useState( product.name );
-    const [ cardPrice, setCardPrice ] = useState( product.price );
-    const [ cardDescription, setCardDescription ] = useState( product.description );
-    const [ cardDetails, setCardDetails ] = useState( product.details );
-    const [ cardPromotion, setCardPromotion ] = useState( product.sale );
-    const [ cardPieces, setCardPieces ] = useState( product.stock );
-    const [ cardSrc, setCardSrc ] = useState( product.src );
+    const [ product, setProduct ] = useState( useSelector( ( state: any ) => state.products.filter( ( item: any ) => item._id === match.params.id )[ 0 ] ) );
+    const [ cardName, setCardName ] = useState( product ? product.name : '' );
+    const [ cardPrice, setCardPrice ] = useState( product ? product.price : 0 );
+    const [ cardDescription, setCardDescription ] = useState( product ? product.description : '' );
+    const [ cardDetails, setCardDetails ] = useState( product ? product.details : '' );
+    const [ cardPromotion, setCardPromotion ] = useState( product ? product.sale : 0 );
+    const [ cardPieces, setCardPieces ] = useState( product ? product.stock : 0 );
+    const [ cardSrc, setCardSrc ] = useState( product ? product.src : '' );
+
+    const getProduct = async () =>
+    {
+        const response = await axios.get( `/products/${ match.params.id }` );
+        return response.data.product;
+    };
+
+    useEffect( () =>
+    {
+        ( async () =>
+        {
+            if ( !product )
+            {
+                const newProduct = await getProduct();
+                setProduct( newProduct );
+                setCardName( newProduct.name );
+                setCardPrice( newProduct.price );
+                setCardDescription( newProduct.description );
+                setCardDetails( newProduct.details );
+                setCardPromotion( newProduct.sale );
+                setCardPieces( newProduct.stock );
+                setCardSrc( newProduct.src );
+            }
+        } )();
+    }, [] );
 
 
 
@@ -101,7 +133,7 @@ const UpdateProduct = ( props: Props ) =>
 
     };
 
-    const clearProductDetails = () =>
+    const resetProduct = () =>
     {
         setCardName( product.name );
         setCardPrice( product.price );
@@ -114,20 +146,44 @@ const UpdateProduct = ( props: Props ) =>
 
 
     return (
-        <Grid container spacing={ 2 } className={ classes.root }>
-            <Grid item xs={ 12 } md={ 7 }>
-                <Card
-                    _id={ product._id }
-                    name={ cardName }
-                    price={ cardPrice }
-                    description={ cardDescription }
-                    details={ cardDetails }
-                    piecesLeft={ cardPieces }
-                    promotion={ cardPromotion }
-                    src={ cardSrc }
-                />
-            </Grid>
-        </Grid>
+        <>
+            {
+                product ?
+                    <Grid container spacing={ 2 } className={ classes.root }>
+                        <Grid item xs={ 12 } md={ 7 }>
+                            <Card
+                                _id={ product._id }
+                                name={ cardName }
+                                price={ cardPrice }
+                                description={ cardDescription }
+                                details={ cardDetails }
+                                piecesLeft={ cardPieces }
+                                promotion={ cardPromotion }
+                                src={ cardSrc }
+                                active={ false }
+                            />
+                        </Grid>
+
+                        <Grid item xs={ 12 } md={ 5 }>
+                            <Form
+                                name={ cardName }
+                                description={ cardDescription }
+                                details={ cardDetails }
+                                promotion={ cardPromotion }
+                                price={ cardPrice }
+                                pieces={ cardPieces }
+                                src={ cardSrc }
+                                change={ handleChanges }
+                                reset={ resetProduct }
+                                send={ handleSubmit }
+                            />
+                        </Grid>
+                    </Grid> :
+                    <Grid container className={ classes.loading }>
+                        <CircularProgress />
+                    </Grid>
+            }
+        </>
     );
 };
 

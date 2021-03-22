@@ -56,9 +56,28 @@ export const updateProducts = async ( req: any, res: any ) =>
     const { id: _id } = req.params;
     const product = req.body;
 
-    if ( !mongoose.Types.ObjectId.isValid( _id ) ) res.status( 404 ).send( { status: 'fail', message: 'id not found' } );
+    if ( !mongoose.Types.ObjectId.isValid( _id ) ) 
+    {
+        res.status( 404 ).send( { status: 'fail', message: 'id not found' } );
+    }
 
     const updatedProduct = await ProductMessage.findByIdAndUpdate( _id, product, { new: true } );
 
     res.status( 200 ).json( { status: 'success', product: updatedProduct } );
+};
+
+export const getSpecificProduct = async ( req: any, res: any ) =>
+{
+    const { id: _id } = req.params;
+
+    if ( !mongoose.Types.ObjectId.isValid( _id ) ) 
+    {
+        res.status( 404 ).send( { status: 'fail', message: 'id not found' } );
+    }
+
+    const selectedProduct = await ProductMessage.findById( _id );
+
+    console.log( selectedProduct );
+
+    res.status( 200 ).json( { status: 'success', product: selectedProduct } );
 };

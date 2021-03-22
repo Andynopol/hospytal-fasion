@@ -54,6 +54,10 @@ const useStyles = makeStyles( ( theme ) => ( {
     description: {
         overflow: 'hidden',
         // wordWrap: 'normal'
+    },
+    icon: {
+        position: 'relative',
+        top: '-30%',
     }
 } ) );
 
@@ -67,6 +71,7 @@ interface Props
     price: number;
     piecesLeft?: number;
     src?: string;
+    active: boolean;
 }
 
 const ProductCard = ( props: Props ) =>
@@ -82,7 +87,9 @@ const ProductCard = ( props: Props ) =>
         promotion,
         price,
         piecesLeft,
-        src } = props;
+        active,
+        src
+    } = props;
     const [ expanded, setExpanded ] = useState( false );
 
 
@@ -93,25 +100,32 @@ const ProductCard = ( props: Props ) =>
 
     const deteleItemHandler = ( id: string ) =>
     {
-        console.log( id );
+        if ( active )
+        {
+            console.log( id );
+        }
     };
 
     return (
         <Card className={ classes.root }>
             <CardHeader
                 action={
-                    <Link to={ `/admin/product/${ _id }` }>
+                    active ?
+                        <Link to={ `/admin/product/${ _id }` }>
+                            <IconButton aria-label="settings">
+                                <MoreVertIcon />
+                            </IconButton>
+                        </Link> :
                         <IconButton aria-label="settings">
                             <MoreVertIcon />
                         </IconButton>
-                    </Link>
                 }
                 title={ name }
                 subheader={ `${ price } RON` }
             />
             <CardMedia
                 className={ classes.media }
-                children={ src ? null : <CropOriginalIcon /> }
+                children={ src ? null : <CropOriginalIcon className={ classes.icon } /> }
                 image={ src }
                 title="asd"
             />

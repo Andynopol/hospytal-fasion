@@ -132,6 +132,7 @@ const ProductAdder = ( props: Props ) =>
                     price={ cardPrice }
                     piecesLeft={ cardPieces }
                     src={ cardSrc }
+                    active={ false }
                 />
             </Grid>
             <Grid item xs={ 12 } md={ 5 }>

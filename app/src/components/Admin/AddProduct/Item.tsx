@@ -31,6 +31,7 @@ const Items = ( props: Props ) =>
                 price={ price }
                 piecesLeft={ piecesLeft }
                 src={ src }
+                active={ false }
             />
         </Grid>
     );

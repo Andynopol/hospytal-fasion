@@ -1,8 +1,8 @@
 import React from 'react';
 import { TextField, Grid, Button } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
-import DeleteIcon from '@material-ui/icons/Delete';
-import PublishIcon from '@material-ui/icons/Publish';
+import RestoreRoundedIcon from '@material-ui/icons/RestoreRounded';
+import SaveIcon from '@material-ui/icons/Save';
 
 
 const useStyles = makeStyles( ( theme: Theme ) => ( {
@@ -36,14 +36,14 @@ interface Props
     pieces: number;
     src: string;
     change: ( ev: any, id: 'NAME' | 'DESCRIPTION' | 'DETAILS' | 'PROMOTION' | 'PIECES' | 'PRICE' | 'SRC', forced?: boolean ) => void;
-    clear: () => void;
+    reset: () => void;
     send: ( ev: any ) => void;
 
 }
 
 const Form = ( props: Props ) =>
 {
-    const { name, description, details, promotion, pieces, price, change, clear, send } = props;
+    const { name, description, details, promotion, pieces, price, change, reset, send } = props;
 
     const classes = useStyles();
 
@@ -169,10 +169,10 @@ const Form = ( props: Props ) =>
                         variant="contained"
                         color="primary"
                         className={ classes.button }
-                        startIcon={ <PublishIcon /> }
+                        startIcon={ <SaveIcon /> }
                         onClick={ ( ev ) => { send( ev ); } }
                     >
-                        Upload
+                        Save
                     </Button>
                 </Grid>
 
@@ -181,10 +181,10 @@ const Form = ( props: Props ) =>
                         variant="contained"
                         color="default"
                         className={ classes.button }
-                        startIcon={ <DeleteIcon /> }
-                        onClick={ clear }
+                        startIcon={ <RestoreRoundedIcon /> }
+                        onClick={ reset }
                     >
-                        Clear
+                        Reset
                     </Button>
 
                 </Grid>

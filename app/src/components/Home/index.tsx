@@ -59,6 +59,7 @@ const Home = () =>
                 piecesLeft={ product.stock }
                 promotion={ product.sale }
                 src={ product.src }
+                active={ true }
             />
         </Grid>
     );

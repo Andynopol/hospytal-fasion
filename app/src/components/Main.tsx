@@ -22,6 +22,7 @@ const Main: React.FC = () =>
                 <Grid item xs={ 12 } md={ 10 } lg={ 8 }>
                     <Switch>
                         <Route exact path='/' component={ Home } />
+                        <Route path={ '/admin' } component={ Home } />
                         <Route exact path='/admin/add-product' component={ AddProduct } />
                         <Route path='/admin/product/:id' component={ UpdateProduct } />
                         <Route path='*'>
