@@ -3,10 +3,13 @@ import { Grid } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import Item from './Item';
 import Form from './Form';
-import ProductCard from '../../ProductCard';
+import Card from '../../ProductCard';
 import { useDispatch } from 'react-redux';
+
+//@object that contains all global state product actions(including API calls)
 import { productsActions } from '../../../actions';
 
+//@enum of commands for form fileds
 import FieldSelector from '../constants';
 
 
@@ -129,7 +132,8 @@ const ProductAdder = ( props: Props ) =>
     return (
         <Grid container spacing={ 3 } className={ classes.root }>
             <Grid item xs={ 12 } md={ 7 }>
-                <ProductCard
+                {/* PROTO-DISPLAY */ }
+                <Card
                     _id=''
                     name={ cardName }
                     description={ cardDescription }

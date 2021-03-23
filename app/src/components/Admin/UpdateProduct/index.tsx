@@ -176,6 +176,7 @@ const UpdateProduct = ( props: Props ) =>
                 product ?
                     <Grid container spacing={ 2 } className={ classes.root }>
                         <Grid item xs={ 12 } md={ 7 }>
+                            {/* PROTO-DISPLAY */ }
                             <Card
                                 _id={ product._id }
                                 name={ cardName }

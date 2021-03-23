@@ -62,6 +62,7 @@ const useStyles = makeStyles( ( theme ) => ( {
     }
 } ) );
 
+//@params: @active = activates the action buttons when #PROTO-DISPLAY
 interface Props
 {
     _id: string;
@@ -77,10 +78,12 @@ interface Props
 
 
 //TODO documnet this component
+//@component that renders the card component of a product
 const ProductCard = ( props: Props ) =>
 {
 
     const dispatch = useDispatch();
+    //bruteforce state of login
     const isLogged = useSelector( ( state: any ) => state.isLogged );
     const classes = useStyles();
     const {
@@ -94,14 +97,18 @@ const ProductCard = ( props: Props ) =>
         active,
         src
     } = props;
+
+    //@details block expand state
     const [ expanded, setExpanded ] = useState( false );
 
 
+    //@expands the details block inside card
     const handleExpandClick = () =>
     {
         setExpanded( !expanded );
     };
 
+    //@deletes the current item using the ID only if the card is active(in admin/ only)
     const deteleItemHandler = ( id: string ) =>
     {
         if ( active )
@@ -127,29 +134,40 @@ const ProductCard = ( props: Props ) =>
                 title={ name }
                 subheader={ `${ price } RON` }
             />
+
+
             <CardMedia
                 className={ classes.media }
                 children={ src ? null : <BrokenImageIcon className={ classes.icon } /> }
                 image={ src }
                 title="asd"
             />
+
+
             <CardContent className={ classes.description }>
                 <Typography variant="body2" display='block' color="textSecondary" component="p">
                     { description }
                 </Typography>
             </CardContent>
+
+
             <CardActions disableSpacing>
                 { isLogged ?
                     <IconButton aria-label="add to favorites">
                         <FavoriteIcon />
                     </IconButton> :
                     null }
+
                 <IconButton aria-label="delete" onClick={ () => deteleItemHandler( _id ) }>
                     <DeleteIcon />
                 </IconButton>
+
+
                 <IconButton aria-label="share">
                     <AddShoppingCartIcon />
                 </IconButton>
+
+
                 { details ?
                     <IconButton
                         className={ clsx( classes.expand, {
@@ -161,7 +179,11 @@ const ProductCard = ( props: Props ) =>
                     >
                         <ExpandMoreIcon />
                     </IconButton> : null }
+
+
             </CardActions>
+
+
             <Collapse in={ expanded } timeout="auto" unmountOnExit>
                 <CardContent>
                     <Typography variant="body2" component='p' gutterBottom display='block' color="textSecondary">
@@ -169,6 +191,8 @@ const ProductCard = ( props: Props ) =>
                     </Typography>
                 </CardContent>
             </Collapse>
+
+
         </Card>
     );
 };
