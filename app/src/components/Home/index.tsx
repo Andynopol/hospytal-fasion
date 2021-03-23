@@ -40,14 +40,20 @@ const Home = () =>
 {
     const classes = useStyles();
     const dispatch = useDispatch();
+    const areProductsLoaded = useSelector( ( state: any ) =>
+    {
+        return state.productsAreLoaded;
+    } );
     let products = useSelector( ( state: any ) =>
     {
         return state.products;
     } );
 
-    const [ loading, setLoading ] = useState( true );
-    const [ firstRender, setFirstRender ] = useState( true );
+    //@UI loading state
+    // const [ loading, setLoading ] = useState( true );
+    // const [ firstRender, setFirstRender ] = useState( true );
 
+    //@fetch products API call
     useEffect( () =>
     {
         /*
@@ -60,14 +66,15 @@ const Home = () =>
 
 
 
-    useEffect( () =>
-    {
-        if ( !firstRender )
-        {
-            setTimeout( () => setLoading( false ), 500 );
-        }
-        setFirstRender( false );
-    }, [ products ] );
+    //@managing the UI loading state
+    // useEffect( () =>
+    // {
+    //     if ( !firstRender )
+    //     {
+    //         setTimeout( () => setLoading( false ), 500 );
+    //     }
+    //     setFirstRender( false );
+    // }, [ products ] );
 
     console.log( products );
 
@@ -91,7 +98,7 @@ const Home = () =>
     return (
         <>
             {
-                loading ?
+                !areProductsLoaded ?
                     ( <Grid className={ classes.loading } container justify='center' alignItems='center' spacing={ 2 }>
                         <CircularProgress />
                     </Grid> ) :

@@ -26,6 +26,7 @@ const fetchProducts = () => async ( dispatch: any ) =>
         const { data } = await API.fetchProducts();
 
         dispatch( { type: 'GET', payload: data.products } );
+        dispatch( loaded() );
     } catch ( error )
     {
         console.log( error );
@@ -40,7 +41,7 @@ const postProduct = ( product: Product ) => async ( dispatch: any ) =>
     {
         const { data } = await API.postProduct( product );
         console.log( data );
-
+        dispatch( dump() );
         dispatch( { type: "ADD-PRODUCT", payload: data } );
     } catch ( error )
     {
@@ -54,7 +55,7 @@ const postProducts = ( products: Product[] ) => async ( dispatch: any ) =>
     {
         const { data } = await API.postProducts( products );
         console.log( data );
-
+        dispatch( dump() );
         dispatch( { type: "ADD-PRODUCTS", payload: data } );
     } catch ( error )
     {
@@ -93,6 +94,20 @@ const deleteProduct = ( id: string ) => async ( dispatch: any ) =>
     }
 };
 
-const productsActions = { get: fetchProducts, post: postProduct, multipost: postProducts, update: updateProduct, delete: deleteProduct };
+const loaded = () =>
+{
+    return {
+        type: 'LOADED',
+    };
+};
+
+const dump = () =>
+{
+    return {
+        type: "DUMP",
+    };
+};
+
+const productsActions = { get: fetchProducts, post: postProduct, multipost: postProducts, update: updateProduct, delete: deleteProduct, load: loaded, dump: dump };
 
 export { productsActions };

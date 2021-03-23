@@ -23,4 +23,17 @@ const productsReducer = ( state: any[] = [], action: Action ) =>
     }
 };
 
-export { productsReducer };
+const productsAreLoadedReducer = ( state: boolean = false, action: Action ) =>
+{
+    switch ( action.type )
+    {
+        case "LOADED":
+            return true;
+        case "DUMP":
+            return false;
+        default:
+            return state;
+    }
+};
+
+export { productsReducer, productsAreLoadedReducer };
