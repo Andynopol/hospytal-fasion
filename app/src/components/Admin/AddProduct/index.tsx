@@ -54,7 +54,6 @@ const ProductAdder: React.FC<Props> = ( props: Props ) =>
     const [ cardSrc, setCardSrc ] = useState( '' );
 
 
-
     // handles all changes in the form and updates the fake product card
     // @params: @ev: the event that provides us the target input
     // @params: @identifier: the string that feeds switch structure witch selects the setState function
