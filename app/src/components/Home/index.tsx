@@ -49,9 +49,6 @@ const Home = () =>
         return state.products;
     } );
 
-    //@UI loading state
-    // const [ loading, setLoading ] = useState( true );
-    // const [ firstRender, setFirstRender ] = useState( true );
 
     //@fetch products API call
     useEffect( () =>
@@ -64,17 +61,6 @@ const Home = () =>
 
     }, [] );
 
-
-
-    //@managing the UI loading state
-    // useEffect( () =>
-    // {
-    //     if ( !firstRender )
-    //     {
-    //         setTimeout( () => setLoading( false ), 500 );
-    //     }
-    //     setFirstRender( false );
-    // }, [ products ] );
 
     console.log( products );
 
@@ -98,14 +84,28 @@ const Home = () =>
     return (
         <>
             {
-                !areProductsLoaded ?
-                    ( <Grid className={ classes.loading } container justify='center' alignItems='center' spacing={ 2 }>
-                        <CircularProgress />
-                    </Grid> ) :
-                    products.length ?
+                !areProductsLoaded
+                    ?
+                    ( products.length
+                        ?
+                        <Grid className={ classes.root } container justify='center' alignItems='center' spacing={ 2 }>
+                            { items }
+                            <Grid item xs={ 12 } md={ 4 }>
+                                <CircularProgress />
+                            </Grid>
+                        </Grid>
+                        :
+                        <Grid className={ classes.loading } container justify='center' alignItems='center' spacing={ 2 }>
+                            <CircularProgress />
+                        </Grid> )
+                    :
+                    products.length
+                        ?
                         ( <Grid className={ classes.root } container spacing={ 2 }>
                             { items }
-                        </Grid> ) : (
+                        </Grid> )
+                        :
+                        (
                             <Grid className={ classes.loading } container justify='center' alignContent='center'>
                                 <SignalCellularNoSimOutlinedIcon className={ classes.icon } />
                             </Grid>
