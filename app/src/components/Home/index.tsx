@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Card from '../ProductCard';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid, CircularProgress } from '@material-ui/core';
 // import CropOriginalIcon from '@material-ui/icons/CropOriginal';
 import { productsActions } from '../../actions';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchProducts } from '../../api';
+import SignalCellularNoSimOutlinedIcon from '@material-ui/icons/SignalCellularNoSimOutlined';
 
 interface Product extends Document
 {
@@ -28,6 +28,10 @@ const useStyles = makeStyles( () => ( {
     },
     loading: {
         height: '90vh',
+    },
+    icon: {
+        fontSize: '25rem',
+        opacity: '.3',
     }
 } ) );
 
@@ -41,6 +45,9 @@ const Home = () =>
         return state.products;
     } );
 
+    const [ loading, setLoading ] = useState( true );
+    const [ firstRender, setFirstRender ] = useState( true );
+
     useEffect( () =>
     {
         /*
@@ -48,7 +55,19 @@ const Home = () =>
         including API calls that return products objects
         */
         dispatch( productsActions.get() );
+
     }, [] );
+
+
+
+    useEffect( () =>
+    {
+        if ( !firstRender )
+        {
+            setTimeout( () => setLoading( false ), 500 );
+        }
+        setFirstRender( false );
+    }, [ products ] );
 
     console.log( products );
 
@@ -72,13 +91,18 @@ const Home = () =>
     return (
         <>
             {
-                !products.length ?
+                loading ?
                     ( <Grid className={ classes.loading } container justify='center' alignItems='center' spacing={ 2 }>
                         <CircularProgress />
                     </Grid> ) :
-                    ( <Grid className={ classes.root } container spacing={ 2 }>
-                        { items }
-                    </Grid> )
+                    products.length ?
+                        ( <Grid className={ classes.root } container spacing={ 2 }>
+                            { items }
+                        </Grid> ) : (
+                            <Grid className={ classes.loading } container justify='center' alignContent='center'>
+                                <SignalCellularNoSimOutlinedIcon className={ classes.icon } />
+                            </Grid>
+                        )
             }
         </>
 
