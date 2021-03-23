@@ -6,6 +6,7 @@ import Home from './Home';
 import Nav from './Navigation';
 import AddProduct from './Admin/AddProduct';
 import UpdateProduct from './Admin/UpdateProduct';
+import { SnackbarProvider } from 'notistack';
 
 //@main component that defines the routes
 const Main: React.FC = () =>

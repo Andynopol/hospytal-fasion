@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Main from './components/Main';
 import './App.css';
+import { SnackbarProvider } from 'notistack';
 
 export default class App extends Component
 {
@@ -8,7 +9,9 @@ export default class App extends Component
   {
     return (
       <div id="anchor">
-        <Main />
+        <SnackbarProvider maxSnack={ 3 }>
+          <Main />
+        </SnackbarProvider>
       </div>
     );
   }

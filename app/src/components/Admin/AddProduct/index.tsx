@@ -5,6 +5,11 @@ import Item from './Item';
 import Form from './Form';
 import Card from '../../ProductCard';
 import { useDispatch } from 'react-redux';
+import AddProductMessages from '../../../api/constants';
+import { useSnackbar } from 'notistack';
+
+// import Snackbar from '@material-ui/core/Snackbar';
+// import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 
 //@object that contains all global state product actions(including API calls)
 import { productsActions } from '../../../actions';
@@ -19,6 +24,17 @@ const useStyles = makeStyles( ( theme: Theme ) => ( {
     }
 } ) );
 
+interface Product
+{
+    name: string;
+    price: number;
+    description?: string;
+    details?: string;
+    sale?: number;
+    stock?: number;
+    src: string;
+}
+
 interface Props
 {
 
@@ -26,9 +42,8 @@ interface Props
 
 
 
-const ProductAdder = ( props: Props ) =>
+const ProductAdder: React.FC<Props> = ( props: Props ) =>
 {
-
     const classes = useStyles();
     const dispatch = useDispatch();
 
@@ -40,6 +55,11 @@ const ProductAdder = ( props: Props ) =>
     const [ cardPrice, setCardPrice ] = useState( 0 );
     const [ cardPieces, setCardPieces ] = useState( 0 );
     const [ cardSrc, setCardSrc ] = useState( '' );
+
+    // const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+
+
+
 
 
 
@@ -100,6 +120,12 @@ const ProductAdder = ( props: Props ) =>
 
     };
 
+    const sendRequest = async ( product: Product ) =>
+    {
+        const response = await dispatch( productsActions.multipost( [ product ] ) );
+        console.log( response );
+    };
+
     // TODO make it abe to send multiple items
     const handleSubmit = ( ev: any ) =>
     {
@@ -114,7 +140,7 @@ const ProductAdder = ( props: Props ) =>
             src: cardSrc,
         };
 
-        dispatch( productsActions.multipost( [ newProduct ] ) );
+        sendRequest( newProduct );
     };
 
     const clearProductDetails = () =>
@@ -159,6 +185,12 @@ const ProductAdder = ( props: Props ) =>
                     send={ handleSubmit }
                 />
             </Grid>
+
+            {/* <Snackbar open={ open } autoHideDuration={ 6000 } onClose={ handleClose }>
+                <Alert onClose={ handleClose } severity="success">
+                    This is a success message!
+                </Alert>
+            </Snackbar> */}
 
         </Grid>
     );

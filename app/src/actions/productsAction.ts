@@ -1,6 +1,7 @@
 import { Dispatch } from 'react';
 import * as API from '../api';
 
+
 interface Action
 {
     type: string;
@@ -17,6 +18,9 @@ interface Product
     stock?: number;
     src: string;
 }
+
+
+
 
 const fetchProducts = () => async ( dispatch: any ) =>
 {
@@ -40,6 +44,7 @@ const postProduct = ( product: Product ) => async ( dispatch: any ) =>
     try
     {
         const { data } = await API.postProduct( product );
+
         console.log( data );
         dispatch( dump() );
         dispatch( { type: "ADD-PRODUCT", payload: data } );
@@ -54,6 +59,7 @@ const postProducts = ( products: Product[] ) => async ( dispatch: any ) =>
     try
     {
         const { data } = await API.postProducts( products );
+
         console.log( data );
         dispatch( dump() );
         dispatch( { type: "ADD-PRODUCTS", payload: data } );
