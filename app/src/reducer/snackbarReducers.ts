@@ -17,7 +17,6 @@ const snackbarReducer = ( state: SnackInfo = { open: false, message: '', variant
     switch ( action.type )
     {
         case 'SHOW':
-            console.log( { open: true, ...action.payload } );
             return { open: true, ...action.payload };
         case 'HIDE':
             return { ...state, open: false };

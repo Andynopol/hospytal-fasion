@@ -46,7 +46,7 @@ export const addProducts = async ( req: any, res: any ) =>
             res.status( 201 ).json( { status: 'success', product: newProduct, message: "Product(s) added succesfully" } );
         } catch ( error )
         {
-            res.status( 409 ).json( { status: 'fail', message: 'Unsuccesfull save', error: error.message } );
+            res.status( 409 ).json( { status: 'fail', message: 'Unsuccesfull save! Product name duplicate', error: error.message } );
         }
     }
 
