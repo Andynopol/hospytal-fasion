@@ -7,6 +7,7 @@ import axios from 'axios';
 
 import Form from './Form';
 import Card from '../../ProductCard';
+import FieldSelector from '../constants';
 
 
 interface Product
@@ -82,20 +83,20 @@ const UpdateProduct = ( props: Props ) =>
 
 
     // handles all changes in the form and updates the fake product card
-    const handleChanges = ( ev: any, identifier: string, forced?: boolean ) =>
+    const handleChanges = ( ev: any, identifier: FieldSelector, forced?: boolean ) =>
     {
         switch ( identifier )
         {
-            case 'NAME':
+            case FieldSelector.name:
                 setCardName( ev.target.value );
                 break;
-            case 'DESCRIPTION':
+            case FieldSelector.desc:
                 setCardDescription( ev.target.value );
                 break;
-            case 'DETAILS':
+            case FieldSelector.details:
                 setCardDetails( ev.target.value );
                 break;
-            case 'PROMOTION':
+            case FieldSelector.prom:
                 if ( ev.target.value === '' )
                 {
                     setCardPromotion( 0 );
@@ -103,7 +104,7 @@ const UpdateProduct = ( props: Props ) =>
                 }
                 setCardPromotion( parseInt( ev.target.value ) );
                 break;
-            case 'PRICE':
+            case FieldSelector.price:
                 if ( ev.target.value === '' )
                 {
                     setCardPrice( 0 );
@@ -111,7 +112,7 @@ const UpdateProduct = ( props: Props ) =>
                 }
                 setCardPrice( parseInt( ev.target.value ) );
                 break;
-            case 'PIECES':
+            case FieldSelector.stock:
                 if ( ev.target.value === '' )
                 {
                     setCardPieces( 0 );
@@ -119,7 +120,7 @@ const UpdateProduct = ( props: Props ) =>
                 }
                 setCardPieces( parseInt( ev.target.value ) );
                 break;
-            case 'SRC':
+            case FieldSelector.src:
                 if ( forced )
                 {
                     if ( ev )

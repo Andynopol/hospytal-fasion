@@ -31,7 +31,7 @@ const useStyles = makeStyles( () => ( {
     }
 } ) );
 
-
+//@main overview component, the startpoint of the website
 const Home = () =>
 {
     const classes = useStyles();
@@ -43,11 +43,16 @@ const Home = () =>
 
     useEffect( () =>
     {
+        /*
+        @productsActions = object that contains all redux actions that interacts with products
+        including API calls that return products objects
+        */
         dispatch( productsActions.get() );
     }, [] );
 
     console.log( products );
 
+    //@list of the products presented in main menu
     const items = products.map( ( product: Product ) =>
         <Grid item xs={ 12 } md={ 4 } key={ product._id }>
             <Card

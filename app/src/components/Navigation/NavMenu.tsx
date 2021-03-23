@@ -40,6 +40,8 @@ const useStyles = makeStyles( ( theme ) => ( {
     }
 } ) );
 
+
+//@routing menu component: here you find all the link in the nav menu
 const NavMenu = () =>
 {
     const classes = useStyles();

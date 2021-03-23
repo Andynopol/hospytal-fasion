@@ -21,7 +21,7 @@ const useStyles = makeStyles( ( theme ) => ( {
 
 interface Props
 {
-    onClick: () => void;
+    drowerOpen: () => void;
     open: boolean;
 }
 
@@ -32,7 +32,7 @@ const DrowerMenuButton: React.FC<Props> = ( props: Props ) =>
         <IconButton
             color="inherit"
             aria-label="open drawer"
-            onClick={ props.onClick }
+            onClick={ props.drowerOpen }
             edge="start"
             className={ clsx( classes.menuButton, props.open && classes.hide ) }
         >

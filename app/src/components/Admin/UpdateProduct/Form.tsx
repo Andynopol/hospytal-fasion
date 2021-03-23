@@ -4,6 +4,7 @@ import { makeStyles, Theme } from '@material-ui/core/styles';
 import RestoreRoundedIcon from '@material-ui/icons/RestoreRounded';
 import SaveIcon from '@material-ui/icons/Save';
 
+import FieldSelector from '../constants';
 
 const useStyles = makeStyles( ( theme: Theme ) => ( {
     textFieldWrapper: {
@@ -35,7 +36,7 @@ interface Props
     price: number;
     pieces: number;
     src: string;
-    change: ( ev: any, id: 'NAME' | 'DESCRIPTION' | 'DETAILS' | 'PROMOTION' | 'PIECES' | 'PRICE' | 'SRC', forced?: boolean ) => void;
+    change: ( ev: any, id: FieldSelector, forced?: boolean ) => void;
     reset: () => void;
     update: ( ev: any ) => void;
 
@@ -57,7 +58,7 @@ const Form = ( props: Props ) =>
             reader.onload = () =>
             {
                 const base64 = reader.result;
-                change( base64, "SRC", true );
+                change( base64, FieldSelector.src, true );
             };
 
         }
@@ -72,7 +73,7 @@ const Form = ( props: Props ) =>
                     label="Name"
                     type="text"
                     value={ name }
-                    onChange={ ev => change( ev, 'NAME' ) }
+                    onChange={ ev => change( ev, FieldSelector.name ) }
                 />
             </Grid>
             <Grid item xs={ 12 } md={ 6 } className={ classes.textFieldWrapper }>
@@ -85,7 +86,7 @@ const Form = ( props: Props ) =>
                     } }
                     value={ price }
                     onFocus={ ( ev ) => ev.target.select() }
-                    onChange={ ev => change( ev, 'PRICE' ) }
+                    onChange={ ev => change( ev, FieldSelector.price ) }
                 />
             </Grid>
 
@@ -99,7 +100,7 @@ const Form = ( props: Props ) =>
                         shrink: true,
                     } }
                     onFocus={ ( ev ) => ev.target.select() }
-                    onChange={ ev => change( ev, 'PROMOTION' ) }
+                    onChange={ ev => change( ev, FieldSelector.prom ) }
                 />
             </Grid>
 
@@ -113,7 +114,7 @@ const Form = ( props: Props ) =>
                         shrink: true,
                     } }
                     onFocus={ ( ev ) => ev.target.select() }
-                    onChange={ ev => change( ev, 'PIECES' ) }
+                    onChange={ ev => change( ev, FieldSelector.stock ) }
                 />
             </Grid>
 
@@ -123,7 +124,7 @@ const Form = ( props: Props ) =>
                     className={ classes.textField }
                     label="Description"
                     value={ description }
-                    onChange={ ev => change( ev, 'DESCRIPTION' ) }
+                    onChange={ ev => change( ev, FieldSelector.desc ) }
                     rows={ 3 }
                     multiline
                 />
@@ -134,7 +135,7 @@ const Form = ( props: Props ) =>
                     className={ classes.textField }
                     label="Details"
                     value={ details }
-                    onChange={ ev => change( ev, 'DETAILS' ) }
+                    onChange={ ev => change( ev, FieldSelector.details ) }
                     rows={ 3 }
                     multiline
                 />

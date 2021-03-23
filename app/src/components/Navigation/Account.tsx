@@ -7,7 +7,8 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import { authentificationAction } from '../../actions';
 
-interface StyleMenuProps {
+interface StyleMenuProps
+{
   id: string;
   anchorEl: any;
   keepMounted: any;
@@ -17,76 +18,85 @@ interface StyleMenuProps {
 
 }
 
-type OptionsInterface = [string, string];
+type OptionsInterface = [ string, string ];
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles( ( theme ) => ( {
   icon: {
     color: '#fafafa',
   }
-}));
+} ) );
 
 
 
 const ITEM_HEIGHT = 48;
 
 
-const LongMenu: React.FC = () => {
+const LongMenu: React.FC = () =>
+{
 
-  const isLogged = useSelector((state: any) => state.isLogged);
+  //brute force login state
+  const isLogged = useSelector( ( state: any ) => state.isLogged );
   const dispatch = useDispatch();
 
-  const options: OptionsInterface = isLogged ? ['Account', 'Logout'] : ['Login', 'Sign up'];
+  //@account menu items
+  const options: OptionsInterface = isLogged ? [ 'Account', 'Logout' ] : [ 'Login', 'Sign up' ];
 
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
+  const [ anchorEl, setAnchorEl ] = React.useState( null );
+  const open = Boolean( anchorEl );
 
   const classes = useStyles();
 
-  const handleClick = (event: any) => {
-    setAnchorEl(event.currentTarget);
+  const handleAccoutClick = ( event: any ) =>
+  {
+    setAnchorEl( event.currentTarget );
   };
 
 
-  const handleAccountMenuClick = (event: any) => {
-    handleClose();
+  const handleAccountMenuClick = ( event: any ) =>
+  {
+    handleAccountClose();
     // sinteticalLogin(event);
   };
 
-  const sinteticalLogin = (event: any) => {
-    switch (event.target.innerText) {
+  // @brute force login
+  const sinteticalLogin = ( event: any ) =>
+  {
+    switch ( event.target.innerText )
+    {
       case 'Login':
-        dispatch(authentificationAction.login());
+        dispatch( authentificationAction.login() );
         break;
       case 'Logout':
-        dispatch(authentificationAction.logout());
+        dispatch( authentificationAction.logout() );
         break;
     }
-  }
-
-  const handleClose = () => {
-    setAnchorEl(null);
   };
 
-  const StyledMenu = withStyles({
+  const handleAccountClose = () =>
+  {
+    setAnchorEl( null );
+  };
+
+  const StyledMenu = withStyles( {
     paper: {
       border: '1px solid #d3d4d5',
     },
-  })((props: StyleMenuProps) => (
+  } )( ( props: StyleMenuProps ) => (
     <Menu
-      elevation={0}
-      getContentAnchorEl={null}
-      anchorOrigin={{
+      elevation={ 0 }
+      getContentAnchorEl={ null }
+      anchorOrigin={ {
         vertical: 'bottom',
         horizontal: 'center',
-      }}
-      transformOrigin={{
+      } }
+      transformOrigin={ {
         vertical: 'top',
         horizontal: 'center',
-      }}
-      open={false}
-      {...props}
+      } }
+      open={ false }
+      { ...props }
     />
-  ));
+  ) );
 
   return (
     <div>
@@ -94,28 +104,28 @@ const LongMenu: React.FC = () => {
         aria-label="more"
         aria-controls="long-menu"
         aria-haspopup="true"
-        onClick={handleClick}
+        onClick={ handleAccoutClick }
       >
-        <AccountCircleIcon className={classes.icon} />
+        <AccountCircleIcon className={ classes.icon } />
       </IconButton>
       <StyledMenu
         id="long-menu"
-        anchorEl={anchorEl}
+        anchorEl={ anchorEl }
         keepMounted
-        open={open}
-        onClose={handleClose}
-        PaperProps={{
+        open={ open }
+        onClose={ handleAccountClose }
+        PaperProps={ {
           style: {
             maxHeight: ITEM_HEIGHT * 4.5,
             width: '20ch',
           },
-        }}
+        } }
       >
-        {options.map((option) => (
-          <MenuItem value={option} key={option} selected={option === 'Pyxis'} onClick={handleAccountMenuClick}>
-            {option}
+        { options.map( ( option ) => (
+          <MenuItem value={ option } key={ option } selected={ option === 'Pyxis' } onClick={ handleAccountMenuClick }>
+            {option }
           </MenuItem>
-        ))}
+        ) ) }
       </StyledMenu>
     </div>
   );

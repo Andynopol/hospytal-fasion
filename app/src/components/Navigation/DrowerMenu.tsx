@@ -77,12 +77,15 @@ const useStyles = makeStyles( ( theme ) => ( {
     }
 } ) );
 
+//@valid:mobile only / @params: open = state of open/close of the side menu() / closeMenu = closing the menu()
 interface Props
 {
     open: boolean;
     closeMenu: () => void;
 }
 
+
+// @menu that apears on mobile
 const DrowerMenu: React.FC<Props> = ( props: Props ) =>
 {
     const classes = useStyles();
@@ -105,7 +108,7 @@ const DrowerMenu: React.FC<Props> = ( props: Props ) =>
             </div>
             <Divider />
             <List>
-                { [ 'Home', 'Services', 'Websites' ].map( ( text ) =>
+                { [ 'Home', 'Add Product' ].map( ( text ) =>
                 {
                     let path = '';
                     switch ( text )
@@ -113,18 +116,15 @@ const DrowerMenu: React.FC<Props> = ( props: Props ) =>
                         case 'Home':
                             path = '/';
                             break;
-                        case 'Services':
-                            path = '/services';
-                            break;
-                        case 'Websites':
-                            path = '/websites';
+                        case 'Add Product':
+                            path = '/admin/add-product';
                             break;
                         default: {
                             path = '/nothing';
                         }
                     }
                     return (
-                        <Link className={ classes.Link } to={ path } key={ text }>
+                        <Link className={ classes.Link } to={ path } key={ text } onClick={ closeMenu }>
                             <ListItem button key={ text }>
                                 <ListItemText primary={ text } />
                             </ListItem>
@@ -135,7 +135,7 @@ const DrowerMenu: React.FC<Props> = ( props: Props ) =>
             <Divider />
             <List>
                 { [ 'Send mail', 'Account' ].map( ( text ) => (
-                    <ListItem button key={ text }>
+                    <ListItem button key={ text } onClick={ closeMenu }>
                         <ListItemText primary={ text } />
                     </ListItem>
                 ) ) }

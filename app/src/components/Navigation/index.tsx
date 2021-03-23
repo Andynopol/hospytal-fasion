@@ -82,7 +82,7 @@ const ButtonAppBar: React.FC<Props> = ( props: Props ) =>
     <div className={ isVisible ? '' : classes.invisible } color="primary">
       <GoldAppBar position="sticky">
         <Toolbar className={ classes.relative }>
-          <DrowerMenuButton open={ open } onClick={ handleDrawerOpen } />
+          <DrowerMenuButton open={ open } drowerOpen={ handleDrawerOpen } />
           <Logo />
           <NavMenu />
           <Spacer />

@@ -7,6 +7,8 @@ import ProductCard from '../../ProductCard';
 import { useDispatch } from 'react-redux';
 import { productsActions } from '../../../actions';
 
+import FieldSelector from '../constants';
+
 
 const useStyles = makeStyles( ( theme: Theme ) => ( {
     root: {
@@ -18,6 +20,8 @@ interface Props
 {
 
 }
+
+
 
 const ProductAdder = ( props: Props ) =>
 {
@@ -38,21 +42,23 @@ const ProductAdder = ( props: Props ) =>
 
 
     // handles all changes in the form and updates the fake product card
-
-    const handleChanges = ( ev: any, identifier: string, forced?: boolean ) =>
+    // @params: @ev: the event that provides us the target input
+    // @params: @identifier: the string that feeds switch structure witch selects the setState function
+    // @params: @forced: a boolean that can bypass in some cases the target grabbing from the eveny(mainly used on src)
+    const handleChanges = ( ev: any, identifier: FieldSelector, forced?: boolean ) =>
     {
         switch ( identifier )
         {
-            case 'NAME':
+            case FieldSelector.name:
                 setCardName( ev.target.value );
                 break;
-            case 'DESCRIPTION':
+            case FieldSelector.desc:
                 setCardDescription( ev.target.value );
                 break;
-            case 'DETAILS':
+            case FieldSelector.details:
                 setCardDetails( ev.target.value );
                 break;
-            case 'PROMOTION':
+            case FieldSelector.prom:
                 if ( ev.target.value === '' )
                 {
                     setCardPromotion( 0 );
@@ -60,7 +66,7 @@ const ProductAdder = ( props: Props ) =>
                 }
                 setCardPromotion( parseInt( ev.target.value ) );
                 break;
-            case 'PRICE':
+            case FieldSelector.price:
                 if ( ev.target.value === '' )
                 {
                     setCardPrice( 0 );
@@ -68,7 +74,7 @@ const ProductAdder = ( props: Props ) =>
                 }
                 setCardPrice( parseInt( ev.target.value ) );
                 break;
-            case 'PIECES':
+            case FieldSelector.stock:
                 if ( ev.target.value === '' )
                 {
                     setCardPieces( 0 );
@@ -76,7 +82,7 @@ const ProductAdder = ( props: Props ) =>
                 }
                 setCardPieces( parseInt( ev.target.value ) );
                 break;
-            case 'SRC':
+            case FieldSelector.src:
                 if ( forced )
                 {
                     if ( ev )

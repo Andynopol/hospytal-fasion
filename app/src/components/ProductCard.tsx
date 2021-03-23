@@ -75,6 +75,8 @@ interface Props
     active: boolean;
 }
 
+
+//TODO documnet this component
 const ProductCard = ( props: Props ) =>
 {
 
