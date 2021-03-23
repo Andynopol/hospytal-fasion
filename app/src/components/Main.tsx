@@ -52,7 +52,7 @@ const Main: React.FC = () =>
                     </Switch>
 
 
-                    <Snackbar open={ snackInfo.open } autoHideDuration={ 6000 } onClose={ handleSnackbarClose }>
+                    <Snackbar open={ snackInfo.open } autoHideDuration={ 4000 } onClose={ handleSnackbarClose }>
                         <Alert onClose={ handleSnackbarClose } severity={ snackInfo.variant }>
                             { snackInfo.message }
                         </Alert>
