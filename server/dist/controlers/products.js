@@ -6,7 +6,7 @@ export const getProducts = async (req, res) => {
         res.status(201).json({ status: "success", products: products });
     }
     catch (error) {
-        res.status(404).json({ status: "fail", message: "Something went wrong", error: error.message });
+        res.status(404).json({ status: "fail", message: "No database found", error: error.message });
     }
 };
 export const addProduct = async (req, res) => {
@@ -14,7 +14,7 @@ export const addProduct = async (req, res) => {
     const newProduct = new ProductMessage(product);
     try {
         await newProduct.save();
-        res.status(201).json({ status: 'succes', product: newProduct });
+        res.status(201).json({ status: 'success', product: newProduct, message: "Product added succesfully" });
     }
     catch (error) {
         res.status(409).json({ status: 'fail', message: 'Unsuccesfull save', error: error.message });
@@ -26,7 +26,7 @@ export const addProducts = async (req, res) => {
         const newProduct = new ProductMessage(product);
         try {
             await newProduct.save();
-            res.status(201).json({ status: 'succes', product: newProduct });
+            res.status(201).json({ status: 'success', product: newProduct, message: "Product(s) added succesfully" });
         }
         catch (error) {
             res.status(409).json({ status: 'fail', message: 'Unsuccesfull save', error: error.message });
@@ -37,10 +37,10 @@ export const updateProducts = async (req, res) => {
     const { id: _id } = req.params;
     const product = req.body;
     if (!mongoose.Types.ObjectId.isValid(_id)) {
-        res.status(404).send({ status: 'fail', message: 'id not found' });
+        res.status(404).send({ status: 'fail', message: 'Id not found' });
     }
     const updatedProduct = await ProductMessage.findByIdAndUpdate(_id, product, { new: true });
-    res.status(200).json({ status: 'success', product: updatedProduct });
+    res.status(200).json({ status: 'success', product: updatedProduct, message: "Update complete" });
 };
 export const getSpecificProduct = async (req, res) => {
     const { id: _id } = req.params;
@@ -57,6 +57,6 @@ export const deleteProduct = async (req, res) => {
         res.status(404).send({ status: 'fail', message: 'id not found' });
     }
     await ProductMessage.findByIdAndDelete(_id);
-    res.status(201).send({ status: 'success', message: `item ${_id} was deleted` });
+    res.status(201).send({ status: 'success', message: `Item ${_id} was deleted` });
 };
 //# sourceMappingURL=products.js.map

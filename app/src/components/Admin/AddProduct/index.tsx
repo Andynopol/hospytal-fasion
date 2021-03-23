@@ -6,10 +6,8 @@ import Form from './Form';
 import Card from '../../ProductCard';
 import { useDispatch } from 'react-redux';
 import AddProductMessages from '../../../api/constants';
-import { useSnackbar } from 'notistack';
 
-// import Snackbar from '@material-ui/core/Snackbar';
-// import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
+
 
 //@object that contains all global state product actions(including API calls)
 import { productsActions } from '../../../actions';
@@ -47,7 +45,6 @@ const ProductAdder: React.FC<Props> = ( props: Props ) =>
     const classes = useStyles();
     const dispatch = useDispatch();
 
-    // const [ items, setItems ] = useState( [] );
     const [ cardName, setCardName ] = useState( '' );
     const [ cardDescription, setCardDescription ] = useState( '' );
     const [ cardDetails, setCardDetails ] = useState( '' );
@@ -55,12 +52,6 @@ const ProductAdder: React.FC<Props> = ( props: Props ) =>
     const [ cardPrice, setCardPrice ] = useState( 0 );
     const [ cardPieces, setCardPieces ] = useState( 0 );
     const [ cardSrc, setCardSrc ] = useState( '' );
-
-    // const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-
-
-
-
 
 
 
@@ -115,22 +106,15 @@ const ProductAdder: React.FC<Props> = ( props: Props ) =>
                 if ( ev.target.value )
                     setCardSrc( ev.target.value );
                 break;
-
         }
 
-    };
-
-    const sendRequest = async ( product: Product ) =>
-    {
-        const response = await dispatch( productsActions.multipost( [ product ] ) );
-        console.log( response );
     };
 
     // TODO make it abe to send multiple items
     const handleSubmit = ( ev: any ) =>
     {
         ev.preventDefault();
-        const newProduct = {
+        const newProduct: Product = {
             name: cardName,
             price: cardPrice,
             description: cardDescription,
@@ -140,7 +124,7 @@ const ProductAdder: React.FC<Props> = ( props: Props ) =>
             src: cardSrc,
         };
 
-        sendRequest( newProduct );
+        dispatch( productsActions.multipost( [ newProduct ] ) );
     };
 
     const clearProductDetails = () =>
@@ -186,11 +170,7 @@ const ProductAdder: React.FC<Props> = ( props: Props ) =>
                 />
             </Grid>
 
-            {/* <Snackbar open={ open } autoHideDuration={ 6000 } onClose={ handleClose }>
-                <Alert onClose={ handleClose } severity="success">
-                    This is a success message!
-                </Alert>
-            </Snackbar> */}
+
 
         </Grid>
     );

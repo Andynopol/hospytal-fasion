@@ -1,6 +1,7 @@
 import { Dispatch } from 'react';
 import * as API from '../api';
-
+import { snackbarActionManager } from './snackbarActions';
+import AddProductMessages from '../api/constants';
 
 interface Action
 {
@@ -45,12 +46,29 @@ const postProduct = ( product: Product ) => async ( dispatch: any ) =>
     {
         const { data } = await API.postProduct( product );
 
+        if ( data.status === "success" )
+        {
+            console.log( data.status );
+            dispatch( snackbarActionManager.show( { message: data.message, variant: 'success' } ) );
+        }
+        else
+        {
+            dispatch( snackbarActionManager.show( { message: data.message, variant: 'warning' } ) );
+        }
+
         console.log( data );
         dispatch( dump() );
         dispatch( { type: "ADD-PRODUCT", payload: data } );
     } catch ( error )
     {
-        console.log( error );
+        if ( error.message === 'Request failed with status code 409' )
+        {
+            dispatch( snackbarActionManager.show( { message: AddProductMessages.conflict, variant: 'error' } ) );
+        } else
+        {
+            dispatch( snackbarActionManager.show( { message: AddProductMessages.fail, variant: 'error' } ) );
+        }
+        console.log( error.message );
     }
 };
 
@@ -59,13 +77,28 @@ const postProducts = ( products: Product[] ) => async ( dispatch: any ) =>
     try
     {
         const { data } = await API.postProducts( products );
+        if ( data.status === "success" )
+        {
+            dispatch( snackbarActionManager.show( { message: data.message, variant: 'success' } ) );
 
+        }
+        else
+        {
+            dispatch( snackbarActionManager.show( { message: data.message, variant: 'warning' } ) );
+        }
         console.log( data );
         dispatch( dump() );
         dispatch( { type: "ADD-PRODUCTS", payload: data } );
     } catch ( error )
     {
-        console.log( error );
+        if ( error.message === 'Request failed with status code 409' )
+        {
+            dispatch( snackbarActionManager.show( { message: AddProductMessages.conflict, variant: 'error' } ) );
+        } else
+        {
+            dispatch( snackbarActionManager.show( { message: AddProductMessages.fail, variant: 'error' } ) );
+        }
+        console.log( error.message );
     }
 };
 
@@ -75,9 +108,19 @@ const updateProduct = ( id: 'string', product: Product ) => async ( dispatch: an
     {
         const { data } = await API.patchProduct( id, product );
         console.log( data );
+        if ( data.status === "success" )
+        {
+            dispatch( snackbarActionManager.show( { message: data.message, variant: 'success' } ) );
+
+        }
+        else
+        {
+            dispatch( snackbarActionManager.show( { message: data.message, variant: 'warning' } ) );
+        }
         dispatch( { type: 'UPDATE', payload: data } );
     } catch ( error )
     {
+        dispatch( snackbarActionManager.show( { message: AddProductMessages.fail, variant: 'error' } ) );
         console.log( error );
     }
 };
@@ -88,10 +131,14 @@ const deleteProduct = ( id: string ) => async ( dispatch: any ) =>
     {
         const { data } = await API.deleteProduct( id );
         console.log( data );
-        if ( data.status !== 'success' )
+        if ( data.status === "success" )
         {
-            alert( "Something whent whrong!" );
-            return;
+            dispatch( snackbarActionManager.show( { message: data.message, variant: 'success' } ) );
+
+        }
+        else
+        {
+            dispatch( snackbarActionManager.show( { message: data.message, variant: 'warning' } ) );
         }
         dispatch( { type: 'DELETE', payload: id } );
     } catch ( error )

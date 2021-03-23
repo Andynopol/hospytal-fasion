@@ -40,7 +40,6 @@ interface Props
     change: ( ev: any, id: FieldSelector, forced?: boolean ) => void;
     clear: () => void;
     send: ( ev: any ) => void;
-
 }
 
 const Form = ( props: Props ) =>

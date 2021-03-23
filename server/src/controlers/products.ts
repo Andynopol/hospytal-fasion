@@ -12,7 +12,7 @@ export const getProducts = async ( req: any, res: any ) =>
         res.status( 201 ).json( { status: "success", products: products } );
     } catch ( error )
     {
-        res.status( 404 ).json( { status: "fail", message: "Something went wrong", error: error.message } );
+        res.status( 404 ).json( { status: "fail", message: "No database found", error: error.message } );
     }
 };
 
@@ -25,7 +25,7 @@ export const addProduct = async ( req: any, res: any ) =>
     try
     {
         await newProduct.save();
-        res.status( 201 ).json( { status: 'succes', product: newProduct } );
+        res.status( 201 ).json( { status: 'success', product: newProduct, message: "Product added succesfully" } );
     } catch ( error )
     {
         res.status( 409 ).json( { status: 'fail', message: 'Unsuccesfull save', error: error.message } );
@@ -43,7 +43,7 @@ export const addProducts = async ( req: any, res: any ) =>
         try
         {
             await newProduct.save();
-            res.status( 201 ).json( { status: 'succes', product: newProduct } );
+            res.status( 201 ).json( { status: 'success', product: newProduct, message: "Product(s) added succesfully" } );
         } catch ( error )
         {
             res.status( 409 ).json( { status: 'fail', message: 'Unsuccesfull save', error: error.message } );
@@ -61,12 +61,12 @@ export const updateProducts = async ( req: any, res: any ) =>
 
     if ( !mongoose.Types.ObjectId.isValid( _id ) ) 
     {
-        res.status( 404 ).send( { status: 'fail', message: 'id not found' } );
+        res.status( 404 ).send( { status: 'fail', message: 'Id not found' } );
     }
 
     const updatedProduct = await ProductMessage.findByIdAndUpdate( _id, product, { new: true } );
 
-    res.status( 200 ).json( { status: 'success', product: updatedProduct } );
+    res.status( 200 ).json( { status: 'success', product: updatedProduct, message: "Update complete" } );
 };
 
 
@@ -98,6 +98,6 @@ export const deleteProduct = async ( req: any, res: any ) =>
 
     await ProductMessage.findByIdAndDelete( _id );
 
-    res.status( 201 ).send( { status: 'success', message: `item ${ _id } was deleted` } );
+    res.status( 201 ).send( { status: 'success', message: `Item ${ _id } was deleted` } );
 
 };
