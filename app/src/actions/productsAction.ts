@@ -1,4 +1,3 @@
-import { Dispatch } from 'react';
 import * as API from '../api';
 import { snackbarActionManager } from './snackbarActions';
 import AddProductMessages from '../api/constants';
@@ -22,7 +21,7 @@ interface Product
 
 
 
-
+//get request of products state
 const fetchProducts = () => async ( dispatch: any ) =>
 {
 
@@ -40,6 +39,8 @@ const fetchProducts = () => async ( dispatch: any ) =>
 
 };
 
+
+//single item post request for product items
 const postProduct = ( product: Product ) => async ( dispatch: any ) =>
 {
     try
@@ -72,6 +73,8 @@ const postProduct = ( product: Product ) => async ( dispatch: any ) =>
     }
 };
 
+
+//multiple items post request for products state
 const postProducts = ( products: Product[] ) => async ( dispatch: any ) =>
 {
     try
@@ -102,6 +105,8 @@ const postProducts = ( products: Product[] ) => async ( dispatch: any ) =>
     }
 };
 
+
+//singe item update request for products state
 const updateProduct = ( id: 'string', product: Product ) => async ( dispatch: any ) =>
 {
     try
@@ -118,6 +123,7 @@ const updateProduct = ( id: 'string', product: Product ) => async ( dispatch: an
             dispatch( snackbarActionManager.show( { message: data.message, variant: 'warning' } ) );
         }
         dispatch( { type: 'UPDATE', payload: data } );
+        dispatch( fetchProducts() );
     } catch ( error )
     {
         dispatch( snackbarActionManager.show( { message: AddProductMessages.fail, variant: 'error' } ) );
@@ -125,6 +131,7 @@ const updateProduct = ( id: 'string', product: Product ) => async ( dispatch: an
     }
 };
 
+// single item delete for products state
 const deleteProduct = ( id: string ) => async ( dispatch: any ) =>
 {
     try
@@ -147,6 +154,7 @@ const deleteProduct = ( id: string ) => async ( dispatch: any ) =>
     }
 };
 
+//productsAreLoaded -> true
 const loaded = () =>
 {
     return {
@@ -154,6 +162,8 @@ const loaded = () =>
     };
 };
 
+
+//productsAreLoaded -> false
 const dump = () =>
 {
     return {

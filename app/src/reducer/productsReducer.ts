@@ -5,6 +5,9 @@ interface Action
     isForced?: boolean;
 }
 
+
+
+//@products state
 const productsReducer = ( state: any[] = [], action: Action ) =>
 {
     switch ( action.type )
@@ -23,6 +26,8 @@ const productsReducer = ( state: any[] = [], action: Action ) =>
     }
 };
 
+
+//@productsAreLoaded state
 const productsAreLoadedReducer = ( state: boolean = false, action: Action ) =>
 {
     switch ( action.type )

@@ -44,7 +44,7 @@ const Home = () =>
     {
         return state.productsAreLoaded;
     } );
-    let products = useSelector( ( state: any ) =>
+    const products = useSelector( ( state: any ) =>
     {
         return state.products;
     } );
@@ -57,7 +57,8 @@ const Home = () =>
         @productsActions = object that contains all redux actions that interacts with products
         including API calls that return products objects
         */
-        dispatch( productsActions.get() );
+        if ( !areProductsLoaded )
+            dispatch( productsActions.get() );
 
     }, [] );
 
