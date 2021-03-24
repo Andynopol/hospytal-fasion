@@ -8,13 +8,14 @@ import { fileURLToPath } from 'url';
 import productsRouter from './routes/poroducts-routes.js';
 import usersRouter from './routes/users-routes.js';
 
+import UserModel from './models/users-schema';
+
 const app = express();
 const __dirname = dirname( fileURLToPath( import.meta.url ) );
 const PORT = process.env.PORT || 5000;
 
 // TODO: Make this api call more secure
 const ENTRYPOINT = 'mongodb+srv://andy95:14karate@main-server.stch8.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
-
 
 
 app.use( express.static( path.join( __dirname, '../public' ) ) );

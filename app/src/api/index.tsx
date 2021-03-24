@@ -32,3 +32,5 @@ export const postProducts = ( newProducts: Product[] ) => axios.post( `/products
 export const patchProduct = ( id: string, updatedProduct: any ) => axios.patch( `/products/${ id }`, updatedProduct );
 
 export const deleteProduct = ( id: string ) => axios.delete( `/products/${ id }` );
+
+export const addTestUser = () => axios.post( '/users', {} );

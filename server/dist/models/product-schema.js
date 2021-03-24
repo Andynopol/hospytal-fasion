@@ -8,5 +8,5 @@ const productSchema = new mongoose.Schema({
     stock: { type: Number, default: 0, require: true },
     src: { type: String, default: '', require: true }
 });
-export default mongoose.model("product", productSchema);
+export default mongoose.model("product", productSchema, 'products');
 //# sourceMappingURL=product-schema.js.map

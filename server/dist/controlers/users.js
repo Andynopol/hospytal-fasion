@@ -5,7 +5,9 @@ export const getUser = async (req, res) => {
     try {
     }
     catch (error) {
-        res.status(501).json({ status: 'fail', message: 'Server error', error: error.message });
+        res.status(501).json({ status: 'fail', message: 'Server error' });
     }
+};
+export const registerUser = async (req, res) => {
 };
 //# sourceMappingURL=users.js.map

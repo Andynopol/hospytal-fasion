@@ -1,3 +1,5 @@
+import * as API from '../api';
+
 const login = () =>
 {
     return {
@@ -11,6 +13,7 @@ const logout = () =>
         type: "LOGOUT",
     };
 };
+
 
 const authentificationAction = { login: login, logout: logout };
 

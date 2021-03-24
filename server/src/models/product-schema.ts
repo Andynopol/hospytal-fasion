@@ -22,4 +22,4 @@ const productSchema: mongoose.Schema = new mongoose.Schema( {
 } );
 
 
-export default mongoose.model<ProductData>( "product", productSchema );
+export default mongoose.model<ProductData>( "product", productSchema, 'products' );

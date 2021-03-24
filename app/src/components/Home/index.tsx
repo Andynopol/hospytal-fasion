@@ -62,7 +62,6 @@ const Home = () =>
 
     }, [] );
 
-
     console.log( products );
 
     //@list of the products presented in main menu

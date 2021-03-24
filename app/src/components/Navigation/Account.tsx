@@ -123,7 +123,7 @@ const LongMenu: React.FC = () =>
       >
         { options.map( ( option ) => (
           <MenuItem value={ option } key={ option } selected={ option === 'Pyxis' } onClick={ handleAccountMenuClick }>
-            {option }
+            { option }
           </MenuItem>
         ) ) }
       </StyledMenu>
