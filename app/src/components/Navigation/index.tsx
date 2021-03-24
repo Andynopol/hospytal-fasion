@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import { withStyles } from '@material-ui/core/styles';
-import Account from './Account';
+import Account from './AccountButton';
 import Logo from './Logo';
 import NavMenu from './NavMenu';
 import DrowerMenuButton from './DrowerMenuButton';

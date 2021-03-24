@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { Grid } from '@material-ui/core';
+
+//redux
+import { useSelector, useDispatch } from 'react-redux';
+
+//links
 import PageNotFound from './NotFountComponent';
 import Home from './Home';
 import Nav from './Navigation';
 import AddProduct from './Admin/AddProduct';
 import UpdateProduct from './Admin/UpdateProduct';
-import { useSelector, useDispatch } from 'react-redux';
+import { AccountInfo, Login, Register } from './User';
+
 
 
 //@snackbar imports
@@ -46,6 +52,9 @@ const Main: React.FC = () =>
                         <Route exact path={ '/admin' } component={ Home } />
                         <Route exact path='/admin/add-product' component={ AddProduct } />
                         <Route path='/admin/product/:id' component={ UpdateProduct } />
+                        <Route path='/account' component={ AccountInfo } />
+                        <Route path='/login' component={ Login } />
+                        <Route path='/register' component={ Register } />
                         <Route path='*'>
                             <PageNotFound showNav={ setNavVisibility } />
                         </Route>

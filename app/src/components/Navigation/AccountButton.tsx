@@ -6,6 +6,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import { authentificationAction } from '../../actions';
+import { Link } from 'react-router-dom';
 
 interface StyleMenuProps
 {
@@ -18,11 +19,32 @@ interface StyleMenuProps
 
 }
 
-type OptionsInterface = [ string, string ];
+type OptionsInterface = [ string, string ][];
+
+enum OptionsNames
+{
+  login = "Login",
+  signup = "Sign up",
+  logout = "Logout",
+  accout = "Account"
+}
+
+enum OptionsLinks
+{
+  login = '/login',
+  signup = '/register',
+  logout = '/home',
+  accout = '/account',
+}
+
 
 const useStyles = makeStyles( ( theme ) => ( {
   icon: {
     color: '#fafafa',
+  },
+  Link: {
+    textDecoration: 'none',
+    color: '#000',
   }
 } ) );
 
@@ -39,7 +61,9 @@ const LongMenu: React.FC = () =>
   const dispatch = useDispatch();
 
   //@account menu items
-  const options: OptionsInterface = isLogged ? [ 'Account', 'Logout' ] : [ 'Login', 'Sign up' ];
+  const options: OptionsInterface = isLogged ?
+    [ [ OptionsNames.accout, OptionsLinks.accout ], [ OptionsNames.logout, OptionsLinks.logout ] ] :
+    [ [ OptionsNames.login, OptionsLinks.login ], [ OptionsNames.signup, OptionsLinks.signup ] ];
 
   const [ anchorEl, setAnchorEl ] = React.useState( null );
   const open = Boolean( anchorEl );
@@ -122,9 +146,11 @@ const LongMenu: React.FC = () =>
         } }
       >
         { options.map( ( option ) => (
-          <MenuItem value={ option } key={ option } selected={ option === 'Pyxis' } onClick={ handleAccountMenuClick }>
-            { option }
-          </MenuItem>
+          <Link to={ option[ 1 ] } key={ option[ 0 ] } className={ classes.Link }>
+            <MenuItem value={ option[ 0 ] } selected={ option[ 0 ] === 'Pyxis' } onClick={ handleAccountMenuClick }>
+              { option[ 0 ] }
+            </MenuItem>
+          </Link>
         ) ) }
       </StyledMenu>
     </div>
