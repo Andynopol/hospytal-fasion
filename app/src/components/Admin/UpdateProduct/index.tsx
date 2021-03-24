@@ -80,57 +80,64 @@ const UpdateProduct = ( props: Props ) =>
     }, [] );
 
 
+    const setSrc = ( file: any ) =>
+    {
+        const reader = new FileReader();
+        if ( file )
+        {
+            reader.readAsDataURL( file );
+            reader.onload = () =>
+            {
+                const base64 = reader.result;
+                setCardSrc( base64 );
+            };
+
+        }
+    };
 
 
     // handles all changes in the form and updates the fake product card
-    const handleChanges = ( ev: any, identifier: FieldSelector, forced?: boolean ) =>
+    const handleChanges = ( target: HTMLInputElement | HTMLTextAreaElement, identifier: FieldSelector ) =>
     {
         switch ( identifier )
         {
             case FieldSelector.name:
-                setCardName( ev.target.value );
+                setCardName( target.value );
                 break;
             case FieldSelector.desc:
-                setCardDescription( ev.target.value );
+                setCardDescription( target.value );
                 break;
             case FieldSelector.details:
-                setCardDetails( ev.target.value );
+                setCardDetails( target.value );
                 break;
             case FieldSelector.prom:
-                if ( ev.target.value === '' )
+                if ( target.value === '' )
                 {
                     setCardPromotion( 0 );
                     break;
                 }
-                setCardPromotion( parseInt( ev.target.value ) );
+                setCardPromotion( parseInt( target.value ) );
                 break;
             case FieldSelector.price:
-                if ( ev.target.value === '' )
+                if ( target.value === '' )
                 {
                     setCardPrice( 0 );
                     break;
                 }
-                setCardPrice( parseInt( ev.target.value ) );
+                setCardPrice( parseInt( target.value ) );
                 break;
             case FieldSelector.stock:
-                if ( ev.target.value === '' )
+                if ( target.value === '' )
                 {
                     setCardPieces( 0 );
                     break;
                 }
-                setCardPieces( parseInt( ev.target.value ) );
+                setCardPieces( parseInt( target.value ) );
                 break;
             case FieldSelector.src:
-                if ( forced )
-                {
-                    if ( ev )
-                        setCardSrc( ev );
-                    break;
-                }
-                if ( ev.target.value )
-                    setCardSrc( ev.target.value );
+                if ( 'files' in target )
+                    setSrc( target.files[ 0 ] );
                 break;
-
         }
 
     };

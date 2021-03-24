@@ -36,7 +36,7 @@ interface Props
     price: number;
     pieces: number;
     src: string;
-    change: ( ev: any, id: FieldSelector, forced?: boolean ) => void;
+    change: ( target: HTMLInputElement | HTMLTextAreaElement, id: FieldSelector, forced?: boolean ) => void;
     reset: () => void;
     update: ( ev: any ) => void;
 
@@ -49,20 +49,7 @@ const Form = ( props: Props ) =>
     const classes = useStyles();
 
 
-    const setSrc = ( file: any ) =>
-    {
-        const reader = new FileReader();
-        if ( file )
-        {
-            reader.readAsDataURL( file );
-            reader.onload = () =>
-            {
-                const base64 = reader.result;
-                change( base64, FieldSelector.src, true );
-            };
 
-        }
-    };
 
 
     return (
@@ -73,7 +60,7 @@ const Form = ( props: Props ) =>
                     label="Name"
                     type="text"
                     value={ name }
-                    onChange={ ev => change( ev, FieldSelector.name ) }
+                    onChange={ ev => change( ev.target, FieldSelector.name ) }
                 />
             </Grid>
             <Grid item xs={ 12 } md={ 6 } className={ classes.textFieldWrapper }>
@@ -86,7 +73,7 @@ const Form = ( props: Props ) =>
                     } }
                     value={ price }
                     onFocus={ ( ev ) => ev.target.select() }
-                    onChange={ ev => change( ev, FieldSelector.price ) }
+                    onChange={ ev => change( ev.target, FieldSelector.price ) }
                 />
             </Grid>
 
@@ -100,7 +87,7 @@ const Form = ( props: Props ) =>
                         shrink: true,
                     } }
                     onFocus={ ( ev ) => ev.target.select() }
-                    onChange={ ev => change( ev, FieldSelector.prom ) }
+                    onChange={ ev => change( ev.target, FieldSelector.prom ) }
                 />
             </Grid>
 
@@ -114,7 +101,7 @@ const Form = ( props: Props ) =>
                         shrink: true,
                     } }
                     onFocus={ ( ev ) => ev.target.select() }
-                    onChange={ ev => change( ev, FieldSelector.stock ) }
+                    onChange={ ev => change( ev.target, FieldSelector.stock ) }
                 />
             </Grid>
 
@@ -124,7 +111,7 @@ const Form = ( props: Props ) =>
                     className={ classes.textField }
                     label="Description"
                     value={ description }
-                    onChange={ ev => change( ev, FieldSelector.desc ) }
+                    onChange={ ev => change( ev.target, FieldSelector.desc ) }
                     rows={ 3 }
                     multiline
                 />
@@ -135,7 +122,7 @@ const Form = ( props: Props ) =>
                     className={ classes.textField }
                     label="Details"
                     value={ details }
-                    onChange={ ev => change( ev, FieldSelector.details ) }
+                    onChange={ ev => change( ev.target, FieldSelector.details ) }
                     rows={ 3 }
                     multiline
                 />
@@ -158,7 +145,7 @@ const Form = ( props: Props ) =>
                     <input
                         type="file"
                         accept="image/*"
-                        onChange={ ev => setSrc( ev.target.files[ 0 ] ) }
+                        onChange={ ev => change( ev.target, FieldSelector.src ) }
                         hidden
                     />
                 </Button>
