@@ -15,7 +15,12 @@ const __dirname = dirname( fileURLToPath( import.meta.url ) );
 const PORT = process.env.PORT || 5000;
 
 // TODO: Make this api call more secure
-const ENTRYPOINT = 'mongodb+srv://andy95:14karate@main-server.stch8.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
+// const ENTRYPOINT = 'mongodb+srv://andy95:14karate@main-server.stch8.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
+
+
+const password = '14karate';
+
+const ENTRYPOINT = `mongodb+srv://andy95:${ password }@main-server.stch8.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 
 
 app.use( express.static( path.join( __dirname, '../public' ) ) );
@@ -43,8 +48,9 @@ app.use( '/user', usersRouter );
 // app.listen( PORT, () => console.log( `listening at ${ PORT }` ) );
 
 mongoose.connect( ENTRYPOINT, { useUnifiedTopology: true, useNewUrlParser: true } )
-    .then( () => app.listen( PORT, () => console.log( `listening at ${ PORT }` ) ) )
-    .catch( () => console.log( `data not sent from the cloud` ) );
+    .then( () => console.log( `Connection established! We are online!` ) )
+    .catch( () => console.log( `Database connection failed` ) );
 
 mongoose.set( 'useFindAndModify', false );
 
+app.listen( PORT, () => console.log( `listening at ${ PORT }` ) );
