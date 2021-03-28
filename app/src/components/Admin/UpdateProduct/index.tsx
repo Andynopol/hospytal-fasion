@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Grid, CircularProgress } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
-import { productsActions } from '../../../actions';
+import { productsActions, snackbarActionManager } from '../../../actions';
 import axios from 'axios';
 
 import Form from './Form';
 import Card from '../../ProductCard';
-import FieldSelector from '../constants';
+import { FieldSelector, NoSrcAlert } from '../constants';
+import Dialog from '../../AlertDialog';
+import { start } from 'node:repl';
 
 
 interface Product
@@ -41,11 +43,11 @@ interface Props
 const UpdateProduct = ( props: Props ) =>
 {
     const { match } = props;
-    // const product = useSelector( ( state: any ) => state.products.filter( ( item: any ) => item._id === match.params.id )[ 0 ] );
+    const [ product, setProduct ] = useState( useSelector( ( state: any ) => state.products.filter( ( item: any ) => item._id === match.params.id )[ 0 ] ) );
     const classes = useStyles();
     const dispatch = useDispatch();
 
-    const [ product, setProduct ] = useState( useSelector( ( state: any ) => state.products.filter( ( item: any ) => item._id === match.params.id )[ 0 ] ) );
+    // const [ product, setProduct ] = useState( useSelector( ( state: any ) => state.products.filter( ( item: any ) => item._id === match.params.id )[ 0 ] ) );
     const [ cardName, setCardName ] = useState( product ? product.name : '' );
     const [ cardPrice, setCardPrice ] = useState( product ? product.price : 0 );
     const [ cardDescription, setCardDescription ] = useState( product ? product.description : '' );
@@ -54,10 +56,30 @@ const UpdateProduct = ( props: Props ) =>
     const [ cardPieces, setCardPieces ] = useState( product ? product.stock : 0 );
     const [ cardSrc, setCardSrc ] = useState( product ? product.src : '' );
 
+
+    // From alerts
+    const [ alerts, setAlerts ] = useState( { name: false, description: false, price: false } );
+
+
+
+    //Dialog states
+
+    const [ openAlert, setOpenAlert ] = useState( false );
+    const [ titleAlert, setTitleAlert ] = useState( '' );
+    const [ contentAlert, setContentAlert ] = useState( '' );
+
+
     const getProduct = async () =>
     {
-        const response = await axios.get( `/products/${ match.params.id }` );
-        return response.data.product;
+        const newProduct = await ( await axios.get( `/products/${ match.params.id }` ) ).data.product;
+        setProduct( newProduct );
+        setCardName( newProduct.name );
+        setCardPrice( newProduct.price );
+        setCardDescription( newProduct.description );
+        setCardDetails( newProduct.details );
+        setCardPromotion( newProduct.sale );
+        setCardPieces( newProduct.stock );
+        setCardSrc( newProduct.src );
     };
 
     useEffect( () =>
@@ -66,21 +88,41 @@ const UpdateProduct = ( props: Props ) =>
         {
             if ( !product )
             {
-                const newProduct = await getProduct();
-                setProduct( newProduct );
-                setCardName( newProduct.name );
-                setCardPrice( newProduct.price );
-                setCardDescription( newProduct.description );
-                setCardDetails( newProduct.details );
-                setCardPromotion( newProduct.sale );
-                setCardPieces( newProduct.stock );
-                setCardSrc( newProduct.src );
+                console.log( 'start' );
+                await getProduct();
             }
         } )();
     }, [] );
 
 
-    const setSrc = ( file: any ) =>
+    const checkFields = () =>
+    {
+        if ( cardName && cardDescription && cardPrice )
+        {
+            return true;
+        }
+        const tempAlerts = { ...alerts };
+        if ( !cardName )
+        {
+            tempAlerts.name = true;
+        }
+
+        if ( !cardDescription )
+        {
+            tempAlerts.description = true;
+        }
+
+        if ( !cardPrice )
+        {
+            tempAlerts.price = true;
+        }
+
+        setAlerts( tempAlerts );
+        return false;
+    };
+
+
+    const setImage = ( file: any ) =>
     {
         const reader = new FileReader();
         if ( file )
@@ -93,6 +135,11 @@ const UpdateProduct = ( props: Props ) =>
             };
 
         }
+    };
+
+    const removeImage = () =>
+    {
+        setCardSrc( '' );
     };
 
 
@@ -136,10 +183,27 @@ const UpdateProduct = ( props: Props ) =>
                 break;
             case FieldSelector.src:
                 if ( 'files' in target )
-                    setSrc( target.files[ 0 ] );
+                    setImage( target.files[ 0 ] );
                 break;
         }
 
+    };
+
+    const forcedUpdate = () =>
+    {
+        const updatedProduct: Product = {
+            name: cardName,
+            price: cardPrice,
+            description: cardDescription,
+            details: cardDetails,
+            sale: cardPromotion,
+            stock: cardPieces,
+            src: cardSrc,
+        };
+
+
+        dispatch( productsActions.update( product._id, updatedProduct ) );
+        getProduct();
     };
 
 
@@ -158,7 +222,28 @@ const UpdateProduct = ( props: Props ) =>
 
         if ( product )
         {
-            dispatch( productsActions.update( product._id, updatedProduct ) );
+            const trim: Product = ( ( { name, price, description, details, sale, stock, src } ) =>
+                ( { name, price, description, details, sale, stock, src } ) )( product );
+
+            if ( JSON.stringify( trim ) == JSON.stringify( updatedProduct ) )
+            {
+                dispatch( snackbarActionManager.hide() );
+                dispatch( snackbarActionManager.show( { message: 'No updates registered', variant: 'info' } ) );
+            }
+            else
+            {
+                if ( cardSrc )
+                {
+                    dispatch( productsActions.update( product._id, updatedProduct ) );
+                    getProduct();
+                }
+                else
+                {
+                    openDialog( NoSrcAlert.title, NoSrcAlert.content );
+                }
+
+            }
+
         } else
         {
             dispatch( productsActions.post( updatedProduct ) );
@@ -174,6 +259,14 @@ const UpdateProduct = ( props: Props ) =>
         setCardDescription( product.description );
         setCardDetails( product.details );
         setCardSrc( product.src );
+        setAlerts( { name: false, price: false, description: false } );
+    };
+
+    const openDialog = ( title: string, content: string ) =>
+    {
+        setTitleAlert( title );
+        setContentAlert( content );
+        setOpenAlert( true );
     };
 
 
@@ -206,16 +299,29 @@ const UpdateProduct = ( props: Props ) =>
                                 price={ cardPrice }
                                 pieces={ cardPieces }
                                 src={ cardSrc }
+                                removeImage={ removeImage }
                                 change={ handleChanges }
                                 reset={ resetProduct }
                                 update={ handleUpdate }
+                                alerts={ alerts }
+                                checkFields={ checkFields }
+                                openDialog={ openDialog }
+
                             />
                         </Grid>
                     </Grid> :
                     <Grid container className={ classes.loading }>
                         <CircularProgress />
                     </Grid>
+
             }
+            <Dialog
+                open={ openAlert }
+                title={ titleAlert }
+                content={ contentAlert }
+                yes={ forcedUpdate }
+                setOpen={ setOpenAlert }
+            />
         </>
     );
 };

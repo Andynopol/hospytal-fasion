@@ -60,11 +60,19 @@ const ProductAdder: React.FC = () =>
 
 
 
-    //Alert states
+    //Dialog states
 
     const [ openAlert, setOpenAlert ] = useState( false );
     const [ titleAlert, setTitleAlert ] = useState( '' );
     const [ contentAlert, setContentAlert ] = useState( '' );
+
+    const openDialog = ( title: string, content: string ) =>
+    {
+        setTitleAlert( title );
+        setContentAlert( content );
+        setOpenAlert( true );
+    };
+
 
     const setSrc = ( file: File ) =>
     {
@@ -191,8 +199,6 @@ const ProductAdder: React.FC = () =>
         dispatch( productsActions.multipost( [ newProduct ] ) );
 
 
-
-
         //marking the mandatory fields that are not completed
 
 
@@ -209,6 +215,7 @@ const ProductAdder: React.FC = () =>
         setCardDescription( '' );
         setCardDetails( '' );
         setCardSrc( '' );
+        setAlerts( { name: false, price: false, description: false } );
     };
 
 
@@ -246,9 +253,7 @@ const ProductAdder: React.FC = () =>
                     checkFields={ checkFields }
 
                     //dialog params
-                    setTitleAlert={ setTitleAlert }
-                    setContentAlert={ setContentAlert }
-                    setOpenAlert={ setOpenAlert }
+                    openDialog={ openDialog }
                 />
             </Grid>
 

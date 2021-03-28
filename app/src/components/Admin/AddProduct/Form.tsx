@@ -57,9 +57,7 @@ interface Props
 
     //dialog props
 
-    setTitleAlert: Dispatch<SetStateAction<string>>;
-    setContentAlert: Dispatch<SetStateAction<string>>;
-    setOpenAlert: Dispatch<SetStateAction<boolean>>;
+    openDialog: ( title: string, content: string ) => void;
 }
 
 const Form = ( props: Props ) =>
@@ -75,22 +73,11 @@ const Form = ( props: Props ) =>
         send,
         alerts,
         src,
-        setTitleAlert,
-        setContentAlert,
-        setOpenAlert,
+        openDialog,
         checkFields
     } = props;
 
     const classes = useStyles();
-
-
-    const noSrcUpload = () =>
-    {
-        setTitleAlert( NoSrcAlert.title );
-        setContentAlert( NoSrcAlert.content );
-        setOpenAlert( true );
-    };
-
 
 
 
@@ -197,7 +184,7 @@ const Form = ( props: Props ) =>
                             if ( checkFields() )
                             {
                                 if ( src ) { send( ev ); }
-                                else { noSrcUpload(); }
+                                else { openDialog( NoSrcAlert.title, NoSrcAlert.content ); }
                             }
 
                         } }
