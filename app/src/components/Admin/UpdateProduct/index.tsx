@@ -189,6 +189,7 @@ const UpdateProduct = ( props: Props ) =>
 
     };
 
+    //! This function updates the product without any filters! Use it with caution!
     const forcedUpdate = () =>
     {
         const updatedProduct: Product = {
@@ -201,12 +202,12 @@ const UpdateProduct = ( props: Props ) =>
             src: cardSrc,
         };
 
-
         dispatch( productsActions.update( product._id, updatedProduct ) );
         getProduct();
     };
 
 
+    // product update handler
     const handleUpdate = ( ev: any ) =>
     {
         ev.preventDefault();
