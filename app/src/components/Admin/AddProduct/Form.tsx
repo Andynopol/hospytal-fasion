@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { TextField, Grid, Button } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import DeleteIcon from '@material-ui/icons/Delete';
 import PublishIcon from '@material-ui/icons/Publish';
+
 
 import FieldSelector from '../constants';
 
@@ -40,6 +41,8 @@ interface Props
     change: ( target: ( HTMLInputElement | HTMLTextAreaElement ), id: FieldSelector ) => void;
     clear: () => void;
     send: ( ev: any ) => void;
+
+    //alert related props
 }
 
 const Form = ( props: Props ) =>

@@ -6,7 +6,10 @@ import Form from './Form';
 import Card from '../../ProductCard';
 import { useDispatch } from 'react-redux';
 import AddProductMessages from '../../../api/constants';
+import AlertDialog from '../../AlertDialog';
 
+
+import { addProductAlertInfo } from './AlertMessages';
 
 
 //@object that contains all global state product actions(including API calls)
@@ -45,6 +48,7 @@ const ProductAdder: React.FC<Props> = ( props: Props ) =>
     const classes = useStyles();
     const dispatch = useDispatch();
 
+    // Form states
     const [ cardName, setCardName ] = useState( '' );
     const [ cardDescription, setCardDescription ] = useState( '' );
     const [ cardDetails, setCardDetails ] = useState( '' );
@@ -53,7 +57,15 @@ const ProductAdder: React.FC<Props> = ( props: Props ) =>
     const [ cardPieces, setCardPieces ] = useState( 0 );
     const [ cardSrc, setCardSrc ] = useState( '' );
 
+    const [ alerts, setAlerst ] = useState( { name: false, description: false, price: false } );
 
+
+    //Alert states
+
+    const [ openAlert, setOpenAlert ] = useState( false );
+    const [ titleAlert, setTitleAlert ] = useState( '' );
+    const [ contentAlert, setContentAlert ] = useState( '' );
+    const [ yesAlert, setYesAlert ] = useState( null );
 
     const setSrc = ( file: File ) =>
     {
@@ -123,6 +135,9 @@ const ProductAdder: React.FC<Props> = ( props: Props ) =>
     const handleSubmit = ( ev: any ) =>
     {
         ev.preventDefault();
+
+
+
         const newProduct: Product = {
             name: cardName,
             price: cardPrice,
@@ -132,6 +147,11 @@ const ProductAdder: React.FC<Props> = ( props: Props ) =>
             stock: cardPieces,
             src: cardSrc,
         };
+
+        if ( !newProduct.name )
+        {
+            setTitleAlert( '' );
+        }
 
         dispatch( productsActions.multipost( [ newProduct ] ) );
     };
@@ -180,7 +200,13 @@ const ProductAdder: React.FC<Props> = ( props: Props ) =>
             </Grid>
 
 
-
+            <AlertDialog
+                open={ openAlert }
+                title={ titleAlert }
+                content={ contentAlert }
+                yes={ yesAlert }
+                setOpen={ setOpenAlert }
+            />
         </Grid>
     );
 };
