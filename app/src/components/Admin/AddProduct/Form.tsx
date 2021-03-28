@@ -5,7 +5,8 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import PublishIcon from '@material-ui/icons/Publish';
 
 
-import FieldSelector from '../constants';
+
+import { FieldSelector, NoSrcAlert } from '../constants';
 
 
 const useStyles = makeStyles( ( theme: Theme ) => ( {
@@ -26,6 +27,14 @@ const useStyles = makeStyles( ( theme: Theme ) => ( {
     buttonWrapper: {
         display: 'flex',
         justifyContent: 'center',
+    },
+    alertField: {
+        '&>label': {
+            color: 'red'
+        },
+        '& .MuiInput-underline:before': {
+            borderBottom: '1px solid red'
+        }
     }
 } ) );
 
@@ -42,17 +51,45 @@ interface Props
     clear: () => void;
     send: ( ev: any ) => void;
 
-    //alert related props
+    //fields checkers
+    alerts: { name: boolean, price: boolean, description: boolean; };
+    checkFields: () => boolean;
+
+    //dialog props
+
+    setTitleAlert: Dispatch<SetStateAction<string>>;
+    setContentAlert: Dispatch<SetStateAction<string>>;
+    setOpenAlert: Dispatch<SetStateAction<boolean>>;
 }
 
 const Form = ( props: Props ) =>
 {
-    const { name, description, details, promotion, pieces, price, change, clear, send } = props;
+    const { name,
+        description,
+        details,
+        promotion,
+        pieces,
+        price,
+        change,
+        clear,
+        send,
+        alerts,
+        src,
+        setTitleAlert,
+        setContentAlert,
+        setOpenAlert,
+        checkFields
+    } = props;
 
     const classes = useStyles();
 
 
-
+    const noSrcUpload = () =>
+    {
+        setTitleAlert( NoSrcAlert.title );
+        setContentAlert( NoSrcAlert.content );
+        setOpenAlert( true );
+    };
 
 
 
@@ -61,8 +98,8 @@ const Form = ( props: Props ) =>
         <Grid container spacing={ 1 } justify="center">
             <Grid item xs={ 12 } className={ classes.textFieldWrapper }>
                 <TextField
-                    className={ classes.textField }
-                    label="Name"
+                    className={ `${ classes.textField } ${ alerts.name ? classes.alertField : '' }` }
+                    label="Name*"
                     type="text"
                     value={ name }
                     onChange={ ev => change( ev.target, FieldSelector.name ) }
@@ -70,8 +107,8 @@ const Form = ( props: Props ) =>
             </Grid>
             <Grid item xs={ 12 } md={ 6 } className={ classes.textFieldWrapper }>
                 <TextField
-                    className={ classes.textField }
-                    label="Price(RON)"
+                    className={ `${ classes.textField } ${ alerts.price ? classes.alertField : '' }` }
+                    label="Price*(RON)"
                     type="number"
                     InputLabelProps={ {
                         shrink: true,
@@ -113,8 +150,8 @@ const Form = ( props: Props ) =>
 
             <Grid item xs={ 12 } className={ classes.textFieldWrapper }>
                 <TextField
-                    className={ classes.textField }
-                    label="Description"
+                    className={ `${ classes.textField } ${ alerts.description ? classes.alertField : '' }` }
+                    label="Description*"
                     value={ description }
                     onChange={ ev => change( ev.target, FieldSelector.desc ) }
                     rows={ 3 }
@@ -155,7 +192,15 @@ const Form = ( props: Props ) =>
                         color="primary"
                         className={ classes.button }
                         startIcon={ <PublishIcon /> }
-                        onClick={ ( ev ) => { send( ev ); } }
+                        onClick={ ( ev ) =>
+                        {
+                            if ( checkFields() )
+                            {
+                                if ( src ) { send( ev ); }
+                                else { noSrcUpload(); }
+                            }
+
+                        } }
                     >
                         Upload
                     </Button>

@@ -6,17 +6,15 @@ import Form from './Form';
 import Card from '../../ProductCard';
 import { useDispatch } from 'react-redux';
 import AddProductMessages from '../../../api/constants';
-import AlertDialog from '../../AlertDialog';
-
-
-import { addProductAlertInfo } from './AlertMessages';
+import Dialog from '../../AlertDialog';
 
 
 //@object that contains all global state product actions(including API calls)
 import { productsActions } from '../../../actions';
 
 //@enum of commands for form fileds
-import FieldSelector from '../constants';
+import { FieldSelector } from '../constants';
+import { isElementAccessExpression } from 'typescript';
 
 
 const useStyles = makeStyles( ( theme: Theme ) => ( {
@@ -43,7 +41,7 @@ interface Props
 
 
 
-const ProductAdder: React.FC<Props> = ( props: Props ) =>
+const ProductAdder: React.FC = () =>
 {
     const classes = useStyles();
     const dispatch = useDispatch();
@@ -57,7 +55,9 @@ const ProductAdder: React.FC<Props> = ( props: Props ) =>
     const [ cardPieces, setCardPieces ] = useState( 0 );
     const [ cardSrc, setCardSrc ] = useState( '' );
 
-    const [ alerts, setAlerst ] = useState( { name: false, description: false, price: false } );
+    // From alerts
+    const [ alerts, setAlerts ] = useState( { name: false, description: false, price: false } );
+
 
 
     //Alert states
@@ -65,7 +65,6 @@ const ProductAdder: React.FC<Props> = ( props: Props ) =>
     const [ openAlert, setOpenAlert ] = useState( false );
     const [ titleAlert, setTitleAlert ] = useState( '' );
     const [ contentAlert, setContentAlert ] = useState( '' );
-    const [ yesAlert, setYesAlert ] = useState( null );
 
     const setSrc = ( file: File ) =>
     {
@@ -92,9 +91,17 @@ const ProductAdder: React.FC<Props> = ( props: Props ) =>
         {
             case FieldSelector.name:
                 setCardName( target.value );
+                if ( alerts.name )
+                {
+                    setAlerts( { ...alerts, name: false } );
+                }
                 break;
             case FieldSelector.desc:
                 setCardDescription( target.value );
+                if ( alerts.description )
+                {
+                    setAlerts( { ...alerts, description: false } );
+                }
                 break;
             case FieldSelector.details:
                 setCardDetails( target.value );
@@ -114,6 +121,10 @@ const ProductAdder: React.FC<Props> = ( props: Props ) =>
                     break;
                 }
                 setCardPrice( parseInt( target.value ) );
+                if ( alerts.price )
+                {
+                    setAlerts( { ...alerts, price: false } );
+                }
                 break;
             case FieldSelector.stock:
                 if ( target.value === '' )
@@ -132,9 +143,37 @@ const ProductAdder: React.FC<Props> = ( props: Props ) =>
     };
 
     // TODO make it abe to send multiple items
+
+
+    const checkFields = () =>
+    {
+        if ( cardName && cardDescription && cardPrice )
+        {
+            return true;
+        }
+        const tempAlerts = { ...alerts };
+        if ( !cardName )
+        {
+            tempAlerts.name = true;
+        }
+
+        if ( !cardDescription )
+        {
+            tempAlerts.description = true;
+        }
+
+        if ( !cardPrice )
+        {
+            tempAlerts.price = true;
+        }
+
+        setAlerts( tempAlerts );
+        return false;
+    };
+
     const handleSubmit = ( ev: any ) =>
     {
-        ev.preventDefault();
+        // ev.preventDefault();
 
 
 
@@ -148,12 +187,17 @@ const ProductAdder: React.FC<Props> = ( props: Props ) =>
             src: cardSrc,
         };
 
-        if ( !newProduct.name )
-        {
-            setTitleAlert( '' );
-        }
 
         dispatch( productsActions.multipost( [ newProduct ] ) );
+
+
+
+
+        //marking the mandatory fields that are not completed
+
+
+
+
     };
 
     const clearProductDetails = () =>
@@ -196,15 +240,24 @@ const ProductAdder: React.FC<Props> = ( props: Props ) =>
                     change={ handleChanges }
                     clear={ clearProductDetails }
                     send={ handleSubmit }
+
+                    //fields checkers
+                    alerts={ alerts }
+                    checkFields={ checkFields }
+
+                    //dialog params
+                    setTitleAlert={ setTitleAlert }
+                    setContentAlert={ setContentAlert }
+                    setOpenAlert={ setOpenAlert }
                 />
             </Grid>
 
 
-            <AlertDialog
+            <Dialog
                 open={ openAlert }
                 title={ titleAlert }
                 content={ contentAlert }
-                yes={ yesAlert }
+                yes={ handleSubmit }
                 setOpen={ setOpenAlert }
             />
         </Grid>

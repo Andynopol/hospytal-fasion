@@ -11,7 +11,7 @@ interface Props
 {
     title: string,
     content: string,
-    yes: () => void | null;
+    yes: ( ev: any ) => void;
     no?: () => void | null;
     open: boolean;
     setOpen: Dispatch<SetStateAction<boolean>>;
@@ -20,9 +20,9 @@ interface Props
 
 const AlertDialog: React.FC<Props> = ( props: Props ) =>
 {
-    const [ open, setOpen ] = useState( false );
+    // const [ open, setOpen ] = useState( false );
 
-    const { title, content, yes, no } = props;
+    const { title, content, yes, no, open, setOpen } = props;
 
     // const handleClickOpen = () =>
     // {
@@ -51,7 +51,7 @@ const AlertDialog: React.FC<Props> = ( props: Props ) =>
                 <Button onClick={ no ? () => { no(); handleClose(); } : handleClose } color="primary">
                     No
           </Button>
-                <Button onClick={ yes ? () => { yes(); handleClose(); } : handleClose } color="primary" autoFocus>
+                <Button onClick={ yes ? ( ev ) => { yes( ev ); handleClose(); } : handleClose } color="primary" autoFocus>
                     Yes
           </Button>
             </DialogActions>
