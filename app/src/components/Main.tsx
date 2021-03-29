@@ -17,8 +17,9 @@ import { AccountInfo, Login, Register } from './User';
 
 //@snackbar imports
 import Snackbar from '@material-ui/core/Snackbar';
-import { Alert } from './Admin/alerts';
+import { Alert } from './Alert';
 import { snackbarActionManager } from '../actions';
+
 
 //@main component that defines the routes
 const Main: React.FC = () =>
@@ -27,8 +28,10 @@ const Main: React.FC = () =>
     //@snackbar controllers
     const dispatch = useDispatch();
 
+    //@redux state for snackbar dinamic data
     const snackInfo = useSelector( ( state: any ) => state.snackbar );
 
+    //@callback when snackbar closes
     const handleSnackbarClose = ( event?: React.SyntheticEvent, reason?: string ) =>
     {
         if ( reason === 'clickaway' )
@@ -38,7 +41,9 @@ const Main: React.FC = () =>
         dispatch( snackbarActionManager.hide() );
     };
 
-
+    /**visibility of navbar
+     * ! true only on PageNotFound
+    */
     const [ navVisibility, setNavVisibility ] = useState( true );
 
     return (

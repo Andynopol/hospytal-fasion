@@ -62,6 +62,7 @@ interface Props
   isVisible: boolean;
 }
 
+//@entrypoint of the navbar component 
 const ButtonAppBar: React.FC<Props> = ( props: Props ) =>
 {
   const classes = useStyles();

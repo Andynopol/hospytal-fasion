@@ -15,6 +15,7 @@ const useStyles = makeStyles( ( theme ) => ( {
     },
 } ) );
 
+//Just a display component
 const Logo = () =>
 {
     const classes = useStyles();

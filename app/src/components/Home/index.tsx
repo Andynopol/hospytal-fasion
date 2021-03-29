@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import Card from '../ProductCard';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid, CircularProgress } from '@material-ui/core';
-// import CropOriginalIcon from '@material-ui/icons/CropOriginal';
 import { productsActions } from '../../actions';
 import { useSelector, useDispatch } from 'react-redux';
 import SignalCellularNoSimOutlinedIcon from '@material-ui/icons/SignalCellularNoSimOutlined';
@@ -90,22 +89,26 @@ const Home = () =>
                         ?
                         <Grid className={ classes.root } container justify='center' alignItems='center' spacing={ 2 }>
                             { items }
+                            {/* loading animation after last product in the list until the new array of products is loaded */ }
                             <Grid item xs={ 12 } md={ 4 }>
                                 <CircularProgress />
                             </Grid>
                         </Grid>
                         :
+                        // loading animation for all products
                         <Grid className={ classes.loading } container justify='center' alignItems='center' spacing={ 2 }>
                             <CircularProgress />
                         </Grid> )
                     :
                     products.length
                         ?
+                        //displaying all products with no loading involved
                         ( <Grid className={ classes.root } container spacing={ 2 }>
                             { items }
                         </Grid> )
                         :
                         (
+                            //when the products array is empty(or maybe when you have a connection issue)
                             <Grid className={ classes.loading } container justify='center' alignContent='center'>
                                 <SignalCellularNoSimOutlinedIcon className={ classes.icon } />
                             </Grid>

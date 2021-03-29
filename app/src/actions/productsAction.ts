@@ -34,6 +34,7 @@ const fetchProducts = () => async ( dispatch: any ) =>
     } catch ( error )
     {
         dispatch( { type: 'GET', payload: [] } );
+        //signal that all products are loaded and no refresh is needed
         dispatch( loaded() );
         dispatch( snackbarActionManager.hide() );
         dispatch( snackbarActionManager.show( { message: "Connection failed", variant: 'error' } ) );
@@ -64,8 +65,11 @@ const postProduct = ( product: Product ) => async ( dispatch: any ) =>
         }
 
         console.log( data );
+        //signal the app that not all products are loaded
         dispatch( dump() );
         dispatch( { type: "ADD-PRODUCT", payload: data } );
+        //refresh all products
+        dispatch( fetchProducts() );
     } catch ( error )
     {
         if ( error.message === 'Request failed with status code 409' )
@@ -98,8 +102,11 @@ const postProducts = ( products: Product[] ) => async ( dispatch: any ) =>
             dispatch( snackbarActionManager.show( { message: data.message, variant: 'warning' } ) );
         }
         console.log( data );
+        //signal the app that not all products are loaded
         dispatch( dump() );
         dispatch( { type: "ADD-PRODUCTS", payload: data } );
+        //refresh all products
+        dispatch( fetchProducts() );
     } catch ( error )
     {
         if ( error.message === 'Request failed with status code 409' )
@@ -186,6 +193,11 @@ const dump = () =>
     };
 };
 
+
+/*
+@productsActions = object that contains all redux actions that interacts with products
+including API calls that return products objects
+*/
 const productsActions = { get: fetchProducts, post: postProduct, multipost: postProducts, update: updateProduct, delete: deleteProduct, load: loaded, dump: dump };
 
 export { productsActions };

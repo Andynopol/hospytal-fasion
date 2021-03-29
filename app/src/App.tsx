@@ -7,9 +7,7 @@ export default class App extends Component
   render ()
   {
     return (
-      <div id="anchor">
-        <Main />
-      </div>
+      <Main />
     );
   }
 }
