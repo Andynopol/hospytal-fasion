@@ -1,9 +1,9 @@
 import React, { Dispatch, SetStateAction } from 'react';
-import { TextField, Grid, Button } from '@material-ui/core';
+import { TextField, Grid, Button, IconButton } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import DeleteIcon from '@material-ui/icons/Delete';
 import PublishIcon from '@material-ui/icons/Publish';
-
+import BrokenImageIcon from '@material-ui/icons/BrokenImage';
 
 
 import { FieldSelector, NoSrcAlert } from '../constants';
@@ -35,6 +35,9 @@ const useStyles = makeStyles( ( theme: Theme ) => ( {
         '& .MuiInput-underline:before': {
             borderBottom: '1px solid red'
         }
+    },
+    activeButton: {
+        color: 'rgba( 0, 0, 0, 1 ) !important'
     }
 } ) );
 
@@ -47,12 +50,13 @@ interface Props
     price: number;
     pieces: number;
     src: string;
+    removeImage: () => void;
     change: ( target: ( HTMLInputElement | HTMLTextAreaElement ), id: FieldSelector ) => void;
     clear: () => void;
     send: ( ev: any ) => void;
 
     //fields checkers
-    alerts: { name: boolean, price: boolean, description: boolean; };
+    fieldWarnings: { name: boolean, price: boolean, description: boolean; };
     checkFields: () => boolean;
 
     //dialog props
@@ -71,10 +75,11 @@ const Form = ( props: Props ) =>
         change,
         clear,
         send,
-        alerts,
+        fieldWarnings,
         src,
         openDialog,
-        checkFields
+        checkFields,
+        removeImage,
     } = props;
 
     const classes = useStyles();
@@ -85,7 +90,7 @@ const Form = ( props: Props ) =>
         <Grid container spacing={ 1 } justify="center">
             <Grid item xs={ 12 } className={ classes.textFieldWrapper }>
                 <TextField
-                    className={ `${ classes.textField } ${ alerts.name ? classes.alertField : '' }` }
+                    className={ `${ classes.textField } ${ fieldWarnings.name ? classes.alertField : '' }` }
                     label="Name*"
                     type="text"
                     value={ name }
@@ -94,7 +99,7 @@ const Form = ( props: Props ) =>
             </Grid>
             <Grid item xs={ 12 } md={ 6 } className={ classes.textFieldWrapper }>
                 <TextField
-                    className={ `${ classes.textField } ${ alerts.price ? classes.alertField : '' }` }
+                    className={ `${ classes.textField } ${ fieldWarnings.price ? classes.alertField : '' }` }
                     label="Price*(RON)"
                     type="number"
                     InputLabelProps={ {
@@ -137,7 +142,7 @@ const Form = ( props: Props ) =>
 
             <Grid item xs={ 12 } className={ classes.textFieldWrapper }>
                 <TextField
-                    className={ `${ classes.textField } ${ alerts.description ? classes.alertField : '' }` }
+                    className={ `${ classes.textField } ${ fieldWarnings.description ? classes.alertField : '' }` }
                     label="Description*"
                     value={ description }
                     onChange={ ev => change( ev.target, FieldSelector.desc ) }
@@ -158,18 +163,25 @@ const Form = ( props: Props ) =>
             </Grid>
 
             <Grid item xs={ 12 } className={ classes.textFieldWrapper }>
-                <Button
-                    variant="contained"
-                    component="label"
-                >
-                    Select File
-                    <input
-                        type="file"
-                        accept="image/*"
-                        onChange={ ev => change( ev.target, FieldSelector.src ) }
-                        hidden
-                    />
-                </Button>
+                <Grid container spacing={ 1 } justify="center">
+                    <Button
+                        variant="contained"
+                        component="label"
+                    >
+                        Select File
+                            <input
+                            type="file"
+                            accept="image/*"
+                            onChange={ ev => change( ev.target, FieldSelector.src ) }
+                            hidden
+                        />
+                    </Button>
+                    <IconButton disabled={ src ? false : true } onClick={ removeImage } className={ `${ src ? classes.activeButton : '' }` }>
+                        <BrokenImageIcon />
+                    </IconButton>
+
+                </Grid>
+
             </Grid>
 
             <Grid container>

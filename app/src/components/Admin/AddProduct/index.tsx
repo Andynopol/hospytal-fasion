@@ -39,9 +39,7 @@ interface Props
 
 }
 
-
-
-const ProductAdder: React.FC = () =>
+const ProductAdder: React.FC<Props> = ( props: Props ) =>
 {
     const classes = useStyles();
     const dispatch = useDispatch();
@@ -55,8 +53,8 @@ const ProductAdder: React.FC = () =>
     const [ cardPieces, setCardPieces ] = useState( 0 );
     const [ cardSrc, setCardSrc ] = useState( '' );
 
-    // From alerts
-    const [ alerts, setAlerts ] = useState( { name: false, description: false, price: false } );
+    // Mandatory fields alerts
+    const [ fieldWarnings, setFieldWarnings ] = useState( { name: false, description: false, price: false } );
 
 
 
@@ -66,6 +64,7 @@ const ProductAdder: React.FC = () =>
     const [ titleAlert, setTitleAlert ] = useState( '' );
     const [ contentAlert, setContentAlert ] = useState( '' );
 
+    //opens the dialog and sets the title and content inside the componenet
     const openDialog = ( title: string, content: string ) =>
     {
         setTitleAlert( title );
@@ -73,8 +72,8 @@ const ProductAdder: React.FC = () =>
         setOpenAlert( true );
     };
 
-
-    const setSrc = ( file: File ) =>
+    //transforms the image file into base64 string sets it in src state
+    const setImage = ( file: File ) =>
     {
         const reader = new FileReader();
         if ( file )
@@ -89,6 +88,12 @@ const ProductAdder: React.FC = () =>
 
     };
 
+    //resets src state
+    const removeImage = () =>
+    {
+        setCardSrc( '' );
+    };
+
     // handles all changes in the form and updates the fake product card
     // @params: @ev: the event that provides us the target input
     // @params: @identifier: the string that feeds switch structure witch selects the setState function
@@ -99,16 +104,16 @@ const ProductAdder: React.FC = () =>
         {
             case FieldSelector.name:
                 setCardName( target.value );
-                if ( alerts.name )
+                if ( fieldWarnings.name )
                 {
-                    setAlerts( { ...alerts, name: false } );
+                    setFieldWarnings( { ...fieldWarnings, name: false } );
                 }
                 break;
             case FieldSelector.desc:
                 setCardDescription( target.value );
-                if ( alerts.description )
+                if ( fieldWarnings.description )
                 {
-                    setAlerts( { ...alerts, description: false } );
+                    setFieldWarnings( { ...fieldWarnings, description: false } );
                 }
                 break;
             case FieldSelector.details:
@@ -129,9 +134,9 @@ const ProductAdder: React.FC = () =>
                     break;
                 }
                 setCardPrice( parseInt( target.value ) );
-                if ( alerts.price )
+                if ( fieldWarnings.price )
                 {
-                    setAlerts( { ...alerts, price: false } );
+                    setFieldWarnings( { ...fieldWarnings, price: false } );
                 }
                 break;
             case FieldSelector.stock:
@@ -144,7 +149,7 @@ const ProductAdder: React.FC = () =>
                 break;
             case FieldSelector.src:
                 if ( 'files' in target )
-                    setSrc( target.files[ 0 ] );
+                    setImage( target.files[ 0 ] );
                 break;
         }
 
@@ -159,23 +164,23 @@ const ProductAdder: React.FC = () =>
         {
             return true;
         }
-        const tempAlerts = { ...alerts };
+        const tempWarnings = { ...fieldWarnings };
         if ( !cardName )
         {
-            tempAlerts.name = true;
+            tempWarnings.name = true;
         }
 
         if ( !cardDescription )
         {
-            tempAlerts.description = true;
+            tempWarnings.description = true;
         }
 
         if ( !cardPrice )
         {
-            tempAlerts.price = true;
+            tempWarnings.price = true;
         }
 
-        setAlerts( tempAlerts );
+        setFieldWarnings( tempWarnings );
         return false;
     };
 
@@ -215,7 +220,7 @@ const ProductAdder: React.FC = () =>
         setCardDescription( '' );
         setCardDetails( '' );
         setCardSrc( '' );
-        setAlerts( { name: false, price: false, description: false } );
+        setFieldWarnings( { name: false, price: false, description: false } );
     };
 
 
@@ -247,9 +252,10 @@ const ProductAdder: React.FC = () =>
                     change={ handleChanges }
                     clear={ clearProductDetails }
                     send={ handleSubmit }
+                    removeImage={ removeImage }
 
                     //fields checkers
-                    alerts={ alerts }
+                    fieldWarnings={ fieldWarnings }
                     checkFields={ checkFields }
 
                     //dialog params

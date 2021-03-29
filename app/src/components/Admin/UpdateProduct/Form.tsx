@@ -33,6 +33,9 @@ const useStyles = makeStyles( ( theme: Theme ) => ( {
         '& .MuiInput-underline:before': {
             borderBottom: '1px solid red'
         }
+    },
+    activeButton: {
+        color: 'rgba( 0, 0, 0, 1 ) !important'
     }
 } ) );
 
@@ -49,14 +52,14 @@ interface Props
     change: ( target: HTMLInputElement | HTMLTextAreaElement, id: FieldSelector, forced?: boolean ) => void;
     reset: () => void;
     update: ( ev: any ) => void;
-    alerts: { name: boolean, price: boolean, description: boolean, };
+    fieldWarnings: { name: boolean, price: boolean, description: boolean, };
     checkFields: () => boolean;
     openDialog?: ( title: string, content: string ) => void;
 }
 
 const Form = ( props: Props ) =>
 {
-    const { name, description, details, promotion, pieces, price, change, reset, update, removeImage, checkFields, alerts } = props;
+    const { name, description, details, promotion, pieces, price, change, reset, update, removeImage, checkFields, fieldWarnings, src } = props;
 
     const classes = useStyles();
 
@@ -68,7 +71,7 @@ const Form = ( props: Props ) =>
         <Grid container spacing={ 1 } justify="center">
             <Grid item xs={ 12 } className={ classes.textFieldWrapper }>
                 <TextField
-                    className={ `${ classes.textField } ${ alerts.name ? classes.alertField : '' }` }
+                    className={ `${ classes.textField } ${ fieldWarnings.name ? classes.alertField : '' }` }
                     label="Name"
                     type="text"
                     value={ name }
@@ -77,7 +80,7 @@ const Form = ( props: Props ) =>
             </Grid>
             <Grid item xs={ 12 } md={ 6 } className={ classes.textFieldWrapper }>
                 <TextField
-                    className={ `${ classes.textField } ${ alerts.price ? classes.alertField : '' }` }
+                    className={ `${ classes.textField } ${ fieldWarnings.price ? classes.alertField : '' }` }
                     label="Price(RON)"
                     type="number"
                     InputLabelProps={ {
@@ -120,7 +123,7 @@ const Form = ( props: Props ) =>
 
             <Grid item xs={ 12 } className={ classes.textFieldWrapper }>
                 <TextField
-                    className={ `${ classes.textField } ${ alerts.description ? classes.alertField : '' }` }
+                    className={ `${ classes.textField } ${ fieldWarnings.description ? classes.alertField : '' }` }
                     label="Description"
                     value={ description }
                     onChange={ ev => change( ev.target, FieldSelector.desc ) }
@@ -154,7 +157,7 @@ const Form = ( props: Props ) =>
                             hidden
                         />
                     </Button>
-                    <IconButton onClick={ removeImage }>
+                    <IconButton disabled={ src ? false : true } className={ `${ src ? classes.activeButton : '' }` } onClick={ removeImage }>
                         <BrokenImageIcon />
                     </IconButton>
 

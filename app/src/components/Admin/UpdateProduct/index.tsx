@@ -43,11 +43,11 @@ interface Props
 const UpdateProduct = ( props: Props ) =>
 {
     const { match } = props;
-    const [ product, setProduct ] = useState( useSelector( ( state: any ) => state.products.filter( ( item: any ) => item._id === match.params.id )[ 0 ] ) );
     const classes = useStyles();
     const dispatch = useDispatch();
 
-    // const [ product, setProduct ] = useState( useSelector( ( state: any ) => state.products.filter( ( item: any ) => item._id === match.params.id )[ 0 ] ) );
+
+    const [ product, setProduct ] = useState( useSelector( ( state: any ) => state.products.filter( ( item: any ) => item._id === match.params.id )[ 0 ] ) );
     const [ cardName, setCardName ] = useState( product ? product.name : '' );
     const [ cardPrice, setCardPrice ] = useState( product ? product.price : 0 );
     const [ cardDescription, setCardDescription ] = useState( product ? product.description : '' );
@@ -57,8 +57,8 @@ const UpdateProduct = ( props: Props ) =>
     const [ cardSrc, setCardSrc ] = useState( product ? product.src : '' );
 
 
-    // From alerts
-    const [ alerts, setAlerts ] = useState( { name: false, description: false, price: false } );
+    // Mandatory field alerts
+    const [ fieldWarnings, setFieldWarnings ] = useState( { name: false, description: false, price: false } );
 
 
 
@@ -101,23 +101,23 @@ const UpdateProduct = ( props: Props ) =>
         {
             return true;
         }
-        const tempAlerts = { ...alerts };
+        const tempWarnings = { ...fieldWarnings };
         if ( !cardName )
         {
-            tempAlerts.name = true;
+            tempWarnings.name = true;
         }
 
         if ( !cardDescription )
         {
-            tempAlerts.description = true;
+            tempWarnings.description = true;
         }
 
         if ( !cardPrice )
         {
-            tempAlerts.price = true;
+            tempWarnings.price = true;
         }
 
-        setAlerts( tempAlerts );
+        setFieldWarnings( tempWarnings );
         return false;
     };
 
@@ -143,16 +143,27 @@ const UpdateProduct = ( props: Props ) =>
     };
 
 
-    // handles all changes in the form and updates the fake product card
+    /* 
+    Handles all changes in the form and updates the fake product card including the removal of warnings if you change the input 
+    value of that corresponding field
+    */
     const handleChanges = ( target: HTMLInputElement | HTMLTextAreaElement, identifier: FieldSelector ) =>
     {
         switch ( identifier )
         {
             case FieldSelector.name:
                 setCardName( target.value );
+                if ( fieldWarnings.name )
+                {
+                    setFieldWarnings( { ...fieldWarnings, name: false } );
+                }
                 break;
             case FieldSelector.desc:
                 setCardDescription( target.value );
+                if ( fieldWarnings.description )
+                {
+                    setFieldWarnings( { ...fieldWarnings, description: false } );
+                }
                 break;
             case FieldSelector.details:
                 setCardDetails( target.value );
@@ -172,6 +183,10 @@ const UpdateProduct = ( props: Props ) =>
                     break;
                 }
                 setCardPrice( parseInt( target.value ) );
+                if ( fieldWarnings.price )
+                {
+                    setFieldWarnings( { ...fieldWarnings, price: false } );
+                }
                 break;
             case FieldSelector.stock:
                 if ( target.value === '' )
@@ -189,7 +204,10 @@ const UpdateProduct = ( props: Props ) =>
 
     };
 
-    //! This function updates the product without any filters! Use it with caution!
+    /** 
+     * ! This function updates the product without any filters! Use it with caution! 
+     * ! Use it only as dialog yes property 
+     * */
     const forcedUpdate = () =>
     {
         const updatedProduct: Product = {
@@ -251,6 +269,7 @@ const UpdateProduct = ( props: Props ) =>
         }
     };
 
+
     const resetProduct = () =>
     {
         setCardName( product.name );
@@ -260,7 +279,7 @@ const UpdateProduct = ( props: Props ) =>
         setCardDescription( product.description );
         setCardDetails( product.details );
         setCardSrc( product.src );
-        setAlerts( { name: false, price: false, description: false } );
+        setFieldWarnings( { name: false, price: false, description: false } );
     };
 
     const openDialog = ( title: string, content: string ) =>
@@ -304,7 +323,7 @@ const UpdateProduct = ( props: Props ) =>
                                 change={ handleChanges }
                                 reset={ resetProduct }
                                 update={ handleUpdate }
-                                alerts={ alerts }
+                                fieldWarnings={ fieldWarnings }
                                 checkFields={ checkFields }
                                 openDialog={ openDialog }
 
