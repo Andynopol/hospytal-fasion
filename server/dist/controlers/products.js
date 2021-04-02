@@ -27,7 +27,7 @@ export const addProduct = async (req, res) => {
         console.log('New Product: ' + newProduct);
         await newProduct.save();
         if (file) {
-            saveFile(`public/${filePath}`, file.buffer);
+            saveFile(`${filePath}`, file.buffer);
         }
         res.status(201).json({ status: 'success', product: newProduct, message: "Product added succesfully" });
     }
