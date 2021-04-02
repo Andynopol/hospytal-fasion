@@ -35,8 +35,6 @@ export const addProduct = async (req, res) => {
 export const addProducts = async (req, res) => {
     const proudcts = req.body;
     const files = req.files;
-    console.log(proudcts);
-    console.log(files);
     for (let product of proudcts) {
         const newProduct = new ProductMessage(product);
         try {
@@ -73,7 +71,6 @@ export const deleteProduct = async (req, res) => {
     }
     const selectedProduct = await ProductMessage.findById(_id);
     await ProductMessage.findByIdAndDelete(_id);
-    console.log(selectedProduct.src);
     FileManager.delete(getPathToDelete(selectedProduct.src));
     res.status(201).send({ status: 'success', message: `Item ${_id} was deleted` });
 };

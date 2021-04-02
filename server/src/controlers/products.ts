@@ -63,14 +63,12 @@ export const addProduct = async ( req: any, res: any ) =>
 
 };
 
-
+//deprecated for now
 export const addProducts = async ( req: any, res: any ) =>
 {
     const proudcts = req.body;
     const files = req.files;
 
-    console.log( proudcts );
-    console.log( files );
 
     for ( let product of proudcts )
     {
@@ -134,7 +132,6 @@ export const deleteProduct = async ( req: any, res: any ) =>
     const selectedProduct = await ProductMessage.findById( _id );
     await ProductMessage.findByIdAndDelete( _id );
 
-    console.log( selectedProduct.src );
     FileManager.delete( getPathToDelete( selectedProduct.src ) );
 
     res.status( 201 ).send( { status: 'success', message: `Item ${ _id } was deleted` } );
