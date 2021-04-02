@@ -42,23 +42,19 @@ export const addProduct = async ( req: any, res: any ) =>
     const files = req.files;
     let file = files[ 0 ];
     const fileName = Date.now();
-    const filePath = `/public/uploads/${ fileName }.png`;
-    product.src = `http://localhost/${ filePath }`;
+    const filePath = `uploads/${ fileName }.png`;
 
-    // path.join(
-    //     '../',
-    //     path.relative( path.join( __dirname, `..\\..\\` ), ` ) )
-    // );
+    product.src = `http://localhost:5000/${ filePath }`;
+
 
     product.src = product.src.replace( /\\/g, "/" );
 
-    console.log( product.src );
     try
     {
         const newProduct = new ProductMessage( product );
         console.log( 'New Product: ' + newProduct );
         await newProduct.save();
-        saveFile( filePath, file.buffer );
+        saveFile( `public/${ filePath }`, file.buffer );
         res.status( 201 ).json( { status: 'success', product: newProduct, message: "Product added succesfully" } );
     } catch ( error )
     {
@@ -139,7 +135,7 @@ export const deleteProduct = async ( req: any, res: any ) =>
     await ProductMessage.findByIdAndDelete( _id );
 
     console.log( selectedProduct.src );
-    FileManager.delete( selectedProduct.src );
+    FileManager.delete( getPathToDelete( selectedProduct.src ) );
 
     res.status( 201 ).send( { status: 'success', message: `Item ${ _id } was deleted` } );
 
@@ -149,6 +145,12 @@ export const deleteProduct = async ( req: any, res: any ) =>
 
 
 // helper functions
+
+const getPathToDelete: ( filePath: string ) => string = ( filePath ) =>
+{
+    const levels = filePath.split( '/' );
+    return `public/uploads/${ levels[ levels.length - 1 ] }`;
+};
 
 const generateSrclessProduct: ( body: any ) => Product = ( body: any ) =>
 {
