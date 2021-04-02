@@ -48,7 +48,6 @@ export const addProduct = async (req: any, res: any) => {
 
     try {
         const newProduct = new ProductMessage(product);
-        console.log('New Product: ' + newProduct);
         //saving the product to the db
         await newProduct.save();
         //saving the file to the uploads folder
@@ -121,8 +120,6 @@ export const getSpecificProduct = async (req: any, res: any) => {
     }
 
     const selectedProduct = await ProductMessage.findById(_id);
-
-    console.log(selectedProduct);
 
     res.status(200).json({ status: 'success', product: selectedProduct });
 };
