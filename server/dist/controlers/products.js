@@ -27,7 +27,7 @@ export const addProduct = async (req, res) => {
         console.log('New Product: ' + newProduct);
         await newProduct.save();
         if (file) {
-            saveFile(`public/${filePath}`, file.buffer);
+            saveFile(`${filePath}`, file.buffer);
         }
         res.status(201).json({ status: 'success', product: newProduct, message: "Product added succesfully" });
     }
@@ -50,9 +50,28 @@ export const addProducts = async (req, res) => {
 };
 export const updateProducts = async (req, res) => {
     const { id: _id } = req.params;
-    const product = req.body;
+    const file = req.files[0];
+    const product = generateSrclessProduct(req.body);
+    const selectedProduct = await ProductMessage.findById(_id);
+    let filePath;
+    if (selectedProduct.src) {
+        filePath = `${selectedProduct.src.split('/')[selectedProduct.src.split('/').length - 2]}/${selectedProduct.src.split('/')[selectedProduct.src.split('/').length - 1]}`;
+    }
+    else {
+        filePath = `uploads/${Date.now()}.png`;
+    }
+    const src = `http://localhost:5000/${filePath}`;
     if (!mongoose.Types.ObjectId.isValid(_id)) {
         res.status(404).send({ status: 'fail', message: 'Id not found' });
+    }
+    if (file) {
+        saveFile(filePath, file.buffer);
+        product.src = src;
+    }
+    else {
+        if (!product.src) {
+            FileManager.delete(filePath);
+        }
     }
     const updatedProduct = await ProductMessage.findByIdAndUpdate(_id, product, { new: true });
     res.status(200).json({ status: 'success', product: updatedProduct, message: "Update complete" });
@@ -79,14 +98,15 @@ export const deleteProduct = async (req, res) => {
 };
 const getPathToDelete = (filePath) => {
     const levels = filePath.split('/');
-    return `public/uploads/${levels[levels.length - 1]}`;
+    return `uploads/${levels[levels.length - 1]}`;
 };
 const generateSrclessProduct = (body) => {
     const product = {};
     for (let key of Object.keys(body)) {
         product[key] = body[key];
     }
-    product.src = '';
+    if (!product.src)
+        product.src = '';
     return product;
 };
 const saveFile = (filePath, buffer) => {

@@ -8,16 +8,16 @@ const upload = multer();
 
 
 //localhost:5000/products
-router.get( '/', getProducts );
+router.get('/', getProducts);
 
-router.get( '/:id', getSpecificProduct );
+router.get('/:id', getSpecificProduct);
 
-router.post( '/add-product', upload.any(), addProduct );
+router.post('/add-product', upload.any(), addProduct);
 
-router.post( '/add-products', upload.any(), addProducts );
+router.post('/add-products', upload.any(), addProducts);
 
-router.patch( '/:id', updateProducts );
+router.patch('/:id', upload.any(), updateProducts);
 
-router.delete( '/:id', deleteProduct );
+router.delete('/:id', deleteProduct);
 
 export default router;
