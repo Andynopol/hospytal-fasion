@@ -15,7 +15,7 @@ interface Product {
     price: number,
     description: string,
     details: string,
-    sale: string,
+    sale: number,
     stock: number,
     src: string,
 }
@@ -82,14 +82,33 @@ export const addProducts = async (req: any, res: any) => {
 
 export const updateProducts = async (req: any, res: any) => {
     const { id: _id } = req.params;
-    const product = req.body;
+    const file = req.files[0];
+    const product: Product = generateSrclessProduct(req.body);
+    const selectedProduct = await ProductMessage.findById(_id);
+    let filePath;
+    if (selectedProduct.src) {
+        filePath = `${selectedProduct.src.split('/')[selectedProduct.src.split('/').length - 2]}/${selectedProduct.src.split('/')[selectedProduct.src.split('/').length - 1]}`;
+    }
+    else {
+        filePath = `uploads/${Date.now()}.png`;
+    }
+    const src = `http://localhost:5000/${filePath}`;
 
     if (!mongoose.Types.ObjectId.isValid(_id)) {
         res.status(404).send({ status: 'fail', message: 'Id not found' });
     }
 
-    const updatedProduct = await ProductMessage.findByIdAndUpdate(_id, product, { new: true });
+    if (file) {
+        saveFile(filePath, file.buffer);
+        product.src = src;
+    }
+    else {
+        if (!product.src) {
+            FileManager.delete(filePath);
+        }
+    }
 
+    const updatedProduct = await ProductMessage.findByIdAndUpdate(_id, product, { new: true });
     res.status(200).json({ status: 'success', product: updatedProduct, message: "Update complete" });
 };
 
@@ -133,7 +152,7 @@ export const deleteProduct = async (req: any, res: any) => {
 
 const getPathToDelete: (filePath: string) => string = (filePath) => {
     const levels = filePath.split('/');
-    return `public/uploads/${levels[levels.length - 1]}`;
+    return `uploads/${levels[levels.length - 1]}`;
 };
 
 const generateSrclessProduct: (body: any) => Product = (body: any) => {
@@ -142,7 +161,8 @@ const generateSrclessProduct: (body: any) => Product = (body: any) => {
     for (let key of Object.keys(body)) {
         product[key] = body[key];
     }
-    product.src = '';
+    if (!product.src)
+        product.src = '';
     return product;
 };
 

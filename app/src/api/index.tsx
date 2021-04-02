@@ -1,7 +1,6 @@
 import axios from 'axios';
 
-interface Product
-{
+interface Product {
     name: string;
     price: number;
     description?: string;
@@ -17,21 +16,21 @@ interface Product
 
 //get products
 // export const fetchProducts = () => axios.get( '/products' );
-export const fetchProducts = () => fetch( '/products' );
+export const fetchProducts = () => fetch('/products');
 
 //get specific product
-export const fetchSpecificProduct = ( id: string ) => axios.get( `/products/${ id }` );
+export const fetchSpecificProduct = (id: string) => axios.get(`/products/${id}`);
 
 //send new product
-export const postProduct = ( newProduct: FormData ) => fetch( `/products/add-product`, { method: 'POST', body: newProduct } );
+export const postProduct = (newProduct: FormData) => fetch(`/products/add-product`, { method: 'POST', body: newProduct });
 
 //send new products
-export const postProducts = ( newProducts: Array<FormData> ) => axios.post( `/products/add-products`, newProducts );
+export const postProducts = (newProducts: Array<FormData>) => axios.post(`/products/add-products`, newProducts);
 
 //updete product
 
-export const patchProduct = ( id: string, updatedProduct: any ) => axios.patch( `/products/${ id }`, updatedProduct );
+export const patchProduct = (id: string, updatedProduct: any) => fetch(`/products/${id}`, { method: 'PATCH', body: updatedProduct });
 
-export const deleteProduct = ( id: string ) => axios.delete( `/products/${ id }` );
+export const deleteProduct = (id: string) => axios.delete(`/products/${id}`);
 
-export const addTestUser = () => axios.post( '/users', {} );
+export const addTestUser = () => axios.post('/users', {});
