@@ -1,9 +1,6 @@
 import mongoose from 'mongoose';
 import ProductMessage from '../models/product-schema.js';
 import { FileManager } from '../lib/FileManager.js';
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
-const __dirname = dirname(fileURLToPath(import.meta.url));
 export const getProducts = async (req, res) => {
     try {
         const products = await ProductMessage.find();
@@ -16,16 +13,22 @@ export const getProducts = async (req, res) => {
 export const addProduct = async (req, res) => {
     const product = generateSrclessProduct(req.body);
     const files = req.files;
-    let file = files[0];
-    const fileName = Date.now();
-    const filePath = `uploads/${fileName}.png`;
-    product.src = `http://localhost:5000/${filePath}`;
-    product.src = product.src.replace(/\\/g, "/");
+    const file = files[0];
+    let fileName;
+    let filePath;
+    if (file) {
+        fileName = Date.now();
+        filePath = `uploads/${fileName}.png`;
+        const src = `http://localhost:5000/${filePath}`;
+        product.src = src.replace(/\\/g, "/");
+    }
     try {
         const newProduct = new ProductMessage(product);
         console.log('New Product: ' + newProduct);
         await newProduct.save();
-        saveFile(`public/${filePath}`, file.buffer);
+        if (file) {
+            saveFile(`public/${filePath}`, file.buffer);
+        }
         res.status(201).json({ status: 'success', product: newProduct, message: "Product added succesfully" });
     }
     catch (error) {
@@ -34,7 +37,6 @@ export const addProduct = async (req, res) => {
 };
 export const addProducts = async (req, res) => {
     const proudcts = req.body;
-    const files = req.files;
     for (let product of proudcts) {
         const newProduct = new ProductMessage(product);
         try {
@@ -71,7 +73,8 @@ export const deleteProduct = async (req, res) => {
     }
     const selectedProduct = await ProductMessage.findById(_id);
     await ProductMessage.findByIdAndDelete(_id);
-    FileManager.delete(getPathToDelete(selectedProduct.src));
+    if (selectedProduct.src)
+        FileManager.delete(getPathToDelete(selectedProduct.src));
     res.status(201).send({ status: 'success', message: `Item ${_id} was deleted` });
 };
 const getPathToDelete = (filePath) => {
