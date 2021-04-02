@@ -14,7 +14,6 @@ import { productsActions } from '../../../actions';
 
 //@enum of commands for form fileds
 import { FieldSelector } from '../constants';
-import { isElementAccessExpression } from 'typescript';
 
 
 const useStyles = makeStyles( ( theme: Theme ) => ( {
@@ -51,7 +50,8 @@ const ProductAdder: React.FC<Props> = ( props: Props ) =>
     const [ cardPromotion, setCardPromotion ] = useState( 0 );
     const [ cardPrice, setCardPrice ] = useState( 0 );
     const [ cardPieces, setCardPieces ] = useState( 0 );
-    const [ cardSrc, setCardSrc ] = useState( '' );
+    const [ cardSrc, setCardSrc ] = useState( null );
+    const [ fakeSrc, setFakeSrc ] = useState( '' );
 
     // Mandatory fields alerts
     const [ fieldWarnings, setFieldWarnings ] = useState( { name: false, description: false, price: false } );
@@ -78,11 +78,12 @@ const ProductAdder: React.FC<Props> = ( props: Props ) =>
         const reader = new FileReader();
         if ( file )
         {
+            setCardSrc( file );
             reader.readAsDataURL( file );
             reader.onload = () =>
             {
                 const base64 = reader.result;
-                setCardSrc( base64.toString() );
+                setFakeSrc( base64.toString() );
             };
         }
 
@@ -186,11 +187,9 @@ const ProductAdder: React.FC<Props> = ( props: Props ) =>
 
     const handleSubmit = ( ev: any ) =>
     {
-        // ev.preventDefault();
+        ev.preventDefault();
 
-
-
-        const newProduct: Product = {
+        const newProduct: any = {
             name: cardName,
             price: cardPrice,
             description: cardDescription,
@@ -200,8 +199,15 @@ const ProductAdder: React.FC<Props> = ( props: Props ) =>
             src: cardSrc,
         };
 
+        const form = new FormData();
 
-        dispatch( productsActions.multipost( [ newProduct ] ) );
+        for ( let key of Object.keys( newProduct ) )
+        {
+            form.append( key, newProduct[ key ] );
+        }
+
+
+        dispatch( productsActions.post( form ) );
 
 
         //marking the mandatory fields that are not completed
@@ -219,7 +225,7 @@ const ProductAdder: React.FC<Props> = ( props: Props ) =>
         setCardPromotion( 0 );
         setCardDescription( '' );
         setCardDetails( '' );
-        setCardSrc( '' );
+        setCardSrc( null );
         setFieldWarnings( { name: false, price: false, description: false } );
     };
 
@@ -236,7 +242,7 @@ const ProductAdder: React.FC<Props> = ( props: Props ) =>
                     promotion={ cardPromotion }
                     price={ cardPrice }
                     piecesLeft={ cardPieces }
-                    src={ cardSrc }
+                    src={ fakeSrc }
                     active={ false }
                 />
             </Grid>

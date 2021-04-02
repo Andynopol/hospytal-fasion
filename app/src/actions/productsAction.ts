@@ -27,9 +27,8 @@ const fetchProducts = () => async ( dispatch: any ) =>
 
     try
     {
-        const { data } = await API.fetchProducts();
-
-        dispatch( { type: 'GET', payload: data.products } );
+        const response = await ( await API.fetchProducts() ).json();
+        dispatch( { type: 'GET', payload: response.products } );
         dispatch( loaded() );
     } catch ( error )
     {
@@ -46,28 +45,28 @@ const fetchProducts = () => async ( dispatch: any ) =>
 
 
 //single item post request for product items
-const postProduct = ( product: Product ) => async ( dispatch: any ) =>
+const postProduct = ( product: FormData ) => async ( dispatch: any ) =>
 {
     try
     {
-        const { data } = await API.postProduct( product );
+        const response = await ( await API.postProduct( product ) ).json();
 
-        if ( data.status === "success" )
+        if ( response.status === "success" )
         {
-            console.log( data.status );
+            console.log( response.status );
             dispatch( snackbarActionManager.hide() );
-            dispatch( snackbarActionManager.show( { message: data.message, variant: 'success' } ) );
+            dispatch( snackbarActionManager.show( { message: response.message, variant: 'success' } ) );
         }
         else
         {
             dispatch( snackbarActionManager.hide() );
-            dispatch( snackbarActionManager.show( { message: data.message, variant: 'warning' } ) );
+            dispatch( snackbarActionManager.show( { message: response.message, variant: 'warning' } ) );
         }
 
-        console.log( data );
+        console.log( response );
         //signal the app that not all products are loaded
         dispatch( dump() );
-        dispatch( { type: "ADD-PRODUCT", payload: data } );
+        dispatch( { type: "ADD-PRODUCT", payload: response.product } );
         //refresh all products
         dispatch( fetchProducts() );
     } catch ( error )
@@ -85,7 +84,7 @@ const postProduct = ( product: Product ) => async ( dispatch: any ) =>
 
 
 //multiple items post request for products state
-const postProducts = ( products: Product[] ) => async ( dispatch: any ) =>
+const postProducts = ( products: Array<FormData> ) => async ( dispatch: any ) =>
 {
     try
     {

@@ -265,7 +265,7 @@ const UpdateProduct = ( props: Props ) =>
 
         } else
         {
-            dispatch( productsActions.post( updatedProduct ) );
+            // dispatch( productsActions.post( updatedProduct ) );
         }
     };
 

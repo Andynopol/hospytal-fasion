@@ -16,16 +16,17 @@ interface Product
 
 
 //get products
-export const fetchProducts = () => axios.get( '/products' );
+// export const fetchProducts = () => axios.get( '/products' );
+export const fetchProducts = () => fetch( '/products' );
 
 //get specific product
 export const fetchSpecificProduct = ( id: string ) => axios.get( `/products/${ id }` );
 
 //send new product
-export const postProduct = ( newProduct: Product ) => axios.post( `/products/add-product`, newProduct );
+export const postProduct = ( newProduct: FormData ) => fetch( `/products/add-product`, { method: 'POST', body: newProduct } );
 
 //send new products
-export const postProducts = ( newProducts: Product[] ) => axios.post( `/products/add-products`, newProducts );
+export const postProducts = ( newProducts: Array<FormData> ) => axios.post( `/products/add-products`, newProducts );
 
 //updete product
 

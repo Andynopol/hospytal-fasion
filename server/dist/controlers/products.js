@@ -1,5 +1,9 @@
 import mongoose from 'mongoose';
 import ProductMessage from '../models/product-schema.js';
+import { FileManager } from '../lib/FileManager.js';
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+const __dirname = dirname(fileURLToPath(import.meta.url));
 export const getProducts = async (req, res) => {
     try {
         const products = await ProductMessage.find();
@@ -10,10 +14,19 @@ export const getProducts = async (req, res) => {
     }
 };
 export const addProduct = async (req, res) => {
-    const product = req.body;
-    const newProduct = new ProductMessage(product);
+    const product = generateSrclessProduct(req.body);
+    const files = req.files;
+    let file = files[0];
+    const fileName = Date.now();
+    const filePath = `/public/uploads/${fileName}.png`;
+    product.src = `http://localhost/${filePath}`;
+    product.src = product.src.replace(/\\/g, "/");
+    console.log(product.src);
     try {
+        const newProduct = new ProductMessage(product);
+        console.log('New Product: ' + newProduct);
         await newProduct.save();
+        saveFile(filePath, file.buffer);
         res.status(201).json({ status: 'success', product: newProduct, message: "Product added succesfully" });
     }
     catch (error) {
@@ -22,6 +35,9 @@ export const addProduct = async (req, res) => {
 };
 export const addProducts = async (req, res) => {
     const proudcts = req.body;
+    const files = req.files;
+    console.log(proudcts);
+    console.log(files);
     for (let product of proudcts) {
         const newProduct = new ProductMessage(product);
         try {
@@ -56,7 +72,27 @@ export const deleteProduct = async (req, res) => {
     if (!mongoose.Types.ObjectId.isValid(_id)) {
         res.status(404).send({ status: 'fail', message: 'id not found' });
     }
+    const selectedProduct = await ProductMessage.findById(_id);
     await ProductMessage.findByIdAndDelete(_id);
+    console.log(selectedProduct.src);
+    FileManager.delete(selectedProduct.src);
     res.status(201).send({ status: 'success', message: `Item ${_id} was deleted` });
+};
+const generateSrclessProduct = (body) => {
+    const product = {};
+    for (let key of Object.keys(body)) {
+        product[key] = body[key];
+    }
+    product.src = '';
+    return product;
+};
+const saveFile = (filePath, buffer) => {
+    try {
+        FileManager.saveFile(filePath, buffer);
+        return true;
+    }
+    catch (err) {
+        throw err;
+    }
 };
 //# sourceMappingURL=products.js.map
