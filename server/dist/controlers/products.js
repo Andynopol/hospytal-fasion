@@ -24,7 +24,6 @@ export const addProduct = async (req, res) => {
     }
     try {
         const newProduct = new ProductMessage(product);
-        console.log('New Product: ' + newProduct);
         await newProduct.save();
         if (file) {
             saveFile(`${filePath}`, file.buffer);
@@ -82,7 +81,6 @@ export const getSpecificProduct = async (req, res) => {
         res.status(404).send({ status: 'fail', message: 'id not found' });
     }
     const selectedProduct = await ProductMessage.findById(_id);
-    console.log(selectedProduct);
     res.status(200).json({ status: 'success', product: selectedProduct });
 };
 export const deleteProduct = async (req, res) => {

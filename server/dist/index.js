@@ -10,7 +10,7 @@ const app = express();
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PORT = process.env.PORT || 5000;
 const password = '14karate';
-const ENTRYPOINT = `mongodb+srv://andy95:${password}@main-server.stch8.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+const ENTRYPOINT = `mongodb+srv://andy95:${password}@main-server.stch8.mongodb.net/develop?retryWrites=true&w=majority`;
 app.use(express.static(path.join(__dirname, '../public')));
 app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname, '../public', 'index.html'));
