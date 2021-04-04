@@ -45,7 +45,7 @@ app.get( '/', function ( req, res )
 
 
 
-app.use( '/uploads', express.static( path.join( __dirname, `../${ process.env.UPLOAD_FOLDER }` ) ) );
+app.use( `/${ process.env.UPLOAD_FOLDER }`, express.static( path.join( __dirname, `../${ process.env.UPLOAD_FOLDER }` ) ) );
 
 
 app.use( express.json( { limit: '30mb' } ) );

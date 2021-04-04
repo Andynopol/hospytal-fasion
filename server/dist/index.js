@@ -16,7 +16,7 @@ app.use(express.static(path.join(__dirname, '../public')));
 app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname, '../public', 'index.html'));
 });
-app.use('/uploads', express.static(path.join(__dirname, `../${process.env.UPLOAD_FOLDER}`)));
+app.use(`/${process.env.UPLOAD_FOLDER}`, express.static(path.join(__dirname, `../${process.env.UPLOAD_FOLDER}`)));
 app.use(express.json({ limit: '30mb' }));
 app.use(express.urlencoded({ limit: '30mb', extended: true }));
 app.use(cors());
