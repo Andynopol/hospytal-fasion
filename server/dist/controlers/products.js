@@ -18,7 +18,7 @@ export const addProduct = async (req, res) => {
     let filePath;
     if (file) {
         fileName = Date.now();
-        filePath = `uploads/${fileName}.png`;
+        filePath = `${process.env.UPLOAD_FOLDER}/${fileName}.png`;
         const src = `http://localhost:5000/${filePath}`;
         product.src = src.replace(/\\/g, "/");
     }
@@ -57,7 +57,7 @@ export const updateProducts = async (req, res) => {
         filePath = `${selectedProduct.src.split('/')[selectedProduct.src.split('/').length - 2]}/${selectedProduct.src.split('/')[selectedProduct.src.split('/').length - 1]}`;
     }
     else {
-        filePath = `uploads/${Date.now()}.png`;
+        filePath = `${process.env.UPLOAD_FOLDER}/${Date.now()}.png`;
     }
     const src = `http://localhost:5000/${filePath}`;
     if (!mongoose.Types.ObjectId.isValid(_id)) {
@@ -96,7 +96,7 @@ export const deleteProduct = async (req, res) => {
 };
 const getPathToDelete = (filePath) => {
     const levels = filePath.split('/');
-    return `uploads/${levels[levels.length - 1]}`;
+    return `${process.env.UPLOAD_FOLDER}/${levels[levels.length - 1]}`;
 };
 const generateSrclessProduct = (body) => {
     const product = {};
