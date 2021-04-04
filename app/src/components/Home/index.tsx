@@ -77,6 +77,7 @@ const Home = () =>
             stock={ product.stock }
             src={ product.src }
             active={ true }
+            key={ product._id }
         />
     );
 
