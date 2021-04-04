@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import Card from '../ProductCard';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid, CircularProgress } from '@material-ui/core';
 import { productsActions } from '../../actions';
 import { useSelector, useDispatch } from 'react-redux';
 import SignalCellularNoSimOutlinedIcon from '@material-ui/icons/SignalCellularNoSimOutlined';
+
+const Item = React.lazy( () => import( './Item' ) );
 
 interface Product extends Document
 {
@@ -65,23 +67,21 @@ const Home = () =>
 
     //@list of the products presented in main menu
     const items = products.map( ( product: Product ) =>
-        <Grid item xs={ 12 } md={ 4 } key={ product._id }>
-            <Card
-                _id={ product._id }
-                name={ product.name }
-                price={ product.price }
-                description={ product.description }
-                details={ product.details }
-                piecesLeft={ product.stock }
-                promotion={ product.sale }
-                src={ product.src }
-                active={ true }
-            />
-        </Grid>
+        <Item
+            _id={ product._id }
+            name={ product.name }
+            price={ product.price }
+            description={ product.description }
+            details={ product.details }
+            sale={ product.sale }
+            stock={ product.stock }
+            src={ product.src }
+            active={ true }
+        />
     );
 
     return (
-        <>
+        <Suspense fallback={ <CircularProgress /> }>
             {
                 !areProductsLoaded
                     ?
@@ -114,7 +114,7 @@ const Home = () =>
                             </Grid>
                         )
             }
-        </>
+        </Suspense>
 
     );
 };
