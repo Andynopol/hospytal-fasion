@@ -137,7 +137,7 @@ const ProductCard = ( props: Props ) =>
 
 
             <CardMedia
-                className={ classes.media22 }
+                className={ classes.media }
                 children={ src ? null : <BrokenImageIcon className={ classes.icon } /> }
                 image={ src }
                 title="asd"
