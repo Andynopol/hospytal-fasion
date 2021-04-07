@@ -26,6 +26,9 @@ const useStyles = makeStyles( ( theme: Theme ) => ( {
             padding: 12,
         }
     }
+
+
+    
 } ) );
 
 interface Product
