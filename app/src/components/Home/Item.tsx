@@ -17,6 +17,7 @@ interface Props
 
 const Item = ( props: Props ) =>
 {
+    //test change
     const { _id, name, price, description, details, sale, stock, src, active } = props;
 
     return (
