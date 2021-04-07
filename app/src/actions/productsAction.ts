@@ -28,7 +28,7 @@ const fetchProducts = () => async (dispatch: any) => {
         dispatch(loaded());
     } catch (error) {
         dispatch({ type: 'GET', payload: [] });
-        //signal that all products are loaded and no refresh is needed
+        //signal that all products are loaded and no refresh is needed so that it shows the no items
         dispatch(loaded());
         dispatch(snackbarActionManager.hide());
         dispatch(snackbarActionManager.show({ message: "Connection failed", variant: 'error' }));
@@ -37,6 +37,15 @@ const fetchProducts = () => async (dispatch: any) => {
 
 
 };
+
+// same as fetchProducts without UI interaction
+// used as a autorefresh when you have no signal
+// ? THINK ABOUT USING IT AS A AUTORELOAD ENGINE
+const bluntFetchProducts = () => async (dispatch: any) => {
+    const response = await (await API.fetchProducts()).json();
+    dispatch({ type: 'GET', payload: response.products });
+    dispatch(loaded());
+}
 
 
 //single item post request for product items
@@ -119,11 +128,13 @@ const updateProduct = (id: 'string', product: FormData) => async (dispatch: any)
             dispatch(snackbarActionManager.show({ message: response.message, variant: 'warning' }));
         }
         dispatch({ type: 'UPDATE', payload: response.product });
-        dispatch(fetchProducts());
     } catch (error) {
         dispatch(snackbarActionManager.hide());
         dispatch(snackbarActionManager.show({ message: AddProductMessages.fail, variant: 'error' }));
         console.log(error);
+    }
+    finally {
+        dispatch(fetchProducts());
     }
 };
 
