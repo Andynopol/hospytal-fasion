@@ -50,8 +50,8 @@ const Main: React.FC = () =>
         <Router>
             <Nav isVisible={ navVisibility } />
             <Grid container>
-                <Grid item xs={ false } md={ 1 } lg={ 2 } />
-                <Grid item xs={ 12 } md={ 10 } lg={ 8 }>
+                <Grid item xs={ 1 } md={ 1 } lg={ 2 } />
+                <Grid item xs={ 10 } lg={ 8 }>
                     <Switch>
                         <Route exact path='/' component={ Home } />
                         <Route exact path={ '/admin' } component={ Home } />
@@ -79,7 +79,7 @@ const Main: React.FC = () =>
                         </Alert>
                     </Snackbar>
                 </Grid>
-                <Grid item xs={ false } md={ 1 } lg={ 2 } />
+                <Grid item xs={ 1 } lg={ 2 } />
 
 
             </Grid>

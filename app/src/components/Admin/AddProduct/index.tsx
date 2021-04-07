@@ -16,13 +16,14 @@ import { productsActions } from '../../../actions';
 import { FieldSelector } from '../constants';
 
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles( ( theme: Theme ) => ( {
     root: {
         paddingTop: '3rem',
-    }
-}));
+    },
+} ) );
 
-interface Product {
+interface Product
+{
     name: string;
     price: number;
     description?: string;
@@ -32,109 +33,124 @@ interface Product {
     src: string | File;
 }
 
-interface Props {
+interface Props
+{
 
 }
 
-const ProductAdder: React.FC<Props> = (props: Props) => {
+const ProductAdder: React.FC<Props> = ( props: Props ) =>
+{
     const classes = useStyles();
     const dispatch = useDispatch();
 
     // Form states
-    const [cardName, setCardName] = useState('');
-    const [cardDescription, setCardDescription] = useState('');
-    const [cardDetails, setCardDetails] = useState('');
-    const [cardPromotion, setCardPromotion] = useState(0);
-    const [cardPrice, setCardPrice] = useState(0);
-    const [cardPieces, setCardPieces] = useState(0);
-    const [cardSrc, setCardSrc]: [any, SetStateAction<any>] = useState('');
-    const [fakeSrc, setFakeSrc] = useState('');
+    const [ cardName, setCardName ] = useState( '' );
+    const [ cardDescription, setCardDescription ] = useState( '' );
+    const [ cardDetails, setCardDetails ] = useState( '' );
+    const [ cardPromotion, setCardPromotion ] = useState( 0 );
+    const [ cardPrice, setCardPrice ] = useState( 0 );
+    const [ cardPieces, setCardPieces ] = useState( 0 );
+    const [ cardSrc, setCardSrc ]: [ any, SetStateAction<any> ] = useState( '' );
+    const [ fakeSrc, setFakeSrc ] = useState( '' );
 
     // Mandatory fields alerts
-    const [fieldWarnings, setFieldWarnings] = useState({ name: false, description: false, price: false });
+    const [ fieldWarnings, setFieldWarnings ] = useState( { name: false, description: false, price: false } );
 
 
 
     //Dialog states
 
-    const [openAlert, setOpenAlert] = useState(false);
-    const [titleAlert, setTitleAlert] = useState('');
-    const [contentAlert, setContentAlert] = useState('');
+    const [ openAlert, setOpenAlert ] = useState( false );
+    const [ titleAlert, setTitleAlert ] = useState( '' );
+    const [ contentAlert, setContentAlert ] = useState( '' );
 
     //opens the dialog and sets the title and content inside the componenet
-    const openDialog = (title: string, content: string) => {
-        setTitleAlert(title);
-        setContentAlert(content);
-        setOpenAlert(true);
+    const openDialog = ( title: string, content: string ) =>
+    {
+        setTitleAlert( title );
+        setContentAlert( content );
+        setOpenAlert( true );
     };
 
     //transforms the image file into base64 string sets it in src state
-    const setImage = (file: File) => {
+    const setImage = ( file: File ) =>
+    {
         const reader = new FileReader();
-        if (file) {
-            setCardSrc(file);
-            reader.readAsDataURL(file);
-            reader.onload = () => {
+        if ( file )
+        {
+            setCardSrc( file );
+            reader.readAsDataURL( file );
+            reader.onload = () =>
+            {
                 const base64 = reader.result;
-                setFakeSrc(base64.toString());
+                setFakeSrc( base64.toString() );
             };
         }
 
     };
 
     //resets src state
-    const removeImage = () => {
-        setCardSrc('');
+    const removeImage = () =>
+    {
+        setCardSrc( '' );
     };
 
     // handles all changes in the form and updates the fake product card
     // @params: @ev: the event that provides us the target input
     // @params: @identifier: the string that feeds switch structure witch selects the setState function
     // @params: @forced: a boolean that can bypass in some cases the target grabbing from the eveny(mainly used on src)
-    const handleChanges = (target: HTMLInputElement | HTMLTextAreaElement, identifier: FieldSelector) => {
-        switch (identifier) {
+    const handleChanges = ( target: HTMLInputElement | HTMLTextAreaElement, identifier: FieldSelector ) =>
+    {
+        switch ( identifier )
+        {
             case FieldSelector.name:
-                setCardName(target.value);
-                if (fieldWarnings.name) {
-                    setFieldWarnings({ ...fieldWarnings, name: false });
+                setCardName( target.value );
+                if ( fieldWarnings.name )
+                {
+                    setFieldWarnings( { ...fieldWarnings, name: false } );
                 }
                 break;
             case FieldSelector.desc:
-                setCardDescription(target.value);
-                if (fieldWarnings.description) {
-                    setFieldWarnings({ ...fieldWarnings, description: false });
+                setCardDescription( target.value );
+                if ( fieldWarnings.description )
+                {
+                    setFieldWarnings( { ...fieldWarnings, description: false } );
                 }
                 break;
             case FieldSelector.details:
-                setCardDetails(target.value);
+                setCardDetails( target.value );
                 break;
             case FieldSelector.prom:
-                if (target.value === '') {
-                    setCardPromotion(0);
+                if ( target.value === '' )
+                {
+                    setCardPromotion( 0 );
                     break;
                 }
-                setCardPromotion(parseInt(target.value));
+                setCardPromotion( parseInt( target.value ) );
                 break;
             case FieldSelector.price:
-                if (target.value === '') {
-                    setCardPrice(0);
+                if ( target.value === '' )
+                {
+                    setCardPrice( 0 );
                     break;
                 }
-                setCardPrice(parseInt(target.value));
-                if (fieldWarnings.price) {
-                    setFieldWarnings({ ...fieldWarnings, price: false });
+                setCardPrice( parseInt( target.value ) );
+                if ( fieldWarnings.price )
+                {
+                    setFieldWarnings( { ...fieldWarnings, price: false } );
                 }
                 break;
             case FieldSelector.stock:
-                if (target.value === '') {
-                    setCardPieces(0);
+                if ( target.value === '' )
+                {
+                    setCardPieces( 0 );
                     break;
                 }
-                setCardPieces(parseInt(target.value));
+                setCardPieces( parseInt( target.value ) );
                 break;
             case FieldSelector.src:
-                if ('files' in target)
-                    setImage(target.files[0]);
+                if ( 'files' in target )
+                    setImage( target.files[ 0 ] );
                 break;
         }
 
@@ -143,28 +159,34 @@ const ProductAdder: React.FC<Props> = (props: Props) => {
     // TODO make it abe to send multiple items
 
 
-    const checkFields = () => {
-        if (cardName && cardDescription && cardPrice) {
+    const checkFields = () =>
+    {
+        if ( cardName && cardDescription && cardPrice )
+        {
             return true;
         }
         const tempWarnings = { ...fieldWarnings };
-        if (!cardName) {
+        if ( !cardName )
+        {
             tempWarnings.name = true;
         }
 
-        if (!cardDescription) {
+        if ( !cardDescription )
+        {
             tempWarnings.description = true;
         }
 
-        if (!cardPrice) {
+        if ( !cardPrice )
+        {
             tempWarnings.price = true;
         }
 
-        setFieldWarnings(tempWarnings);
+        setFieldWarnings( tempWarnings );
         return false;
     };
 
-    const handleSubmit = (ev: any) => {
+    const handleSubmit = ( ev: any ) =>
+    {
         ev.preventDefault();
 
         const newProduct: any = {
@@ -179,80 +201,80 @@ const ProductAdder: React.FC<Props> = (props: Props) => {
 
         const form = new FormData();
 
-        for (let key of Object.keys(newProduct)) {
-            form.append(key, newProduct[key]);
+        for ( let key of Object.keys( newProduct ) )
+        {
+            form.append( key, newProduct[ key ] );
         }
 
 
-        dispatch(productsActions.post(form));
+        dispatch( productsActions.post( form ) );
 
 
         //marking the mandatory fields that are not completed
 
 
-
-
     };
 
-    const clearProductDetails = () => {
-        setCardName('');
-        setCardPrice(0);
-        setCardPieces(0);
-        setCardPromotion(0);
-        setCardDescription('');
-        setCardDetails('');
-        setCardSrc('');
-        setFakeSrc('');
-        setFieldWarnings({ name: false, price: false, description: false });
+    const clearProductDetails = () =>
+    {
+        setCardName( '' );
+        setCardPrice( 0 );
+        setCardPieces( 0 );
+        setCardPromotion( 0 );
+        setCardDescription( '' );
+        setCardDetails( '' );
+        setCardSrc( '' );
+        setFakeSrc( '' );
+        setFieldWarnings( { name: false, price: false, description: false } );
     };
 
 
     return (
-        <Grid container spacing={3} className={classes.root}>
-            <Grid item xs={12} md={7}>
-                {/* PROTO-DISPLAY */}
+        <Grid container className={ classes.root }>
+            <Grid item xs={ 12 } md={ 7 }>
+                {/* PROTO-DISPLAY */ }
                 <Card
                     _id=''
-                    name={cardName}
-                    description={cardDescription}
-                    details={cardDetails}
-                    promotion={cardPromotion}
-                    price={cardPrice}
-                    piecesLeft={cardPieces}
-                    src={fakeSrc}
-                    active={false}
+                    name={ cardName }
+                    description={ cardDescription }
+                    details={ cardDetails }
+                    promotion={ cardPromotion }
+                    price={ cardPrice }
+                    piecesLeft={ cardPieces }
+                    src={ fakeSrc }
+                    active={ false }
                 />
             </Grid>
-            <Grid item xs={12} md={5}>
+            <Grid item xs={ 12 } md={ 5 }>
                 <Form
-                    name={cardName}
-                    description={cardDescription}
-                    details={cardDetails}
-                    promotion={cardPromotion}
-                    price={cardPrice}
-                    pieces={cardPieces}
-                    src={cardSrc}
-                    change={handleChanges}
-                    clear={clearProductDetails}
-                    send={handleSubmit}
-                    removeImage={removeImage}
+                    name={ cardName }
+                    description={ cardDescription }
+                    details={ cardDetails }
+                    promotion={ cardPromotion }
+                    price={ cardPrice }
+                    pieces={ cardPieces }
+                    src={ cardSrc }
+                    change={ handleChanges }
+                    clear={ clearProductDetails }
+                    send={ handleSubmit }
+                    removeImage={ removeImage }
 
                     //fields checkers
-                    fieldWarnings={fieldWarnings}
-                    checkFields={checkFields}
+                    fieldWarnings={ fieldWarnings }
+                    checkFields={ checkFields }
 
                     //dialog params
-                    openDialog={openDialog}
+                    openDialog={ openDialog }
                 />
             </Grid>
 
 
             <Dialog
-                open={openAlert}
-                title={titleAlert}
-                content={contentAlert}
-                yes={handleSubmit}
-                setOpen={setOpenAlert}
+                open={ openAlert }
+                title={ titleAlert }
+                content={ contentAlert }
+                yes={ handleSubmit }
+                setOpen={ setOpenAlert }
             />
         </Grid>
     );
