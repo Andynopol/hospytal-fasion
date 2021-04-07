@@ -21,9 +21,9 @@ const useStyles = makeStyles( ( theme: Theme ) => ( {
         paddingTop: '3rem',
     },
     section: {
-        padding: 12,
+        padding: '2rem',
         [ theme.breakpoints.up( 'md' ) ]: {
-            padding: '2rem',
+            padding: 12,
         }
     }
 } ) );
@@ -217,8 +217,6 @@ const ProductAdder: React.FC<Props> = ( props: Props ) =>
 
 
         //marking the mandatory fields that are not completed
-
-
 
 
     };
