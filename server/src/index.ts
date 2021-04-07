@@ -20,12 +20,7 @@ const PORT = process.env.PORT || 5000;
 // const ENTRYPOINT = 'mongodb+srv://andy95:14karate@main-server.stch8.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
 
 
-
-
-//for production
-// const ENTRYPOINT = `mongodb+srv://andy95:${ password }@main-server.stch8.mongodb.net/main?retryWrites=true&w=majority`;
-
-const ENTRYPOINT = `mongodb+srv://andy95:${ process.env.MONGODB_PASSWORD }@main-server.stch8.mongodb.net/${ process.env.MONGODB_DATABASE_NAME }?retryWrites=true&w=majority`;
+const ENTRYPOINT = process.env.MONGODB_URL;
 
 
 
