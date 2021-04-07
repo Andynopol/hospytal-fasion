@@ -20,12 +20,6 @@ const useStyles = makeStyles( ( theme: Theme ) => ( {
     root: {
         paddingTop: '3rem',
     },
-    section: {
-        padding: '4rem',
-        [ theme.breakpoints.up( 'md' ) ]: {
-            padding: 12,
-        }
-    }
 } ) );
 
 interface Product
@@ -237,7 +231,7 @@ const ProductAdder: React.FC<Props> = ( props: Props ) =>
 
     return (
         <Grid container className={ classes.root }>
-            <Grid item xs={ 12 } md={ 7 } className={ classes.section }>
+            <Grid item xs={ 12 } md={ 7 }>
                 {/* PROTO-DISPLAY */ }
                 <Card
                     _id=''
@@ -251,7 +245,7 @@ const ProductAdder: React.FC<Props> = ( props: Props ) =>
                     active={ false }
                 />
             </Grid>
-            <Grid item xs={ 12 } md={ 5 } className={ classes.section }>
+            <Grid item xs={ 12 } md={ 5 }>
                 <Form
                     name={ cardName }
                     description={ cardDescription }

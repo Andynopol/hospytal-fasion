@@ -22,7 +22,7 @@ interface Product extends Document
 
 const useStyles = makeStyles( () => ( {
     root: {
-        paddingTop: 20,
+        paddingTop: '2rem',
     },
     item: {
         textAlign: 'center'
@@ -104,7 +104,7 @@ const Home = () =>
                     products.length
                         ?
                         //displaying all products with no loading involved
-                        ( <Grid className={ classes.root } container spacing={ 2 }>
+                        ( <Grid className={ classes.root } container spacing={ 3 }>
                             { items }
                         </Grid> )
                         :

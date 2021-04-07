@@ -17,7 +17,6 @@ interface Props
 
 const Item = ( props: Props ) =>
 {
-
     const { _id, name, price, description, details, sale, stock, src, active } = props;
 
     return (
