@@ -21,14 +21,11 @@ const useStyles = makeStyles( ( theme: Theme ) => ( {
         paddingTop: '3rem',
     },
     section: {
-        padding: '2rem',
+        padding: '4rem',
         [ theme.breakpoints.up( 'md' ) ]: {
             padding: 12,
         }
     }
-
-
-    
 } ) );
 
 interface Product
