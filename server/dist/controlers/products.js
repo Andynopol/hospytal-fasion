@@ -19,7 +19,7 @@ export const addProduct = async (req, res) => {
     if (file) {
         fileName = Date.now();
         filePath = `${process.env.UPLOAD_FOLDER}/${fileName}.png`;
-        const src = `http://localhost:5000/${filePath}`;
+        const src = `http://${process.env.DOMAIN}:${process.env.PORT}/${filePath}`;
         product.src = src.replace(/\\/g, "/");
     }
     try {
@@ -59,7 +59,7 @@ export const updateProducts = async (req, res) => {
     else {
         filePath = `${process.env.UPLOAD_FOLDER}/${Date.now()}.png`;
     }
-    const src = `http://localhost:5000/${filePath}`;
+    const src = `http://${process.env.DOMAIN}:${process.env.PORT}/${filePath}`;
     if (!mongoose.Types.ObjectId.isValid(_id)) {
         res.status(404).send({ status: 'fail', message: 'Id not found' });
     }

@@ -47,7 +47,7 @@ export const addProduct = async ( req: any, res: any ) =>
     {
         fileName = Date.now();
         filePath = `${ process.env.UPLOAD_FOLDER }/${ fileName }.png`;
-        const src = `http://localhost:5000/${ filePath }`;
+        const src = `http://${ process.env.DOMAIN }:${ process.env.PORT }/${ filePath }`;
         product.src = src.replace( /\\/g, "/" );
     }
 
@@ -107,7 +107,7 @@ export const updateProducts = async ( req: any, res: any ) =>
     {
         filePath = `${ process.env.UPLOAD_FOLDER }/${ Date.now() }.png`;
     }
-    const src = `http://localhost:5000/${ filePath }`;
+    const src = `http://${ process.env.DOMAIN }:${ process.env.PORT }/${ filePath }`;
 
     if ( !mongoose.Types.ObjectId.isValid( _id ) )
     {
