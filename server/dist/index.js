@@ -11,12 +11,13 @@ const app = express();
 dotenv.config();
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PORT = process.env.PORT || 5000;
-const ENTRYPOINT = `mongodb+srv://andy95:${process.env.MONGODB_PASSWORD}@main-server.stch8.mongodb.net/${process.env.MONGODB_DATABASE_NAME}?retryWrites=true&w=majority`;
+const ENTRYPOINT = process.env.MONGODB_URL;
 app.use(express.static(path.join(__dirname, '../public')));
 app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname, '../public', 'index.html'));
 });
 app.use(`/${process.env.UPLOAD_FOLDER}`, express.static(path.join(__dirname, `../${process.env.UPLOAD_FOLDER}`)));
+app.use(express.static(path.normalize(`/${process.env.UPLOAD_FOLDER}`)));
 app.use(express.json({ limit: '30mb' }));
 app.use(express.urlencoded({ limit: '30mb', extended: true }));
 app.use(cors());
@@ -27,4 +28,5 @@ mongoose.connect(ENTRYPOINT, { useUnifiedTopology: true, useNewUrlParser: true }
     .catch(() => console.log(`Database connection failed`));
 mongoose.set('useFindAndModify', false);
 app.listen(PORT, () => console.log(`listening at ${PORT}`));
+;
 //# sourceMappingURL=index.js.map

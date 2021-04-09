@@ -41,7 +41,7 @@ app.get( '/', function ( req, res )
 
 
 app.use( `/${ process.env.UPLOAD_FOLDER }`, express.static( path.join( __dirname, `../${ process.env.UPLOAD_FOLDER }` ) ) );
-
+app.use( express.static( path.normalize( `/${ process.env.UPLOAD_FOLDER }` ) ) );
 
 app.use( express.json( { limit: '30mb' } ) );
 app.use( express.urlencoded( { limit: '30mb', extended: true } ) );
@@ -57,4 +57,4 @@ mongoose.connect( ENTRYPOINT, { useUnifiedTopology: true, useNewUrlParser: true 
 
 mongoose.set( 'useFindAndModify', false );
 
-app.listen( PORT, () => console.log( `listening at ${ PORT }` ) );
+app.listen( PORT, () => console.log( `listening at ${ PORT }` ) );;
