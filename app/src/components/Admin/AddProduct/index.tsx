@@ -93,6 +93,7 @@ const ProductAdder: React.FC<Props> = ( props: Props ) =>
     const removeImage = () =>
     {
         setCardSrc( '' );
+        setFakeSrc( '' );
     };
 
     // handles all changes in the form and updates the fake product card

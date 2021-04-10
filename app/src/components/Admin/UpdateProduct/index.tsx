@@ -12,7 +12,8 @@ import Dialog from '../../AlertDialog';
 import { start } from 'node:repl';
 
 
-interface Product {
+interface Product
+{
     name: string;
     price: number;
     description?: string;
@@ -22,7 +23,7 @@ interface Product {
     src: string;
 }
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles( ( theme: Theme ) => ( {
     root: {
         marginTop: '4rem'
     },
@@ -32,101 +33,116 @@ const useStyles = makeStyles((theme: Theme) => ({
         alignItems: 'center',
         display: 'flex',
     }
-}));
+} ) );
 
-interface Props {
+interface Props
+{
     match: any;
 }
 
-const UpdateProduct = (props: Props) => {
+const UpdateProduct = ( props: Props ) =>
+{
     const { match } = props;
     const classes = useStyles();
     const dispatch = useDispatch();
 
 
-    const [product, setProduct] = useState(useSelector((state: any) => state.products.filter((item: any) => item._id === match.params.id)[0]));
-    const [cardName, setCardName] = useState(product ? product.name : '');
-    const [cardPrice, setCardPrice] = useState(product ? product.price : 0);
-    const [cardDescription, setCardDescription] = useState(product ? product.description : '');
-    const [cardDetails, setCardDetails] = useState(product ? product.details : '');
-    const [cardPromotion, setCardPromotion] = useState(product ? product.sale : 0);
-    const [cardPieces, setCardPieces] = useState(product ? product.stock : 0);
-    const [cardSrc, setCardSrc] = useState(product ? product.src : null);
-    const [fakeSrc, setFakeSrc] = useState(product ? product.src : '');
+    const [ product, setProduct ] = useState( useSelector( ( state: any ) => state.products.filter( ( item: any ) => item._id === match.params.id )[ 0 ] ) );
+    const [ cardName, setCardName ] = useState( product ? product.name : '' );
+    const [ cardPrice, setCardPrice ] = useState( product ? product.price : 0 );
+    const [ cardDescription, setCardDescription ] = useState( product ? product.description : '' );
+    const [ cardDetails, setCardDetails ] = useState( product ? product.details : '' );
+    const [ cardPromotion, setCardPromotion ] = useState( product ? product.sale : 0 );
+    const [ cardPieces, setCardPieces ] = useState( product ? product.stock : 0 );
+    const [ cardSrc, setCardSrc ] = useState( product ? product.src : null );
+    const [ fakeSrc, setFakeSrc ] = useState( product ? product.src : '' );
 
 
     // Mandatory field alerts
-    const [fieldWarnings, setFieldWarnings] = useState({ name: false, description: false, price: false });
+    const [ fieldWarnings, setFieldWarnings ] = useState( { name: false, description: false, price: false } );
 
 
 
     //Dialog states
 
-    const [openAlert, setOpenAlert] = useState(false);
-    const [titleAlert, setTitleAlert] = useState('');
-    const [contentAlert, setContentAlert] = useState('');
+    const [ openAlert, setOpenAlert ] = useState( false );
+    const [ titleAlert, setTitleAlert ] = useState( '' );
+    const [ contentAlert, setContentAlert ] = useState( '' );
 
 
-    const getProduct = async () => {
-        const newProduct = await (await axios.get(`/products/${match.params.id}`)).data.product;
-        setProduct(newProduct);
-        setCardName(newProduct.name);
-        setCardPrice(newProduct.price);
-        setCardDescription(newProduct.description);
-        setCardDetails(newProduct.details);
-        setCardPromotion(newProduct.sale);
-        setCardPieces(newProduct.stock);
-        setCardSrc(newProduct.src);
+    const getProduct = async () =>
+    {
+        const newProduct = await ( await axios.get( `/products/${ match.params.id }` ) ).data.product;
+        setProduct( newProduct );
+        setCardName( newProduct.name );
+        setCardPrice( newProduct.price );
+        setCardDescription( newProduct.description );
+        setCardDetails( newProduct.details );
+        setCardPromotion( newProduct.sale );
+        setCardPieces( newProduct.stock );
+        setCardSrc( newProduct.src );
     };
 
-    useEffect(() => {
-        (async () => {
-            if (!product) {
-                console.log('start');
+    useEffect( () =>
+    {
+        ( async () =>
+        {
+            if ( !product )
+            {
+                console.log( 'start' );
                 await getProduct();
             }
-        })();
-    }, []);
+        } )();
+    }, [] );
 
 
-    const checkFields = () => {
-        if (cardName && cardDescription && cardPrice) {
+    const checkFields = () =>
+    {
+        if ( cardName && cardDescription && cardPrice )
+        {
             return true;
         }
         const tempWarnings = { ...fieldWarnings };
-        if (!cardName) {
+        if ( !cardName )
+        {
             tempWarnings.name = true;
         }
 
-        if (!cardDescription) {
+        if ( !cardDescription )
+        {
             tempWarnings.description = true;
         }
 
-        if (!cardPrice) {
+        if ( !cardPrice )
+        {
             tempWarnings.price = true;
         }
 
-        setFieldWarnings(tempWarnings);
+        setFieldWarnings( tempWarnings );
         return false;
     };
 
 
-    const setImage = (file: any) => {
+    const setImage = ( file: any ) =>
+    {
         const reader = new FileReader();
-        if (file) {
-            setCardSrc(file);
-            reader.readAsDataURL(file);
-            reader.onload = () => {
+        if ( file )
+        {
+            setCardSrc( file );
+            reader.readAsDataURL( file );
+            reader.onload = () =>
+            {
                 const base64 = reader.result;
-                setFakeSrc(base64);
+                setFakeSrc( base64 );
             };
 
         }
     };
 
-    const removeImage = () => {
-        setCardSrc('');
-        setFakeSrc('');
+    const removeImage = () =>
+    {
+        setCardSrc( '' );
+        setFakeSrc( '' );
     };
 
 
@@ -134,50 +150,58 @@ const UpdateProduct = (props: Props) => {
     Handles all changes in the form and updates the fake product card including the removal of warnings if you change the input 
     value of that corresponding field
     */
-    const handleChanges = (target: HTMLInputElement | HTMLTextAreaElement, identifier: FieldSelector) => {
-        switch (identifier) {
+    const handleChanges = ( target: HTMLInputElement | HTMLTextAreaElement, identifier: FieldSelector ) =>
+    {
+        switch ( identifier )
+        {
             case FieldSelector.name:
-                setCardName(target.value);
-                if (fieldWarnings.name) {
-                    setFieldWarnings({ ...fieldWarnings, name: false });
+                setCardName( target.value );
+                if ( fieldWarnings.name )
+                {
+                    setFieldWarnings( { ...fieldWarnings, name: false } );
                 }
                 break;
             case FieldSelector.desc:
-                setCardDescription(target.value);
-                if (fieldWarnings.description) {
-                    setFieldWarnings({ ...fieldWarnings, description: false });
+                setCardDescription( target.value );
+                if ( fieldWarnings.description )
+                {
+                    setFieldWarnings( { ...fieldWarnings, description: false } );
                 }
                 break;
             case FieldSelector.details:
-                setCardDetails(target.value);
+                setCardDetails( target.value );
                 break;
             case FieldSelector.prom:
-                if (target.value === '') {
-                    setCardPromotion(0);
+                if ( target.value === '' )
+                {
+                    setCardPromotion( 0 );
                     break;
                 }
-                setCardPromotion(parseInt(target.value));
+                setCardPromotion( parseInt( target.value ) );
                 break;
             case FieldSelector.price:
-                if (target.value === '') {
-                    setCardPrice(0);
+                if ( target.value === '' )
+                {
+                    setCardPrice( 0 );
                     break;
                 }
-                setCardPrice(parseInt(target.value));
-                if (fieldWarnings.price) {
-                    setFieldWarnings({ ...fieldWarnings, price: false });
+                setCardPrice( parseInt( target.value ) );
+                if ( fieldWarnings.price )
+                {
+                    setFieldWarnings( { ...fieldWarnings, price: false } );
                 }
                 break;
             case FieldSelector.stock:
-                if (target.value === '') {
-                    setCardPieces(0);
+                if ( target.value === '' )
+                {
+                    setCardPieces( 0 );
                     break;
                 }
-                setCardPieces(parseInt(target.value));
+                setCardPieces( parseInt( target.value ) );
                 break;
             case FieldSelector.src:
-                if ('files' in target)
-                    setImage(target.files[0]);
+                if ( 'files' in target )
+                    setImage( target.files[ 0 ] );
                 break;
         }
 
@@ -187,7 +211,8 @@ const UpdateProduct = (props: Props) => {
      * ! This function updates the product without any filters! Use it with caution! 
      * ! Use it only as dialog yes property 
      * */
-    const forcedUpdate = () => {
+    const forcedUpdate = () =>
+    {
         const updatedProduct: Product = {
             name: cardName,
             price: cardPrice,
@@ -198,23 +223,26 @@ const UpdateProduct = (props: Props) => {
             src: cardSrc,
         };
 
-        dispatch(productsActions.update(product._id, getFormData(updatedProduct)));
+        dispatch( productsActions.update( product._id, getFormData( updatedProduct ) ) );
         getProduct();
     };
 
-    const getFormData: (obj: any) => FormData = (updatedProduct) => {
+    const getFormData: ( obj: any ) => FormData = ( updatedProduct ) =>
+    {
         const form = new FormData();
 
-        for (let key of Object.keys(updatedProduct)) {
-            form.append(key, updatedProduct[key]);
+        for ( let key of Object.keys( updatedProduct ) )
+        {
+            form.append( key, updatedProduct[ key ] );
         }
 
         return form;
-    }
+    };
 
 
     // product update handler
-    const handleUpdate = (ev: any) => {
+    const handleUpdate = ( ev: any ) =>
+    {
         ev.preventDefault();
         const updatedProduct: Product = {
             name: cardName,
@@ -226,46 +254,54 @@ const UpdateProduct = (props: Props) => {
             src: cardSrc,
         };
 
-        if (product) {
-            const trim: Product = (({ name, price, description, details, sale, stock, src }) =>
-                ({ name, price, description, details, sale, stock, src }))(product);
+        if ( product )
+        {
+            const trim: Product = ( ( { name, price, description, details, sale, stock, src } ) =>
+                ( { name, price, description, details, sale, stock, src } ) )( product );
 
-            if (JSON.stringify(trim) == JSON.stringify(updatedProduct)) {
-                dispatch(snackbarActionManager.hide());
-                dispatch(snackbarActionManager.show({ message: 'No updates registered', variant: 'info' }));
+            if ( JSON.stringify( trim ) == JSON.stringify( updatedProduct ) )
+            {
+                dispatch( snackbarActionManager.hide() );
+                dispatch( snackbarActionManager.show( { message: 'No updates registered', variant: 'info' } ) );
             }
-            else {
-                if (cardSrc) {
-                    dispatch(productsActions.update(product._id, getFormData(updatedProduct)));
+            else
+            {
+                if ( cardSrc )
+                {
+                    dispatch( productsActions.update( product._id, getFormData( updatedProduct ) ) );
                     getProduct();
                 }
-                else {
-                    openDialog(NoSrcAlert.title, NoSrcAlert.content);
+                else
+                {
+                    openDialog( NoSrcAlert.title, NoSrcAlert.content );
                 }
 
             }
 
-        } else {
+        } else
+        {
             // dispatch( productsActions.post( updatedProduct ) );
         }
     };
 
 
-    const resetProduct = () => {
-        setCardName(product.name);
-        setCardPrice(product.price);
-        setCardPieces(product.stock);
-        setCardPromotion(product.sale);
-        setCardDescription(product.description);
-        setCardDetails(product.details);
-        setCardSrc(product.src);
-        setFieldWarnings({ name: false, price: false, description: false });
+    const resetProduct = () =>
+    {
+        setCardName( product.name );
+        setCardPrice( product.price );
+        setCardPieces( product.stock );
+        setCardPromotion( product.sale );
+        setCardDescription( product.description );
+        setCardDetails( product.details );
+        setCardSrc( product.src );
+        setFieldWarnings( { name: false, price: false, description: false } );
     };
 
-    const openDialog = (title: string, content: string) => {
-        setTitleAlert(title);
-        setContentAlert(content);
-        setOpenAlert(true);
+    const openDialog = ( title: string, content: string ) =>
+    {
+        setTitleAlert( title );
+        setContentAlert( content );
+        setOpenAlert( true );
     };
 
 
@@ -273,53 +309,53 @@ const UpdateProduct = (props: Props) => {
         <>
             {
                 product ?
-                    <Grid container spacing={2} className={classes.root}>
-                        <Grid item xs={12} md={7}>
-                            {/* PROTO-DISPLAY */}
+                    <Grid container spacing={ 2 } className={ classes.root }>
+                        <Grid item xs={ 12 } md={ 7 }>
+                            {/* PROTO-DISPLAY */ }
                             <Card
-                                _id={product._id}
-                                name={cardName}
-                                price={cardPrice}
-                                description={cardDescription}
-                                details={cardDetails}
-                                piecesLeft={cardPieces}
-                                promotion={cardPromotion}
-                                src={fakeSrc}
-                                active={false}
+                                _id={ product._id }
+                                name={ cardName }
+                                price={ cardPrice }
+                                description={ cardDescription }
+                                details={ cardDetails }
+                                piecesLeft={ cardPieces }
+                                promotion={ cardPromotion }
+                                src={ fakeSrc }
+                                active={ false }
                             />
                         </Grid>
 
-                        <Grid item xs={12} md={5}>
+                        <Grid item xs={ 12 } md={ 5 }>
                             <Form
-                                name={cardName}
-                                description={cardDescription}
-                                details={cardDetails}
-                                promotion={cardPromotion}
-                                price={cardPrice}
-                                pieces={cardPieces}
-                                src={cardSrc}
-                                removeImage={removeImage}
-                                change={handleChanges}
-                                reset={resetProduct}
-                                update={handleUpdate}
-                                fieldWarnings={fieldWarnings}
-                                checkFields={checkFields}
-                                openDialog={openDialog}
+                                name={ cardName }
+                                description={ cardDescription }
+                                details={ cardDetails }
+                                promotion={ cardPromotion }
+                                price={ cardPrice }
+                                pieces={ cardPieces }
+                                src={ cardSrc }
+                                removeImage={ removeImage }
+                                change={ handleChanges }
+                                reset={ resetProduct }
+                                update={ handleUpdate }
+                                fieldWarnings={ fieldWarnings }
+                                checkFields={ checkFields }
+                                openDialog={ openDialog }
 
                             />
                         </Grid>
                     </Grid> :
-                    <Grid container className={classes.loading}>
+                    <Grid container className={ classes.loading }>
                         <CircularProgress />
                     </Grid>
 
             }
             <Dialog
-                open={openAlert}
-                title={titleAlert}
-                content={contentAlert}
-                yes={forcedUpdate}
-                setOpen={setOpenAlert}
+                open={ openAlert }
+                title={ titleAlert }
+                content={ contentAlert }
+                yes={ forcedUpdate }
+                setOpen={ setOpenAlert }
             />
         </>
     );
