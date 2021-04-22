@@ -22,6 +22,8 @@ const PORT = process.env.PORT || 5000;
 `mongodb+srv://andy95:14karate@main-server.stch8.mongodb.net/develop?retryWrites=true&w=majority`;
 const ENTRYPOINT = `mongodb+srv://${ process.env.MONGO_USER }:${ process.env.MONGODB_PASSWORD }@${ process.env.MONGO_SERVER_NAME }.stch8.mongodb.net/${ process.env.MONGODB_DATABASE_NAME }?retryWrites=true&w=majority`;
 
+// console.log( ENTRYPOINT );
+
 
 
 app.use( express.static( path.join( __dirname, '../public' ) ) );

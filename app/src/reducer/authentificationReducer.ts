@@ -1,18 +1,38 @@
+import { userActionTypes } from "../constants";
+
 interface Action
 {
     type: string,
+    payload: Crediantials | GoogleResults,
     isForced?: boolean;
 }
 
-const authentificationReducer = ( state: boolean = false, action: Action ) =>
+interface Crediantials
+{
+    username?: string,
+    email?: string,
+    password: string,
+
+}
+
+interface GoogleResults
+{
+    result: any,
+    token: string,
+}
+
+const authentificationReducer = ( state: Crediantials | GoogleResults = null, action: Action ) =>
 {
     switch ( action.type )
     {
-        case "LOGIN":
-            state = true;
+        case userActionTypes.LOGIN:
+            console.log( action.payload );
+            localStorage.setItem( 'profile', JSON.stringify( { ...action?.payload } ) );
+            state = action.payload;
             break;
-        case "LOGOUT":
-            state = false;
+        case userActionTypes.LOGOUT:
+            state = null;
+            localStorage.removeItem( 'profile' );
             break;
     }
     return state;

@@ -10,6 +10,12 @@ import { FieldSelector, NoSrcAlert } from '../constants';
 
 
 const useStyles = makeStyles( ( theme: Theme ) => ( {
+    root: {
+        paddingTop: '2em',
+        [ theme.breakpoints.up( 'md' ) ]: {
+            paddingTop: 0,
+        }
+    },
     textFieldWrapper: {
         display: 'flex',
         justifyContent: 'center',
@@ -87,7 +93,7 @@ const Form = ( props: Props ) =>
 
 
     return (
-        <Grid container spacing={ 1 } justify="center">
+        <Grid container className={ classes.root } spacing={ 1 } justify="center">
             <Grid item xs={ 12 } className={ classes.textFieldWrapper }>
                 <TextField
                     className={ `${ classes.textField } ${ fieldWarnings.name ? classes.alertField : '' }` }

@@ -18,7 +18,7 @@ import { AccountInfo, Login, Register } from './User';
 //@snackbar imports
 import Snackbar from '@material-ui/core/Snackbar';
 import { Alert } from './Alert';
-import { snackbarActionManager } from '../actions';
+import { snackbarActionManager, authentificationAction } from '../actions';
 
 
 //@main component that defines the routes
@@ -42,9 +42,17 @@ const Main: React.FC = () =>
     };
 
     /**visibility of navbar
-     * ! true only on PageNotFound
+     * ! false only on PageNotFound
     */
     const [ navVisibility, setNavVisibility ] = useState( true );
+
+    useEffect( () =>
+    {
+        if ( localStorage.getItem( 'profile' ) )
+        {
+            dispatch( authentificationAction.login( JSON.parse( localStorage.getItem( 'profile' ) ) ) );
+        }
+    }, [] );
 
     return (
         <Router>

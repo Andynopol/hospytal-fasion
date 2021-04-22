@@ -6,8 +6,8 @@ import { getUser, registerUser } from '../controlers/users.js';
 const router = express.Router();
 
 
-//localhost:5000/user
-router.post( '/', getUser );
+//localhost:5000/user/login
+router.post( '/login', getUser );
 
 router.post( '/register', registerUser );
 

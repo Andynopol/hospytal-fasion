@@ -9,7 +9,7 @@ import { snackbarReducer } from './snackbarReducers';
 //@snackbar: an object state that contains weather is closed or open, the message and the type/variant
 
 const reducer = combineReducers( {
-    isLogged: authentificationReducer,
+    profile: authentificationReducer,
     products: productsReducer,
     productsAreLoaded: productsAreLoadedReducer,
     snackbar: snackbarReducer

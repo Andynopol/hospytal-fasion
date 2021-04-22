@@ -1,9 +1,10 @@
 import * as API from '../api';
 
-const login = () =>
+const login = ( profile: any ) =>
 {
     return {
-        type: "LOGIN"
+        type: "LOGIN",
+        payload: profile
     };
 };
 

@@ -6,7 +6,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import { authentificationAction } from '../../actions';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 interface StyleMenuProps
 {
@@ -33,7 +33,7 @@ enum OptionsLinks
 {
   login = '/login',
   signup = '/register',
-  logout = '/home',
+  home = '/',
   accout = '/account',
 }
 
@@ -57,12 +57,13 @@ const LongMenu: React.FC = () =>
 {
 
   //brute force login state
-  const isLogged = useSelector( ( state: any ) => state.isLogged );
+  const profile = useSelector( ( state: any ) => state.profile );
   const dispatch = useDispatch();
+  const history = useHistory();
 
   //@account menu items
-  const options: OptionsInterface = isLogged ?
-    [ [ OptionsNames.accout, OptionsLinks.accout ], [ OptionsNames.logout, OptionsLinks.logout ] ] :
+  const options: OptionsInterface = profile ?
+    [ [ OptionsNames.accout, OptionsLinks.accout ], [ OptionsNames.logout, OptionsLinks.home ] ] :
     [ [ OptionsNames.login, OptionsLinks.login ], [ OptionsNames.signup, OptionsLinks.signup ] ];
 
   const [ anchorEl, setAnchorEl ] = React.useState( null );
@@ -79,19 +80,39 @@ const LongMenu: React.FC = () =>
   const handleAccountMenuClick = ( event: any ) =>
   {
     handleAccountClose();
-    // sinteticalLogin(event);
+    menuItemClick( event );
   };
 
   // @brute force login
-  const sinteticalLogin = ( event: any ) =>
+  // const sinteticalLogin = ( event: any ) =>
+  // {
+  //   switch ( event.target.innerText )
+  //   {
+  //     case 'Login':
+  //       history
+  //       break;
+  //     case 'Logout':
+  //       dispatch( authentificationAction.logout() );
+  //       break;
+  //   }
+  // };
+
+  const menuItemClick = ( event: any ) =>
   {
     switch ( event.target.innerText )
     {
-      case 'Login':
-        dispatch( authentificationAction.login() );
+      case OptionsNames.login:
+        history.push( OptionsLinks.login );
         break;
-      case 'Logout':
+      case OptionsNames.signup:
+        history.push( OptionsLinks.signup );
+        break;
+      case OptionsNames.logout:
         dispatch( authentificationAction.logout() );
+        history.push( OptionsLinks.home );
+        break;
+      case OptionsNames.accout:
+        history.push( OptionsLinks.accout );
         break;
     }
   };
@@ -146,11 +167,9 @@ const LongMenu: React.FC = () =>
         } }
       >
         { options.map( ( option ) => (
-          <Link to={ option[ 1 ] } key={ option[ 0 ] } className={ classes.Link }>
-            <MenuItem value={ option[ 0 ] } selected={ option[ 0 ] === 'Pyxis' } onClick={ handleAccountMenuClick }>
-              { option[ 0 ] }
-            </MenuItem>
-          </Link>
+          <MenuItem value={ option[ 0 ] } selected={ option[ 0 ] === 'Pyxis' } onClick={ handleAccountMenuClick } key={ option[ 0 ] }>
+            { option[ 0 ] }
+          </MenuItem>
         ) ) }
       </StyledMenu>
     </div>

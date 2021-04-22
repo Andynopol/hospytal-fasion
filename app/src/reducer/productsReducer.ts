@@ -1,3 +1,4 @@
+import { productActionsTypes } from '../constants';
 interface Action
 {
     type: string,
@@ -12,14 +13,14 @@ const productsReducer = ( state: any[] = [], action: Action ) =>
 {
     switch ( action.type )
     {
-        case 'GET':
+        case productActionsTypes.GET_PRODUCST:
             return action.payload;
-        case 'ADD-PRODUCT' || 'ADD-PRODUCTS':
+        case productActionsTypes.ADD_PRODUCT || productActionsTypes.ADD_MULTIPLE_PRODUCTS:
             return [ ...state, action.payload ];
-        case 'UPDATE':
+        case productActionsTypes.UPDATE_PRODUCT:
             console.log( action.payload );
             return state.map( ( product ) => product._id === action.payload._id ? action.payload : product );
-        case 'DELETE':
+        case productActionsTypes.DELETE_PRODUCT:
             return state.filter( ( product ) => product._id !== action.payload );
         default:
             return state;
@@ -32,9 +33,9 @@ const productsAreLoadedReducer = ( state: boolean = false, action: Action ) =>
 {
     switch ( action.type )
     {
-        case "LOADED":
+        case productActionsTypes.PRODUCTS_LOADED:
             return true;
-        case "DUMP":
+        case productActionsTypes.DUMP_PRODUCTS:
             return false;
         default:
             return state;

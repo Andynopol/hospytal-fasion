@@ -1,3 +1,5 @@
+import { snackbarActionTypes } from '../constants';
+
 interface SnackInfo
 {
     message: string,
@@ -7,7 +9,7 @@ interface SnackInfo
 const showSnackbar = ( snackInfo: SnackInfo ) =>
 {
     return {
-        type: "SHOW",
+        type: snackbarActionTypes.SHOW,
         payload: snackInfo
     };
 };
@@ -15,7 +17,7 @@ const showSnackbar = ( snackInfo: SnackInfo ) =>
 const hideSnackbar = () =>
 {
     return {
-        type: "HIDE",
+        type: snackbarActionTypes.HIDE,
     };
 };
 

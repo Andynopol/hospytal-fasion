@@ -1,3 +1,5 @@
+import { snackbarActionTypes } from '../constants';
+
 interface Action
 {
     type: string,
@@ -16,9 +18,9 @@ const snackbarReducer = ( state: SnackInfo = { open: false, message: '', variant
 {
     switch ( action.type )
     {
-        case 'SHOW':
+        case snackbarActionTypes.SHOW:
             return { open: true, ...action.payload };
-        case 'HIDE':
+        case snackbarActionTypes.HIDE:
             return { ...state, open: false };
         default:
             return state;
