@@ -7,23 +7,23 @@ import { Link, useHistory } from 'react-router-dom';
 import Icon from "./GoogleIcon";
 
 
-const useStyles = makeStyles( ( theme ) => ( {
+const useStyles = makeStyles((theme) => ({
     paper: {
-        marginTop: theme.spacing( 8 ),
+        marginTop: theme.spacing(8),
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
     },
     avatar: {
-        margin: theme.spacing( 1 ),
+        margin: theme.spacing(1),
         backgroundColor: theme.palette.secondary.main,
     },
     form: {
         width: '100%', // Fix IE 11 issue.
-        marginTop: theme.spacing( 1 ),
+        marginTop: theme.spacing(1),
     },
     submit: {
-        margin: theme.spacing( 3, 0, 2 ),
+        margin: theme.spacing(3, 0, 2),
     },
     Link: {
         textDecoration: 'none',
@@ -35,47 +35,41 @@ const useStyles = makeStyles( ( theme ) => ( {
     googleButton: {
 
     }
-} ) );
-interface Props
-{
+}));
+interface Props {
 
 }
 
-const From = ( props: Props ) =>
-{
+const From = (props: Props) => {
 
     const classes = useStyles();
     const dispatch = useDispatch();
     const history = useHistory();
 
-    const googleSuccess = async ( res: any ) =>
-    {
-        console.log( res );
+    const googleSuccess = async (res: any) => {
+        console.log(res);
         const result = res?.profileObj;
         const token = res?.tokenId;
-        console.log( result );
-        console.log( token );
+        console.log(result);
+        console.log(token);
 
 
-        try
-        {
-            dispatch( { type: 'LOGIN', payload: { result, token } } );
+        try {
+            dispatch({ type: 'LOGIN', payload: { result, token } });
 
-            history.push( '/' );
-        } catch ( error )
-        {
-            console.log( error );
+            history.push('/');
+        } catch (error) {
+            console.log(error);
         }
 
     };
 
-    const googleError = ( error: any ) =>
-    {
-        console.log( error );
+    const googleError = (error: any) => {
+        console.log(error);
     };
 
     return (
-        <div className={ classes.form }>
+        <div className={classes.form}>
             <TextField
                 variant="outlined"
                 margin="normal"
@@ -99,7 +93,7 @@ const From = ( props: Props ) =>
                 autoComplete="current-password"
             />
             <FormControlLabel
-                control={ <Checkbox value="remember" color="primary" /> }
+                control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
             />
             <Button
@@ -107,7 +101,7 @@ const From = ( props: Props ) =>
                 fullWidth
                 variant="contained"
                 color="primary"
-                className={ classes.submit }
+                className={classes.submit}
             >
                 Sign In
             </Button>
@@ -115,13 +109,13 @@ const From = ( props: Props ) =>
 
             <GoogleLogin
                 clientId="168208016917-nqhlde2rhcavae7jkvje20jvpeho1v56.apps.googleusercontent.com"
-                render={ ( renderProps ) => (
-                    <Button className={ classes.googleButton } color="primary" fullWidth onClick={ renderProps.onClick } disabled={ renderProps.disabled } startIcon={ <Icon /> } variant="contained">
+                render={(renderProps) => (
+                    <Button className={classes.googleButton} color="primary" fullWidth onClick={renderProps.onClick} disabled={renderProps.disabled} startIcon={<Icon />} variant="contained">
                         Google Sign In
                     </Button>
-                ) }
-                onSuccess={ googleSuccess }
-                onFailure={ googleError }
+                )}
+                onSuccess={googleSuccess}
+                onFailure={googleError}
                 cookiePolicy="single_host_origin"
             />
 
@@ -150,13 +144,13 @@ const From = ( props: Props ) =>
 
             <Grid container>
                 <Grid item xs>
-                    <Link to="/" className={ classes.Link }>
+                    <Link to="/" className={classes.Link}>
                         Forgot password?
                     </Link>
                 </Grid>
                 <Grid item>
-                    <Link to="/register" className={ classes.Link }>
-                        { "Don't have an account? Sign Up" }
+                    <Link to="/register" className={classes.Link}>
+                        {"Don't have an account? Sign Up"}
                     </Link>
                 </Grid>
             </Grid>
