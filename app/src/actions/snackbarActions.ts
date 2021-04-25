@@ -3,7 +3,7 @@ import { snackbarActionTypes } from '../constants';
 interface SnackInfo
 {
     message: string,
-    variant: string;
+    variant: "error" | "warning" | "info" | "success";
 }
 
 const showSnackbar = ( snackInfo: SnackInfo ) =>

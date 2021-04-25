@@ -1,6 +1,6 @@
 import * as API from '../api';
 import { snackbarActionManager } from './snackbarActions';
-import AddProductMessages from '../api/constants';
+import { AddProductMessages } from '../constants';
 import { productActionsTypes } from '../constants';
 
 interface Action

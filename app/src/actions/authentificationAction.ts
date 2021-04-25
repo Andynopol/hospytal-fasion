@@ -1,11 +1,16 @@
 import * as API from '../api';
+import { snackbarActionManager } from './snackbarActions';
 
-const login = ( profile: any ) =>
+const login = ( credientials: FormData ) => async ( dispatch: any ) =>
 {
-    return {
-        type: "LOGIN",
-        payload: profile
-    };
+    try
+    {
+        const response = await ( await API.login( credientials ) ).json();
+        console.log( response );
+    } catch ( error )
+    {
+        console.log( error );
+    }
 };
 
 const logout = () =>
