@@ -1,0 +1,4 @@
+export const LOGIN_TYPE = 'LOGIN';
+export const REGISTER_TYPE = 'REGISTER';
+export const ADD_PRODUCT_TYPE = 'ADD_PRODUCT';
+export const UPDATE_PRODUCT_TYPE = 'UPDATE_PRODUCT';
