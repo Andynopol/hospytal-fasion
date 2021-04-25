@@ -13,7 +13,7 @@ import Dialog from '../../AlertDialog';
 import { productsActions } from '../../../actions';
 
 //@enum of commands for form fileds
-import { FieldSelector } from '../constants';
+import { FieldSelector } from '../../constants';
 
 
 const useStyles = makeStyles( ( theme: Theme ) => ( {

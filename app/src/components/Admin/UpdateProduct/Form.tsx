@@ -5,7 +5,7 @@ import RestoreRoundedIcon from '@material-ui/icons/RestoreRounded';
 import SaveIcon from '@material-ui/icons/Save';
 import BrokenImageIcon from '@material-ui/icons/BrokenImage';
 
-import { FieldSelector, NoSrcAlert } from '../constants';
+import { FieldSelector, NoSrcAlert } from '../../constants';
 
 const useStyles = makeStyles( ( theme: Theme ) => ( {
     textFieldWrapper: {

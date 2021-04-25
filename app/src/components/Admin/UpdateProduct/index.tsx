@@ -7,7 +7,7 @@ import axios from 'axios';
 
 import Form from './Form';
 import Card from '../../ProductCard';
-import { FieldSelector, NoSrcAlert } from '../constants';
+import { FieldSelector, NoSrcAlert } from '../../constants';
 import Dialog from '../../AlertDialog';
 import { start } from 'node:repl';
 

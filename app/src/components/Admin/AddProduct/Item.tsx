@@ -14,6 +14,8 @@ interface Props
     src: string;
 }
 
+//* So far is not in use.
+
 const Items = ( props: Props ) =>
 {
 
