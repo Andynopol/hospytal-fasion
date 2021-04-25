@@ -294,6 +294,7 @@ const UpdateProduct = ( props: Props ) =>
         setCardDescription( product.description );
         setCardDetails( product.details );
         setCardSrc( product.src );
+        setFakeSrc( product.src );
         setFieldWarnings( { name: false, price: false, description: false } );
     };
 

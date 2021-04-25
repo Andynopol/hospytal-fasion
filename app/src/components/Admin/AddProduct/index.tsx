@@ -1,11 +1,11 @@
 import React, { SetStateAction, useEffect, useState } from 'react';
 import { Grid } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
-import Item from './Item';
+// import Item from './Item';
 import Form from './Form';
 import Card from '../../ProductCard';
 import { useDispatch } from 'react-redux';
-import AddProductMessages from '../../../api/constants';
+// import AddProductMessages from '../../../api/constants';
 import Dialog from '../../AlertDialog';
 
 
