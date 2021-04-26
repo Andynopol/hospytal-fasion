@@ -26,7 +26,6 @@ const authentificationReducer = ( state: Crediantials | GoogleResults = null, ac
     switch ( action.type )
     {
         case userActionTypes.LOGIN:
-            console.log( action.payload );
             localStorage.setItem( 'profile', JSON.stringify( { ...action?.payload } ) );
             state = action.payload;
             break;

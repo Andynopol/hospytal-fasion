@@ -29,9 +29,14 @@ export const postProduct = ( newProduct: FormData ) => fetch( `/products/add-pro
 export const postProducts = ( newProducts: Array<FormData> ) => axios.post( `/products/add-products`, newProducts );
 
 //updete product
-
 export const patchProduct = ( id: string, updatedProduct: any ) => fetch( `/products/${ id }`, { method: 'PATCH', body: updatedProduct } );
 
+//delete product
 export const deleteProduct = ( id: string ) => axios.delete( `/products/${ id }` );
 
+//login user
 export const login = ( credientials: FormData ) => fetch( '/user/login', { method: 'POST', body: credientials } );
+
+//register user
+export const register = ( credientials: FormData ) => fetch( '/user/register', { method: 'POST', body: credientials } );
+

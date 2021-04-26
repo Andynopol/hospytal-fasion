@@ -138,7 +138,7 @@ export const getSpecificProduct = async ( req: any, res: any ) =>
 
     if ( !mongoose.Types.ObjectId.isValid( _id ) )
     {
-        res.status( 404 ).send( { status: 'fail', message: 'id not found' } );
+        res.status( 204 ).send( { status: 'fail', message: 'id not found' } );
     }
 
     const selectedProduct = await ProductMessage.findById( _id );

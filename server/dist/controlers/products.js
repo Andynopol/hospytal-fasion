@@ -78,7 +78,7 @@ export const updateProducts = async (req, res) => {
 export const getSpecificProduct = async (req, res) => {
     const { id: _id } = req.params;
     if (!mongoose.Types.ObjectId.isValid(_id)) {
-        res.status(404).send({ status: 'fail', message: 'id not found' });
+        res.status(204).send({ status: 'fail', message: 'id not found' });
     }
     const selectedProduct = await ProductMessage.findById(_id);
     res.status(200).json({ status: 'success', product: selectedProduct });

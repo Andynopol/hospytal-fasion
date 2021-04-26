@@ -69,31 +69,20 @@ const From = ( props: Props ) =>
     const [ emailWarning, setEmailWarning ] = useState( false );
     const [ passwordWarning, setPasswordWarning ] = useState( false );
 
-    // useEffect( () =>
-    // {
-    //     console.log( email );
-    //     console.log( password );
-    //     console.log( rememberMe );
-    // }, [ email, password, rememberMe ] );
-
     const googleSuccess = async ( res: any ) =>
     {
-        console.log( res );
         const result = res?.profileObj;
         const token = res?.tokenId;
         console.log( result );
-        console.log( token );
+        // try
+        // {
+        //     dispatch( { type: 'LOGIN', payload: { result, token } } );
 
-
-        try
-        {
-            dispatch( { type: 'LOGIN', payload: { result, token } } );
-
-            history.push( '/' );
-        } catch ( error )
-        {
-            console.log( error );
-        }
+        //     history.push( '/' );
+        // } catch ( error )
+        // {
+        //     console.log( error );
+        // }
 
     };
 
@@ -104,7 +93,7 @@ const From = ( props: Props ) =>
 
     const checkFields = () =>
     {
-        if ( !MAIL_FORMAT.test( email ) )
+        if ( !email || !MAIL_FORMAT.test( email ) )
         {
             setEmailWarning( true );
             dispatch( snackbarActionManager.show( { message: 'Email adress invalid', variant: "warning" } ) );
@@ -127,18 +116,15 @@ const From = ( props: Props ) =>
         }
         const form = new FormData();
         form.append( 'email', email );
-        form.append( 'passowrd', password );
+        form.append( 'password', password );
         form.append( 'rememberMe', rememberMe.toString() );
 
-
-        console.log( form.get( 'email' ) );
-        console.log( form.get( 'passowrd' ) );
-        console.log( form.get( 'rememberMe' ) );
-        console.log( form );
-
         // dispatch( authentificationAction.login( form ) );
-        const response = await ( await fetch( '/user/login', { method: 'POST', body: form } ) ).json();
-        console.log( response );
+        await new Promise( ( resolved, rejected ) =>
+        {
+            resolved( dispatch( authentificationAction.login( form ) ) );
+        } ).then( () => history.push( '/' ) );
+
 
 
     };

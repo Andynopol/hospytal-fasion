@@ -3,6 +3,14 @@
 export const SHOW = 'SHOW';
 export const HIDE = 'HIDE';
 
+enum SnackBarVariants
+{
+    success = 'success',
+    fail = 'fail',
+    warning = 'warning',
+    info = 'info',
+}
+
 
 //product request messages
 
@@ -21,4 +29,4 @@ enum LoginMessages
     no_user = "No user found"
 }
 
-export { AddProductMessages, LoginMessages };
+export { AddProductMessages, LoginMessages, SnackBarVariants };
