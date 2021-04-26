@@ -6,7 +6,7 @@ const userSchema = new mongoose.Schema({
     password: { type: String, require: true },
     cart: { type: Array, required: true },
     isVerified: { type: Boolean, required: true },
-    icon: { type: String, require: false }
+    icon: { type: String, require: false },
 });
 export default mongoose.model("user", userSchema, 'users');
 //# sourceMappingURL=users-schema.js.map

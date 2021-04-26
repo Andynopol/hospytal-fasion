@@ -15,7 +15,8 @@ const userSchema: mongoose.Schema = new mongoose.Schema( {
     password: { type: String, require: true },
     cart: { type: Array, required: true },
     isVerified: { type: Boolean, required: true },
-    icon: { type: String, require: false }
+    icon: { type: String, require: false },
+    // admin:{type:Boolean, require: false},
 } );
 
 
