@@ -4,16 +4,17 @@ import { makeStyles, Theme } from '@material-ui/core/styles';
 // import Item from './Item';
 import Form from './Form';
 import Card from '../../ProductCard';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 // import AddProductMessages from '../../../api/constants';
 import Dialog from '../../AlertDialog';
+import { useHistory } from 'react-router-dom';
 
 
 //@object that contains all global state product actions(including API calls)
 import { productsActions } from '../../../actions';
 
 //@enum of commands for form fileds
-import { FieldSelector } from '../../constants';
+import { FieldSelector } from '../../../constants';
 
 
 const useStyles = makeStyles( ( theme: Theme ) => ( {
@@ -42,6 +43,8 @@ const ProductAdder: React.FC<Props> = ( props: Props ) =>
 {
     const classes = useStyles();
     const dispatch = useDispatch();
+    const history = useHistory();
+    const profile = useSelector( ( state: any ) => state.profile );
 
     // Form states
     const [ cardName, setCardName ] = useState( '' );
@@ -52,6 +55,7 @@ const ProductAdder: React.FC<Props> = ( props: Props ) =>
     const [ cardPieces, setCardPieces ] = useState( 0 );
     const [ cardSrc, setCardSrc ]: [ any, SetStateAction<any> ] = useState( '' );
     const [ fakeSrc, setFakeSrc ] = useState( '' );
+
 
     // Mandatory fields alerts
     const [ fieldWarnings, setFieldWarnings ] = useState( { name: false, description: false, price: false } );
@@ -65,6 +69,10 @@ const ProductAdder: React.FC<Props> = ( props: Props ) =>
     const [ contentAlert, setContentAlert ] = useState( '' );
 
     //opens the dialog and sets the title and content inside the componenet
+    /**
+     * @param title the dialog title
+     * @param content the content of the dialog
+     */
     const openDialog = ( title: string, content: string ) =>
     {
         setTitleAlert( title );
@@ -72,7 +80,10 @@ const ProductAdder: React.FC<Props> = ( props: Props ) =>
         setOpenAlert( true );
     };
 
-    //transforms the image file into base64 string sets it in src state
+    /**
+     * @param file image file form the input
+     * the file is saved in the scr state and than transformed in base64 string to populate the fakeSrc state
+     */
     const setImage = ( file: File ) =>
     {
         const reader = new FileReader();
@@ -96,10 +107,11 @@ const ProductAdder: React.FC<Props> = ( props: Props ) =>
         setFakeSrc( '' );
     };
 
-    // handles all changes in the form and updates the fake product card
-    // @params: @ev: the event that provides us the target input
-    // @params: @identifier: the string that feeds switch structure witch selects the setState function
-    // @params: @forced: a boolean that can bypass in some cases the target grabbing from the eveny(mainly used on src)
+    /**  handles all changes in the form and updates the fake product card
+    * @param ev: the event that provides us the target input
+    * @param identifier: the string that feeds switch structure witch selects the setState function
+    * @param forced: a boolean that can bypass in some cases the target grabbing from the eveny(mainly used on src)
+    */
     const handleChanges = ( target: HTMLInputElement | HTMLTextAreaElement, identifier: FieldSelector ) =>
     {
         switch ( identifier )
@@ -209,13 +221,10 @@ const ProductAdder: React.FC<Props> = ( props: Props ) =>
 
 
         dispatch( productsActions.post( form ) );
-
-
-        //marking the mandatory fields that are not completed
-
-
     };
 
+
+    //empties the form
     const clearProductDetails = () =>
     {
         setCardName( '' );

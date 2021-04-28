@@ -6,13 +6,15 @@ export const HIDE = 'HIDE';
 enum SnackBarVariants
 {
     success = 'success',
-    fail = 'fail',
+    fail = 'error',
     warning = 'warning',
     info = 'info',
 }
 
 
 //product request messages
+
+export type snackVariant = "error" | "warning" | "info" | "success";
 
 enum AddProductMessages
 {
@@ -28,5 +30,6 @@ enum LoginMessages
     fail = "Something went wrong",
     no_user = "No user found"
 }
+
 
 export { AddProductMessages, LoginMessages, SnackBarVariants };

@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 import HomeRoundedIcon from '@material-ui/icons/HomeRounded';
 import QueueRoundedIcon from '@material-ui/icons/QueueRounded';
+import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles( ( theme ) => ( {
     List: {
@@ -44,6 +45,7 @@ const useStyles = makeStyles( ( theme ) => ( {
 //@routing menu component: here you find all the link in the nav menu
 const NavMenu = () =>
 {
+    const profile = useSelector( ( state: any ) => state.profile );
     const classes = useStyles();
     return (
         <Grid container>
@@ -51,9 +53,16 @@ const NavMenu = () =>
                 <Link className={ classes.Link } to='/'>
                     <li><span><HomeRoundedIcon className={ classes.icon } /></span> Home</li>
                 </Link>
-                <Link className={ classes.Link } to='/admin/add-product'>
-                    <li><span><QueueRoundedIcon className={ classes.icon } /></span> Add Product</li>
-                </Link>
+                {
+                    /**
+                     * @param profile the user logged in or null
+                     */
+                    profile && profile.admin ?
+                        <Link className={ classes.Link } to='/admin/add-product'>
+                            <li><span><QueueRoundedIcon className={ classes.icon } /></span> Add Product</li>
+                        </Link> : null
+                }
+
             </ul >
         </Grid>
     );

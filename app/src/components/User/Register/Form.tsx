@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Grid, TextField, FormControlLabel, Button, Checkbox } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
-import { REGISTER_FIRST_NAME, REGISTER_LAST_NAME, REGISTER_EMAIL, REGISTER_PASSWORD, REGISTER_RE_PASSWORD } from '../../constants';
-import { MAIL_FORMAT } from '../../constants';
-import { authentificationAction } from '../../../actions';
+import { REGISTER_FIRST_NAME, REGISTER_LAST_NAME, REGISTER_EMAIL, REGISTER_PASSWORD, REGISTER_RE_PASSWORD, MAIL_FORMAT, SnackBarVariants } from '../../../constants';
+import { authentificationAction, snackbarActionManager } from '../../../actions';
 
 const useStyles = makeStyles( ( theme: Theme ) => ( {
     form: {
@@ -44,6 +43,7 @@ const Form = ( props: Props ) =>
 
     const classes = useStyles();
     const dispatch = useDispatch();
+    const history = useHistory();
 
     //fields state value binding
     const [ firstName, setFirstName ] = useState( '' );
@@ -60,11 +60,12 @@ const Form = ( props: Props ) =>
         password: false,
         rePassword: false,
     } );
-    useEffect( () =>
-    {
-        console.log( warnings );
-    }, [ warnings ] );
 
+    /**
+     * fires on any input change event
+     * @param id identifier for each fields state
+     * @param value the value that will be stored in the state value
+     */
     const onChange = ( id: string, value: string ) =>
     {
         switch ( id )
@@ -86,6 +87,11 @@ const Form = ( props: Props ) =>
                 break;
         }
     };
+
+    /**
+     * checks all fields state and marks the coresponding input if the value is invalid
+     * @returns true if all fields state have valid values
+     */
 
     const checkFields: () => boolean = () =>
     {
@@ -117,6 +123,7 @@ const Form = ( props: Props ) =>
         return true;
     };
 
+    //fires the register request
     const signup = async () =>
     {
         if ( checkFields() )
@@ -128,10 +135,41 @@ const Form = ( props: Props ) =>
             form.append( 'email', email );
             form.append( 'password', password );
 
-            dispatch( authentificationAction.register( form ) );
+            dispatch( authentificationAction.register( form, registerSuccess, registerFail ) );
         }
     };
 
+    /**
+     * callback function for the authentificationAction.register action
+     * @param variant the snackbar variant(a string that determines the color)
+     * @param message the message displayed by the snackbar
+     */
+    const registerSuccess = ( variant: SnackBarVariants, message: string ) =>
+    {
+        dispatch( snackbarActionManager.show( {
+            variant: variant,
+            message: message
+        } ) );
+        history.push( '/' );
+    };
+
+    /**
+     * callback function for the authentificationAction.register action
+     * @param variant the snackbar variant(a string that determines the color)
+     * @param message the message displayed by the snackbar
+     */
+    const registerFail = ( variant: SnackBarVariants, message: string ) =>
+    {
+        dispatch( snackbarActionManager.show( {
+            variant: variant,
+            message: message,
+        } ) );
+    };
+
+    /**
+     * similar to onChange, this function removes the warning marking on the input field on focus
+     * @param id identifier for each field's state
+     */
     const resetStyle = ( id: string ) =>
     {
         switch ( id )
@@ -139,7 +177,6 @@ const Form = ( props: Props ) =>
             case REGISTER_FIRST_NAME:
                 if ( warnings.firstName )
                 {
-                    console.log( 'asjkdhgkkajhsdgkjhsdgfkjhasgf' );
                     setWarnings( { ...warnings, firstName: false } );
                 }
                 break;

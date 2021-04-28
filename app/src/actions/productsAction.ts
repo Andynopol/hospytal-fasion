@@ -1,6 +1,6 @@
 import * as API from '../api';
 import { snackbarActionManager } from './snackbarActions';
-import { AddProductMessages } from '../constants';
+import { AddProductMessages, SnackBarVariants, snackbarActionTypes } from '../constants';
 import { productActionsTypes } from '../constants';
 
 interface Action
@@ -37,7 +37,9 @@ const fetchProducts = () => async ( dispatch: any ) =>
         //signal that all products are loaded and no refresh is needed so that it shows the no items
         dispatch( loaded() );
         dispatch( snackbarActionManager.hide() );
-        dispatch( snackbarActionManager.show( { message: "Connection failed", variant: 'error' } ) );
+        dispatch( snackbarActionManager.show( {
+            message: "Connection failed", variant: SnackBarVariants.fail
+        } ) );
         console.log( error );
     }
 
@@ -66,12 +68,12 @@ const postProduct = ( product: FormData ) => async ( dispatch: any ) =>
         {
             console.log( response.status );
             dispatch( snackbarActionManager.hide() );
-            dispatch( snackbarActionManager.show( { message: response.message, variant: 'success' } ) );
+            dispatch( snackbarActionManager.show( { message: response.message, variant: SnackBarVariants.success } ) );
         }
         else
         {
             dispatch( snackbarActionManager.hide() );
-            dispatch( snackbarActionManager.show( { message: response.message, variant: 'warning' } ) );
+            dispatch( snackbarActionManager.show( { message: response.message, variant: SnackBarVariants.warning } ) );
         }
 
         console.log( response );
@@ -84,10 +86,10 @@ const postProduct = ( product: FormData ) => async ( dispatch: any ) =>
     {
         if ( error.message === 'Request failed with status code 409' )
         {
-            dispatch( snackbarActionManager.show( { message: AddProductMessages.conflict, variant: 'error' } ) );
+            dispatch( snackbarActionManager.show( { message: AddProductMessages.conflict, variant: SnackBarVariants.fail } ) );
         } else
         {
-            dispatch( snackbarActionManager.show( { message: AddProductMessages.fail, variant: 'error' } ) );
+            dispatch( snackbarActionManager.show( { message: AddProductMessages.fail, variant: SnackBarVariants.fail } ) );
         }
         console.log( error.message );
     }
@@ -103,13 +105,13 @@ const postProducts = ( products: Array<FormData> ) => async ( dispatch: any ) =>
         if ( data.status === "success" )
         {
             dispatch( snackbarActionManager.hide() );
-            dispatch( snackbarActionManager.show( { message: data.message, variant: 'success' } ) );
+            dispatch( snackbarActionManager.show( { message: data.message, variant: SnackBarVariants.success } ) );
 
         }
         else
         {
             dispatch( snackbarActionManager.hide() );
-            dispatch( snackbarActionManager.show( { message: data.message, variant: 'warning' } ) );
+            dispatch( snackbarActionManager.show( { message: data.message, variant: SnackBarVariants.warning } ) );
         }
         console.log( data );
         //signal the app that not all products are loaded
@@ -122,11 +124,11 @@ const postProducts = ( products: Array<FormData> ) => async ( dispatch: any ) =>
         if ( error.message === 'Request failed with status code 409' )
         {
             dispatch( snackbarActionManager.hide() );
-            dispatch( snackbarActionManager.show( { message: AddProductMessages.conflict, variant: 'error' } ) );
+            dispatch( snackbarActionManager.show( { message: AddProductMessages.conflict, variant: SnackBarVariants.fail } ) );
         } else
         {
             dispatch( snackbarActionManager.hide() );
-            dispatch( snackbarActionManager.show( { message: AddProductMessages.fail, variant: 'error' } ) );
+            dispatch( snackbarActionManager.show( { message: AddProductMessages.fail, variant: SnackBarVariants.fail } ) );
         }
         console.log( error.message );
     }
@@ -144,19 +146,19 @@ const updateProduct = ( id: 'string', product: FormData ) => async ( dispatch: a
         if ( response.status === "success" )
         {
             dispatch( snackbarActionManager.hide() );
-            dispatch( snackbarActionManager.show( { message: response.message, variant: 'success' } ) );
+            dispatch( snackbarActionManager.show( { message: response.message, variant: SnackBarVariants.success } ) );
 
         }
         else
         {
             dispatch( snackbarActionManager.hide() );
-            dispatch( snackbarActionManager.show( { message: response.message, variant: 'warning' } ) );
+            dispatch( snackbarActionManager.show( { message: response.message, variant: SnackBarVariants.warning } ) );
         }
         dispatch( { type: productActionsTypes.UPDATE_PRODUCT, payload: response.product } );
     } catch ( error )
     {
         dispatch( snackbarActionManager.hide() );
-        dispatch( snackbarActionManager.show( { message: AddProductMessages.fail, variant: 'error' } ) );
+        dispatch( snackbarActionManager.show( { message: AddProductMessages.fail, variant: SnackBarVariants.fail } ) );
         console.log( error );
     }
     finally
@@ -175,13 +177,13 @@ const deleteProduct = ( id: string ) => async ( dispatch: any ) =>
         if ( data.status === "success" )
         {
             dispatch( snackbarActionManager.hide() );
-            dispatch( snackbarActionManager.show( { message: data.message, variant: 'success' } ) );
+            dispatch( snackbarActionManager.show( { message: data.message, variant: SnackBarVariants.success } ) );
 
         }
         else
         {
             dispatch( snackbarActionManager.hide() );
-            dispatch( snackbarActionManager.show( { message: data.message, variant: 'warning' } ) );
+            dispatch( snackbarActionManager.show( { message: data.message, variant: SnackBarVariants.warning } ) );
         }
         dispatch( { type: productActionsTypes.DELETE_PRODUCT, payload: id } );
     } catch ( error )

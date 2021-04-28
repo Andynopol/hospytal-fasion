@@ -7,9 +7,8 @@ import axios from 'axios';
 
 import Form from './Form';
 import Card from '../../ProductCard';
-import { FieldSelector, NoSrcAlert } from '../../constants';
+import { FieldSelector, NoSrcAlert, SnackBarVariants } from '../../../constants';
 import Dialog from '../../AlertDialog';
-import { start } from 'node:repl';
 
 
 interface Product
@@ -72,6 +71,7 @@ const UpdateProduct = ( props: Props ) =>
 
     const getProduct = async () =>
     {
+        // TODO: refactor to fetch
         const newProduct = await ( await axios.get( `/products/${ match.params.id }` ) ).data.product;
         setProduct( newProduct );
         setCardName( newProduct.name );
@@ -89,13 +89,13 @@ const UpdateProduct = ( props: Props ) =>
         {
             if ( !product )
             {
-                console.log( 'start' );
                 await getProduct();
             }
         } )();
     }, [] );
 
 
+    //checks the mandatory fields
     const checkFields = () =>
     {
         if ( cardName && cardDescription && cardPrice )
@@ -123,6 +123,10 @@ const UpdateProduct = ( props: Props ) =>
     };
 
 
+    /**
+     * @param file image file form the input
+     * the file is saved in the scr state and than transformed in base64 string to populate the fakeSrc state
+     */
     const setImage = ( file: any ) =>
     {
         const reader = new FileReader();
@@ -139,6 +143,7 @@ const UpdateProduct = ( props: Props ) =>
         }
     };
 
+    //removes the image from the scr and fakeSrc state
     const removeImage = () =>
     {
         setCardSrc( '' );
@@ -146,9 +151,9 @@ const UpdateProduct = ( props: Props ) =>
     };
 
 
-    /* 
-    Handles all changes in the form and updates the fake product card including the removal of warnings if you change the input 
-    value of that corresponding field
+    /** 
+    * Handles all changes in the form and updates the fake product card including the removal of warnings if you change the input 
+    * value of that corresponding field
     */
     const handleChanges = ( target: HTMLInputElement | HTMLTextAreaElement, identifier: FieldSelector ) =>
     {
@@ -209,7 +214,7 @@ const UpdateProduct = ( props: Props ) =>
 
     /** 
      * ! This function updates the product without any filters! Use it with caution! 
-     * ! Use it only as dialog yes property 
+     * ! Use it only as dialog YES button callback 
      * */
     const forcedUpdate = () =>
     {
@@ -262,7 +267,7 @@ const UpdateProduct = ( props: Props ) =>
             if ( JSON.stringify( trim ) == JSON.stringify( updatedProduct ) )
             {
                 dispatch( snackbarActionManager.hide() );
-                dispatch( snackbarActionManager.show( { message: 'No updates registered', variant: 'info' } ) );
+                dispatch( snackbarActionManager.show( { message: 'No updates registered', variant: SnackBarVariants.info } ) );
             }
             else
             {
@@ -280,11 +285,13 @@ const UpdateProduct = ( props: Props ) =>
 
         } else
         {
+            //? why is this else branch still here???
             // dispatch( productsActions.post( updatedProduct ) );
         }
     };
 
 
+    // resets the fields back to their product state values
     const resetProduct = () =>
     {
         setCardName( product.name );
@@ -297,6 +304,12 @@ const UpdateProduct = ( props: Props ) =>
         setFakeSrc( product.src );
         setFieldWarnings( { name: false, price: false, description: false } );
     };
+
+    /**
+     * 
+     * @param title title of the dialog
+     * @param content content of the dialog
+     */
 
     const openDialog = ( title: string, content: string ) =>
     {

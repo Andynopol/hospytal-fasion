@@ -5,13 +5,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import { GoogleLogin } from 'react-google-login';
 import { Link, useHistory } from 'react-router-dom';
 import Icon from "./GoogleIcon";
-import { LOGIN_EMAIL, LOGIN_PASSWORD, LOGIN_REMEMBER } from '../../constants';
-
-import { authentificationAction } from '../../../actions';
-
-
-import { snackbarActionManager } from '../../../actions';
-import { MAIL_FORMAT } from '../../constants';
+import { LOGIN_EMAIL, LOGIN_PASSWORD, LOGIN_REMEMBER, SnackBarVariants, MAIL_FORMAT } from '../../../constants';
+import { authentificationAction, snackbarActionManager } from '../../../actions';
 
 
 const useStyles = makeStyles( ( theme ) => ( {
@@ -66,9 +61,10 @@ const From = ( props: Props ) =>
     const [ email, setEmail ] = useState( '' );
     const [ password, setPassword ] = useState( '' );
     const [ rememberMe, setRememberMe ] = useState( false );
-    const [ emailWarning, setEmailWarning ] = useState( false );
-    const [ passwordWarning, setPasswordWarning ] = useState( false );
+    const [ warnings, setWarnings ] = useState( { email: false, password: false } );
 
+
+    // the success google login callback
     const googleSuccess = async ( res: any ) =>
     {
         const result = res?.profileObj;
@@ -86,29 +82,65 @@ const From = ( props: Props ) =>
 
     };
 
+    // the fail google login callback
     const googleError = ( error: any ) =>
     {
         console.log( error );
     };
 
-    const checkFields = () =>
+    /**
+     * checks all fields state and marks the coresponding input if the value is invalid
+     * @returns true if all fields state have valid values
+     */
+    const checkFields: () => boolean = () =>
     {
         if ( !email || !MAIL_FORMAT.test( email ) )
         {
-            setEmailWarning( true );
-            dispatch( snackbarActionManager.show( { message: 'Email adress invalid', variant: "warning" } ) );
+            setWarnings( { ...warnings, email: true } );
+            dispatch( snackbarActionManager.show( { message: 'Email adress invalid', variant: SnackBarVariants.warning } ) );
             return false;
         }
         if ( password.length < 8 )
         {
-            setPasswordWarning( true );
-            dispatch( snackbarActionManager.show( { message: 'Password needs to have at least 8 characters', variant: "warning" } ) );
+
+            setWarnings( { ...warnings, password: true } );
+            dispatch( snackbarActionManager.show( { message: 'Password needs to have at least 8 characters', variant: SnackBarVariants.warning } ) );
             return false;
         }
         return true;
     };
 
-    const login = async () =>
+    /**
+     * callback function for the authentificationAction.login action
+     * @param variant the snackbar variant(a string that determines the color)
+     * @param message the message displayed by the snackbar
+     */
+    const successLogin = ( variant: SnackBarVariants, message: string ) =>
+    {
+        dispatch( snackbarActionManager.show( {
+            variant: variant,
+            message: message
+        } ) );
+        history.push( '/' );
+    };
+
+    /**
+     * callback function for the authentificationAction.login action
+     * @param variant the snackbar variant(a string that determines the color)
+     * @param message the message displayed by the snackbar
+     */
+    const failedLogin = ( variant: SnackBarVariants, message: string ) =>
+    {
+        dispatch( snackbarActionManager.show( {
+            variant: variant,
+            message: message
+        } ) );
+
+        setWarnings( { email: true, password: true } );
+    };
+
+    // fires the login request
+    const login = () =>
     {
         if ( !checkFields() )
         {
@@ -119,16 +151,18 @@ const From = ( props: Props ) =>
         form.append( 'password', password );
         form.append( 'rememberMe', rememberMe.toString() );
 
-        // dispatch( authentificationAction.login( form ) );
-        await new Promise( ( resolved, rejected ) =>
-        {
-            resolved( dispatch( authentificationAction.login( form ) ) );
-        } ).then( () => history.push( '/' ) );
+
+        dispatch( authentificationAction.login( form, successLogin, failedLogin ) );
 
 
 
     };
 
+    /**
+     * fires on any input change event
+     * @param id identifier for each field's state
+     * @param value the value that will be stored in the state value
+     */
     const onChange = ( id: string, value: string | boolean ) =>
     {
         switch ( id )
@@ -151,21 +185,20 @@ const From = ( props: Props ) =>
     return (
         <div className={ classes.form }>
             <TextField
-                className={ emailWarning ? classes.alertField : null }
+                className={ warnings.email ? classes.alertField : null }
                 variant="outlined"
                 margin="normal"
                 required
                 fullWidth
-                id="email"
                 label="Email Address"
                 name="email"
                 autoComplete="email"
                 autoFocus
                 onChange={ ( ev ) => onChange( LOGIN_EMAIL, ev.target.value ) }
-                onFocus={ () => { if ( emailWarning ) setEmailWarning( false ); } }
+                onFocus={ () => { if ( warnings.email ) setWarnings( { ...warnings, email: false } ); } }
             />
             <TextField
-                className={ passwordWarning ? classes.alertField : null }
+                className={ warnings.password ? classes.alertField : null }
                 variant="outlined"
                 margin="normal"
                 required
@@ -173,10 +206,9 @@ const From = ( props: Props ) =>
                 name="password"
                 label="Password"
                 type="password"
-                id="password"
                 autoComplete="current-password"
                 onChange={ ( ev ) => onChange( LOGIN_PASSWORD, ev.target.value ) }
-                onFocus={ () => { if ( passwordWarning ) setPasswordWarning( false ); } }
+                onFocus={ () => { if ( warnings.password ) setWarnings( { ...warnings, password: false } ); } }
             />
             <FormControlLabel
                 control={

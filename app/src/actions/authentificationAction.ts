@@ -1,43 +1,74 @@
 import * as API from '../api';
 import { snackbarActionManager } from './snackbarActions';
-import { userActionTypes, SnackBarVariants } from '../constants';
+import { userActionTypes, SnackBarVariants, snackbarActionTypes } from '../constants';
 
-const login = ( credientials: FormData ) => async ( dispatch: any ) =>
-{
-    try
+
+/** 
+ *  @param credientials the form data sent to the server
+ *  @param successCallback callback function that you should call if the request is considered a success one.
+ *  @param failCallback callback function that you should call if the request is considered an unsuccessful one
+*/
+
+
+
+const login = (
+    credientials: FormData,
+    successCallback?: ( variant: SnackBarVariants, message: string ) => void,
+    failCallback?: ( variant: SnackBarVariants, message: string ) => void ) => async ( dispatch: any ) =>
     {
-        const response = await ( await API.login( credientials ) ).json();
-        if ( response.user )
+        try
         {
-            dispatch( { type: userActionTypes.LOGIN, payload: response.user } );
+            const response = await ( await API.login( credientials ) ).json();
+            if ( response.user )
+            {
+                dispatch( { type: userActionTypes.LOGIN, payload: response.user } );
+                if ( successCallback )
+                {
+                    successCallback( SnackBarVariants.success, `Welcome ${ response.user.firstName } ${ response.user.lastName }` );
+                }
+
+            }
+            else
+            {
+                if ( failCallback )
+                {
+                    failCallback( SnackBarVariants.fail, response.message );
+                }
+            }
+
+        } catch ( error )
+        {
             dispatch( snackbarActionManager.show( {
-                variant: SnackBarVariants.success,
-                message: `Welcom ${ response.user.firstName } ${ response.user.lastName }`
+                variant: SnackBarVariants.fail,
+                message: error.message
             } ) );
+            console.log( error );
         }
+    };
 
-    } catch ( error )
+const register = (
+    credientials: FormData,
+    successCallback?: ( variant: SnackBarVariants, message: string ) => void,
+    failCallback?: ( variant: SnackBarVariants, message: string ) => void ) => async ( dispatch: any ) =>
     {
-        console.log( error );
-    }
-};
-
-const register = ( credientials: FormData ) => async ( dispatch: any ) =>
-{
-    try
-    {
-        const response = await ( await API.register( credientials ) ).json();
-        console.log( response );
-        if ( response.status === 'success' )
+        try
         {
-            dispatch( login( credientials ) );
-        }
+            const response = await ( await API.register( credientials ) ).json();
+            console.log( response );
+            if ( response.status === 'success' )
+            {
+                dispatch( login( credientials, successCallback, failCallback ) );
+                dispatch( snackbarActionManager.show( { variant: SnackBarVariants.success, message: response.message } ) );
+            } else
+            {
+                failCallback( SnackBarVariants.fail, response.message );
+            }
 
-    } catch ( error )
-    {
-        console.log( error );
-    }
-};
+        } catch ( error )
+        {
+            console.log( error );
+        }
+    };
 
 const logout = () =>
 {

@@ -1,9 +1,9 @@
-import { snackbarActionTypes } from '../constants';
+import { snackbarActionTypes, SnackBarVariants } from '../constants';
 
 interface SnackInfo
 {
     message: string,
-    variant: "error" | "warning" | "info" | "success";
+    variant: SnackBarVariants;
 }
 
 const showSnackbar = ( snackInfo: SnackInfo ) =>

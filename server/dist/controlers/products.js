@@ -24,6 +24,7 @@ export const addProduct = async (req, res) => {
     }
     try {
         const newProduct = new ProductMessage(product);
+        console.log(newProduct);
         await newProduct.save();
         if (file) {
             saveFile(`${filePath}`, file.buffer);

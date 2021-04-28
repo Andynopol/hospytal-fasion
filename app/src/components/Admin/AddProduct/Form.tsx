@@ -6,7 +6,7 @@ import PublishIcon from '@material-ui/icons/Publish';
 import BrokenImageIcon from '@material-ui/icons/BrokenImage';
 
 
-import { FieldSelector, NoSrcAlert } from '../../constants';
+import { FieldSelector, NoSrcAlert } from '../../../constants';
 
 
 const useStyles = makeStyles( ( theme: Theme ) => ( {

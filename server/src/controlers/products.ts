@@ -55,6 +55,7 @@ export const addProduct = async ( req: any, res: any ) =>
     try
     {
         const newProduct = new ProductMessage( product );
+        console.log( newProduct );
         //saving the product to the db
         await newProduct.save();
         //saving the file to the uploads folder

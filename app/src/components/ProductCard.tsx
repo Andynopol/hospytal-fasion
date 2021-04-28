@@ -84,7 +84,7 @@ const ProductCard = ( props: Props ) =>
 
     const dispatch = useDispatch();
     //bruteforce state of login
-    const isLogged = useSelector( ( state: any ) => state.isLogged );
+    const profile = useSelector( ( state: any ) => state.profile );
     const classes = useStyles();
     const {
         _id,
@@ -95,7 +95,7 @@ const ProductCard = ( props: Props ) =>
         price,
         piecesLeft,
         active,
-        src
+        src,
     } = props;
 
     //@details block expand state
@@ -117,19 +117,34 @@ const ProductCard = ( props: Props ) =>
         }
     };
 
+    const headerAction = () =>
+    {
+        if ( profile )
+        {
+            console.log( profile );
+            if ( profile.admin )
+            {
+                if ( active )
+                {
+                    return ( <Link to={ `/admin/product/${ _id }` }>
+                        <IconButton aria-label="settings">
+                            <MoreVertIcon />
+                        </IconButton>
+                    </Link> );
+                }
+                return ( <IconButton aria-label="settings">
+                    <MoreVertIcon />
+                </IconButton> );
+            }
+        }
+        return null;
+    };
+
     return (
         <Card className={ classes.root }>
             <CardHeader
                 action={
-                    active ?
-                        <Link to={ `/admin/product/${ _id }` }>
-                            <IconButton aria-label="settings">
-                                <MoreVertIcon />
-                            </IconButton>
-                        </Link> :
-                        <IconButton aria-label="settings">
-                            <MoreVertIcon />
-                        </IconButton>
+                    headerAction()
                 }
                 title={ name }
                 subheader={ `${ price } RON` }
@@ -152,16 +167,21 @@ const ProductCard = ( props: Props ) =>
 
 
             <CardActions disableSpacing>
-                { isLogged ?
+
+                {
+                    profile && profile.admin ?
+                        <IconButton aria-label="delete" onClick={ () => deteleItemHandler( _id ) }>
+                            <DeleteIcon />
+                        </IconButton> :
+                        null
+                }
+
+                { profile ?
                     <IconButton aria-label="add to favorites">
                         <FavoriteIcon />
                     </IconButton> :
-                    null }
-
-                <IconButton aria-label="delete" onClick={ () => deteleItemHandler( _id ) }>
-                    <DeleteIcon />
-                </IconButton>
-
+                    null
+                }
 
                 <IconButton aria-label="share">
                     <AddShoppingCartIcon />
