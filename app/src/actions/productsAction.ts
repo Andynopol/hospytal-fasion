@@ -25,11 +25,10 @@ interface Product
 //get request of products state
 const fetchProducts = () => async ( dispatch: any ) =>
 {
-
     try
     {
-        const response = await ( await API.fetchProducts() ).json();
-        dispatch( { type: productActionsTypes.GET_PRODUCST, payload: response.products } );
+        const { data } = await API.fetchProducts();
+        dispatch( { type: productActionsTypes.GET_PRODUCST, payload: data.products } );
         dispatch( loaded() );
     } catch ( error )
     {
@@ -51,8 +50,8 @@ const fetchProducts = () => async ( dispatch: any ) =>
 // ? THINK ABOUT USING IT AS A AUTORELOAD ENGINE
 const bluntFetchProducts = () => async ( dispatch: any ) =>
 {
-    const response = await ( await API.fetchProducts() ).json();
-    dispatch( { type: productActionsTypes.GET_PRODUCST, payload: response.products } );
+    const { data } = await API.fetchProducts();
+    dispatch( { type: productActionsTypes.GET_PRODUCST, payload: data.products } );
     dispatch( loaded() );
 };
 
@@ -62,24 +61,22 @@ const postProduct = ( product: FormData ) => async ( dispatch: any ) =>
 {
     try
     {
-        const response = await ( await API.postProduct( product ) ).json();
+        const { data } = await API.postProduct( product );
 
-        if ( response.status === "success" )
+        if ( data.status === "success" )
         {
-            console.log( response.status );
             dispatch( snackbarActionManager.hide() );
-            dispatch( snackbarActionManager.show( { message: response.message, variant: SnackBarVariants.success } ) );
+            dispatch( snackbarActionManager.show( { message: data.message, variant: SnackBarVariants.success } ) );
         }
         else
         {
             dispatch( snackbarActionManager.hide() );
-            dispatch( snackbarActionManager.show( { message: response.message, variant: SnackBarVariants.warning } ) );
+            dispatch( snackbarActionManager.show( { message: data.message, variant: SnackBarVariants.warning } ) );
         }
 
-        console.log( response );
         //signal the app that not all products are loaded
         dispatch( dump() );
-        dispatch( { type: productActionsTypes.ADD_PRODUCT, payload: response.product } );
+        dispatch( { type: productActionsTypes.ADD_PRODUCT, payload: data.product } );
         //refresh all products
         dispatch( fetchProducts() );
     } catch ( error )
@@ -113,7 +110,6 @@ const postProducts = ( products: Array<FormData> ) => async ( dispatch: any ) =>
             dispatch( snackbarActionManager.hide() );
             dispatch( snackbarActionManager.show( { message: data.message, variant: SnackBarVariants.warning } ) );
         }
-        console.log( data );
         //signal the app that not all products are loaded
         dispatch( dump() );
         dispatch( { type: productActionsTypes.ADD_MULTIPLE_PRODUCTS, payload: data } );
@@ -138,23 +134,21 @@ const postProducts = ( products: Array<FormData> ) => async ( dispatch: any ) =>
 //singe item update request for products state
 const updateProduct = ( id: 'string', product: FormData ) => async ( dispatch: any ) =>
 {
-    console.log( product );
     try
     {
-        const response = await ( await API.patchProduct( id, product ) ).json();
-        console.log( response );
-        if ( response.status === "success" )
+        const { data } = await API.patchProduct( id, product );
+        if ( data.status === "success" )
         {
             dispatch( snackbarActionManager.hide() );
-            dispatch( snackbarActionManager.show( { message: response.message, variant: SnackBarVariants.success } ) );
+            dispatch( snackbarActionManager.show( { message: data.message, variant: SnackBarVariants.success } ) );
 
         }
         else
         {
             dispatch( snackbarActionManager.hide() );
-            dispatch( snackbarActionManager.show( { message: response.message, variant: SnackBarVariants.warning } ) );
+            dispatch( snackbarActionManager.show( { message: data.message, variant: SnackBarVariants.warning } ) );
         }
-        dispatch( { type: productActionsTypes.UPDATE_PRODUCT, payload: response.product } );
+        dispatch( { type: productActionsTypes.UPDATE_PRODUCT, payload: data.product } );
     } catch ( error )
     {
         dispatch( snackbarActionManager.hide() );
@@ -173,7 +167,6 @@ const deleteProduct = ( id: string ) => async ( dispatch: any ) =>
     try
     {
         const { data } = await API.deleteProduct( id );
-        console.log( data );
         if ( data.status === "success" )
         {
             dispatch( snackbarActionManager.hide() );

@@ -1,5 +1,6 @@
 import Users from '../models/users-schema.js';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 var ErrorMessages;
 (function (ErrorMessages) {
     ErrorMessages["no_user"] = "User not found";
@@ -10,11 +11,10 @@ var ErrorMessages;
 export const login = async (req, res) => {
     console.log(req.body);
     try {
-        const user = await Users.find({ email: req.body.email });
-        if (user.length) {
-            const foundUser = user[0];
-            if (bcrypt.compareSync(req.body.password, foundUser.password)) {
-                res.status(200).json({ status: 'success', user: foundUser, message: 'Login success.' });
+        const user = await Users.findOne({ email: req.body.email });
+        if (user) {
+            if (bcrypt.compareSync(req.body.password, user.password)) {
+                res.status(200).json({ status: 'success', user: user, message: 'Login success.' });
             }
             else {
                 throw new Error(ErrorMessages.wrong_password);
@@ -67,5 +67,46 @@ const checkEmailDuplication = async (email) => {
         return true;
     }
     return false;
+};
+export const newLogin = async (req, res) => {
+    const { email, password } = req.body;
+    try {
+        const user = await Users.findOne({ email });
+        if (!user)
+            return res.status(404).json({ status: 'fail', message: 'User not found' });
+        const isPasswordCorrect = await bcrypt.compare(password, user.password);
+        if (!isPasswordCorrect)
+            return res.status(400).json({ status: 'fail', messasge: 'Invalid credientials' });
+        const token = jwt.sign({ email: user.email, id: user._id }, 'test', { expiresIn: "1h" });
+        res.status(200).json({ result: user, token });
+    }
+    catch (error) {
+        res.status(500).json({ message: 'Something went wrong. Contact us to investigate' });
+    }
+};
+export const newRegister = async (req, res) => {
+    const { firstName, lastName, email, password } = req.body;
+    try {
+        const existingUser = await Users.findOne({ email });
+        if (existingUser)
+            return res.status(400).json({ status: 'fail', message: 'User already exists' });
+        const hashedPassword = await bcrypt.hash(password, 12);
+        const newUser = {
+            email,
+            password: hashedPassword,
+            firstName,
+            lastName,
+            cart: [],
+            favorites: [],
+            isVerified: false,
+            icon: ''
+        };
+        const result = await Users.create(newUser);
+        const token = jwt.sign({ email: result.email, id: result._id }, 'test', { expiresIn: "1h" });
+        res.status(200).json({ result, token });
+    }
+    catch (error) {
+        res.status(500).json({ message: 'Something went wrong. Contact us to investigate' });
+    }
 };
 //# sourceMappingURL=users.js.map

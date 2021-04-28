@@ -121,7 +121,6 @@ const ProductCard = ( props: Props ) =>
     {
         if ( profile )
         {
-            console.log( profile );
             if ( profile.admin )
             {
                 if ( active )

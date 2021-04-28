@@ -2,6 +2,19 @@ import * as API from '../api';
 import { snackbarActionManager } from './snackbarActions';
 import { userActionTypes, SnackBarVariants, snackbarActionTypes } from '../constants';
 
+interface User
+{
+    email: string;
+    firstName: string;
+    lastName: string;
+    cart: Array<any>;
+    favorites: Array<any>;
+    passowrd: string;
+    icon: string;
+    isVerified: boolean;
+    admin?: boolean;
+}
+
 
 /** 
  *  @param credientials the form data sent to the server
@@ -18,13 +31,14 @@ const login = (
     {
         try
         {
-            const response = await ( await API.login( credientials ) ).json();
-            if ( response.user )
+            const { data } = await API.login( credientials );
+            if ( data.status === 'success' )
             {
-                dispatch( { type: userActionTypes.LOGIN, payload: response.user } );
+                const user = data.result;
+                dispatch( { type: userActionTypes.LOGIN, payload: { result: user, token: data.token } } );
                 if ( successCallback )
                 {
-                    successCallback( SnackBarVariants.success, `Welcome ${ response.user.firstName } ${ response.user.lastName }` );
+                    successCallback( SnackBarVariants.success, `Welcome ${ user.firstName } ${ user.lastName }` );
                 }
 
             }
@@ -32,7 +46,7 @@ const login = (
             {
                 if ( failCallback )
                 {
-                    failCallback( SnackBarVariants.fail, response.message );
+                    failCallback( SnackBarVariants.fail, data.message );
                 }
             }
 
@@ -53,19 +67,30 @@ const register = (
     {
         try
         {
-            const response = await ( await API.register( credientials ) ).json();
-            console.log( response );
-            if ( response.status === 'success' )
+            const { data } = await API.register( credientials );
+            if ( data.status === 'success' )
             {
-                dispatch( login( credientials, successCallback, failCallback ) );
-                dispatch( snackbarActionManager.show( { variant: SnackBarVariants.success, message: response.message } ) );
+                const user = data.result;
+                dispatch( { type: userActionTypes.LOGIN, payload: { result: user, token: data.token } } );
+                if ( successCallback )
+                {
+                    successCallback( SnackBarVariants.success, `Welcome ${ user.firstName } ${ user.lastName }` );
+                }
             } else
             {
-                failCallback( SnackBarVariants.fail, response.message );
+                if ( failCallback )
+                {
+                    failCallback( SnackBarVariants.fail, data.message );
+                }
+
             }
 
         } catch ( error )
         {
+            dispatch( snackbarActionManager.show( {
+                variant: SnackBarVariants.fail,
+                message: error.message
+            } ) );
             console.log( error );
         }
     };
@@ -73,11 +98,19 @@ const register = (
 const logout = () =>
 {
     return {
-        type: "LOGOUT",
+        type: userActionTypes.LOGOUT,
+    };
+};
+
+const relog = ( user: User ) =>
+{
+    return {
+        type: userActionTypes.RELOG,
+        payload: user
     };
 };
 
 
-const authentificationAction = { login: login, logout: logout, register: register };
+const authentificationAction = { login, logout, register, relog };
 
 export { authentificationAction };

@@ -1,2 +1,6 @@
-export const LOGIN = 'LOGIN';
-export const LOGOUT = 'LOGOUT';
+export enum userActionTypes
+{
+    LOGIN = 'LOGIN',
+    LOGOUT = 'LOGOUT',
+    RELOG = 'RELOG',
+}
