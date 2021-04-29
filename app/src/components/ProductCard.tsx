@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
 import { useSelector, useDispatch } from 'react-redux';
-import
-{
+import {
     Card,
     CardHeader,
     IconButton,
@@ -25,10 +24,10 @@ import { Link } from 'react-router-dom';
 
 import { productsActions } from '../actions';
 
-const useStyles = makeStyles( ( theme ) => ( {
+const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
-        [ theme.breakpoints.up( 'md' ) ]: {
+        [theme.breakpoints.up('md')]: {
             maxWidth: 345,
         }
     },
@@ -42,15 +41,15 @@ const useStyles = makeStyles( ( theme ) => ( {
     expand: {
         transform: 'rotate(0deg)',
         marginLeft: 'auto',
-        transition: theme.transitions.create( 'transform', {
+        transition: theme.transitions.create('transform', {
             duration: theme.transitions.duration.shortest,
-        } ),
+        }),
     },
     expandOpen: {
         transform: 'rotate(180deg)',
     },
     avatar: {
-        backgroundColor: red[ 500 ],
+        backgroundColor: red[500],
     },
     description: {
         overflow: 'hidden',
@@ -60,11 +59,10 @@ const useStyles = makeStyles( ( theme ) => ( {
         top: '-90px',
         position: 'relative',
     }
-} ) );
+}));
 
 //@params: @active = activates the action buttons when #PROTO-DISPLAY
-interface Props
-{
+interface Props {
     _id: string;
     name: string;
     description?: string;
@@ -79,12 +77,11 @@ interface Props
 
 //TODO documnet this component
 //@component that renders the card component of a product
-const ProductCard = ( props: Props ) =>
-{
+const ProductCard = (props: Props) => {
 
     const dispatch = useDispatch();
     //bruteforce state of login
-    const profile = useSelector( ( state: any ) => state.profile );
+    const profile = useSelector((state: any) => state.profile);
     const classes = useStyles();
     const {
         _id,
@@ -99,68 +96,61 @@ const ProductCard = ( props: Props ) =>
     } = props;
 
     //@details block expand state
-    const [ expanded, setExpanded ] = useState( false );
+    const [expanded, setExpanded] = useState(false);
 
 
     //@expands the details block inside card
-    const handleExpandClick = () =>
-    {
-        setExpanded( !expanded );
+    const handleExpandClick = () => {
+        setExpanded(!expanded);
     };
 
     //@deletes the current item using the ID only if the card is active(in admin/ only)
-    const deteleItemHandler = ( id: string ) =>
-    {
-        if ( active )
-        {
-            dispatch( productsActions.delete( id ) );
+    const deteleItemHandler = (id: string) => {
+        if (active) {
+            dispatch(productsActions.delete(id));
         }
     };
 
-    const headerAction = () =>
-    {
-        if ( profile )
-        {
-            if ( profile.admin )
-            {
-                if ( active )
-                {
-                    return ( <Link to={ `/admin/product/${ _id }` }>
+    const headerAction = () => {
+        if (profile) {
+            if (profile.admin) {
+                if (active) {
+                    return (<Link to={`/admin/product/${_id}`}>
                         <IconButton aria-label="settings">
                             <MoreVertIcon />
                         </IconButton>
-                    </Link> );
+                    </Link>);
                 }
-                return ( <IconButton aria-label="settings">
+                return (<IconButton aria-label="settings">
                     <MoreVertIcon />
-                </IconButton> );
+                </IconButton>);
             }
         }
         return null;
     };
 
     return (
-        <Card className={ classes.root }>
+        <Card className={classes.root}>
             <CardHeader
                 action={
                     headerAction()
                 }
-                title={ name }
-                subheader={ `${ price } RON` }
+                title={name}
+                subheader={`${price} RON`}
             />
 
 
             <CardMedia
-                className={ classes.media }
-                children={ src ? null : <BrokenImageIcon className={ classes.icon } /> }
-                image={ src }
+                className={classes.media}
+                children={src ? null : <BrokenImageIcon className={classes.icon} />}
+                image={src}
                 title="asd"
             />
 
 
-            <CardContent className={ classes.description }>
+            <CardContent className={classes.description}>
                 <Typography variant="body2" display='block' color="textSecondary" component="p">
-                    { description }
+                    {description}
                 </Typography>
             </CardContent>
 
@@ -169,13 +159,13 @@ const ProductCard = ( props: Props ) =>
 
                 {
                     profile && profile.admin ?
-                        <IconButton aria-label="delete" onClick={ () => deteleItemHandler( _id ) }>
+                        <IconButton aria-label="delete" onClick={() => deteleItemHandler(_id)}>
                             <DeleteIcon />
                         </IconButton> :
                         null
                 }
 
-                { profile ?
+                {profile ?
                     <IconButton aria-label="add to favorites">
                         <FavoriteIcon />
                     </IconButton> :
@@ -187,26 +177,26 @@ const ProductCard = ( props: Props ) =>
                 </IconButton>
 
 
-                { details ?
+                {details ?
                     <IconButton
-                        className={ clsx( classes.expand, {
-                            [ classes.expandOpen ]: expanded,
-                        } ) }
-                        onClick={ handleExpandClick }
-                        aria-expanded={ expanded }
+                        className={clsx(classes.expand, {
+                            [classes.expandOpen]: expanded,
+                        })}
+                        onClick={handleExpandClick}
+                        aria-expanded={expanded}
                         aria-label="show more"
                     >
                         <ExpandMoreIcon />
-                    </IconButton> : null }
+                    </IconButton> : null}
 
 
             </CardActions>
 
 
-            <Collapse in={ expanded } timeout="auto" unmountOnExit>
+            <Collapse in={expanded} timeout="auto" unmountOnExit>
                 <CardContent>
                     <Typography variant="body2" component='p' gutterBottom display='block' color="textSecondary">
-                        { details }
+                        {details}
                     </Typography>
                 </CardContent>
             </Collapse>
