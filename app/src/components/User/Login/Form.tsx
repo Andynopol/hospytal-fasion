@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { GoogleLogin } from 'react-google-login';
 import { Link, useHistory } from 'react-router-dom';
-import Icon from "./GoogleIcon";
+import Icon from "../GoogleIcon";
 import { LOGIN_EMAIL, LOGIN_PASSWORD, LOGIN_REMEMBER, SnackBarVariants, MAIL_FORMAT } from '../../../constants';
 import { authentificationAction, snackbarActionManager } from '../../../actions';
 
