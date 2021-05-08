@@ -6,10 +6,15 @@ import jwt from 'jsonwebtoken';
 // TODO: More messages need to be added in order to send the correct error message to the client
 enum ErrorMessages
 {
-    no_user = 'User not found',
     duplicate = 'User already exists.',
     unknown = 'Something went wrong. Contact us to investigate.',
-    wrong_password = 'Invalid credientials'
+    invalid_credientials = 'Invalid credientials'
+}
+
+enum Hints
+{
+    no_user = 'User not found',
+    wrong_password = 'Invalid password',
 }
 
 interface User
@@ -31,12 +36,22 @@ export const login = async ( req: any, res: any ) =>
     {
         const user = await Users.findOne( { email } );
 
-        if ( !user ) return res.status( 404 ).json( { status: 'fail', message: ErrorMessages.wrong_password } );
+        if ( !user )
+        {
+            console.log( ":)" );
+            res.status( 203 ).json( { status: 'fail', message: ErrorMessages.invalid_credientials, hint: Hints.no_user } );
+            return;
+        }
 
 
         const isPasswordCorrect = await bcrypt.compare( password, user.password );
 
-        if ( !isPasswordCorrect ) return res.status( 400 ).json( { status: 'fail', messasge: ErrorMessages.wrong_password } );
+        if ( !isPasswordCorrect )
+        {
+            console.log( ":D" );
+            res.status( 203 ).json( { status: 'fail', messasge: ErrorMessages.invalid_credientials, hint: Hints.wrong_password } );
+            return;
+        }
 
         console.log( req.headers.authorization );
         const token = req.headers.authorization ? req.headers.authorization : jwt.sign( { email: user.email, id: user._id }, process.env.SECRET, { expiresIn: "1h" } );
@@ -56,7 +71,7 @@ export const register = async ( req: any, res: any ) =>
     {
         const existingUser = await Users.findOne( { email } );
 
-        if ( existingUser ) return res.status( 400 ).json( { status: 'fail', message: ErrorMessages.duplicate } );
+        if ( existingUser ) return res.status( 200 ).json( { status: 'fail', message: ErrorMessages.duplicate } );
 
         const hashedPassword = await bcrypt.hash( password, 12 );
 

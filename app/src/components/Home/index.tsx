@@ -1,5 +1,4 @@
-import React, { useState, useEffect, Suspense } from 'react';
-import Card from '../ProductCard';
+import React, { useEffect, Suspense } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid, CircularProgress } from '@material-ui/core';
 import { productsActions } from '../../actions';

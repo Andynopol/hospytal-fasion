@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { TextField, FormControlLabel, Button, Grid, Checkbox } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
@@ -51,7 +51,7 @@ interface Props
 
 }
 
-const From = ( props: Props ) =>
+const From: React.FC<Props> = ( props: Props ) =>
 {
 
     const classes = useStyles();
@@ -87,6 +87,7 @@ const From = ( props: Props ) =>
     // the fail google login callback
     const googleError = ( error: any ) =>
     {
+        dispatch( snackbarActionManager.show( { variant: SnackBarVariants.fail, message: error.message } ) );
         console.log( error );
     };
 

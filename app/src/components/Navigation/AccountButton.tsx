@@ -6,7 +6,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { makeStyles, withStyles, Theme } from '@material-ui/core/styles';
 import { authentificationAction } from '../../actions';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { Avatar } from '@material-ui/core';
 
 interface StyleMenuProps
@@ -48,8 +48,8 @@ const useStyles = makeStyles( ( theme: Theme ) => ( {
     color: '#000',
   },
   avatar: {
-    width: theme.spacing( 3 ),
-    height: theme.spacing( 3 ),
+    width: theme.spacing( 3.5 ),
+    height: theme.spacing( 3.5 ),
   }
 } ) );
 
@@ -87,20 +87,6 @@ const LongMenu: React.FC = () =>
     handleAccountClose();
     menuItemClick( event );
   };
-
-  // @brute force login
-  // const sinteticalLogin = ( event: any ) =>
-  // {
-  //   switch ( event.target.innerText )
-  //   {
-  //     case 'Login':
-  //       history
-  //       break;
-  //     case 'Logout':
-  //       dispatch( authentificationAction.logout() );
-  //       break;
-  //   }
-  // };
 
   const menuItemClick = ( event: any ) =>
   {

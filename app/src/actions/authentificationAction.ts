@@ -2,6 +2,20 @@ import * as API from '../api';
 import { snackbarActionManager } from './snackbarActions';
 import { userActionTypes, SnackBarVariants, snackbarActionTypes } from '../constants';
 
+
+enum ErrorMessages
+{
+    duplicate = 'User already exists.',
+    unknown = 'Something went wrong. Contact us to investigate.',
+    invalid_credientials = 'Invalid credientials'
+}
+
+enum Hints
+{
+    no_user = 'User not found',
+    wrong_password = 'Invalid password',
+}
+
 interface User
 {
     email: string;
@@ -54,7 +68,7 @@ const login = (
         {
             dispatch( snackbarActionManager.show( {
                 variant: SnackBarVariants.fail,
-                message: error.message
+                message: ErrorMessages.unknown
             } ) );
             console.log( error );
         }
@@ -70,6 +84,7 @@ const googleLogin = (
         try
         {
             const { data } = await API.login( credientials );
+            console.log( data );
             if ( data.status === 'success' )
             {
                 const user = data.result;
@@ -82,7 +97,13 @@ const googleLogin = (
             }
             else
             {
-                if ( failCallback )
+                if ( data.hint === Hints.no_user )
+                {
+                    dispatch( register( credientials, successCallback, failCallback ) );
+                } else if ( data.status === Hints.wrong_password )
+                {
+                    throw new Error( 'Google auth error!' );
+                } else if ( failCallback )
                 {
                     failCallback( SnackBarVariants.fail, data.message );
                 }
@@ -90,7 +111,13 @@ const googleLogin = (
 
         } catch ( error )
         {
-            dispatch( register( credientials, successCallback, failCallback ) );
+            // dispatch( register( credientials, successCallback, failCallback ) );
+            dispatch( snackbarActionManager.show( {
+                variant: SnackBarVariants.fail,
+                message: ErrorMessages.unknown
+            } ) );
+            dispatch( logout() );
+            console.log( error );
         }
     };
 
@@ -123,7 +150,7 @@ const register = (
         {
             dispatch( snackbarActionManager.show( {
                 variant: SnackBarVariants.fail,
-                message: error.message
+                message: ErrorMessages.unknown
             } ) );
             dispatch( logout() );
             console.log( error );

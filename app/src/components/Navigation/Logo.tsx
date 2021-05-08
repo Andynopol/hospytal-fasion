@@ -15,8 +15,13 @@ const useStyles = makeStyles( ( theme ) => ( {
     },
 } ) );
 
+interface Props
+{
+
+}
+
 //Just a display component
-const Logo = () =>
+const Logo: React.FC<Props> = () =>
 {
     const classes = useStyles();
     return (

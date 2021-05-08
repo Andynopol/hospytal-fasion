@@ -16,7 +16,7 @@ interface Props
 
 //* So far is not in use.
 
-const Items = ( props: Props ) =>
+const Items: React.FC<Props> = ( props: Props ) =>
 {
 
     const { name, description, details, promotion, price, piecesLeft, src, _id } = props;

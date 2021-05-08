@@ -41,9 +41,14 @@ const useStyles = makeStyles( ( theme ) => ( {
     }
 } ) );
 
+interface Props
+{
+
+}
+
 
 //@routing menu component: here you find all the link in the nav menu
-const NavMenu = () =>
+const NavMenu: React.FC<Props> = () =>
 {
     const profile = useSelector( ( state: any ) => state.profile );
     const classes = useStyles();

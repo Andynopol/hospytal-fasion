@@ -23,6 +23,6 @@ export const auth = ( req: any, res: any, next: () => void ) =>
 
     } catch ( error )
     {
-        console.log( error );
+        res.status( 500 ).json( { status: 'fail', message: 'jwt errow' } );
     }
 };

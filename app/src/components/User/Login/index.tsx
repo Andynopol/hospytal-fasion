@@ -35,7 +35,7 @@ interface Props
 
 }
 
-const SignIn = ( props: Props ) =>
+const SignIn: React.FC<Props> = ( props: Props ) =>
 {
     const classes = useStyles();
     const user = useSelector( ( state: any ) => state.profile );

@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { Grid, TextField, FormControlLabel, Button, Checkbox } from '@material-ui/core';
+import React, { useState } from 'react';
+import { Grid, TextField, Button, Checkbox } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import { Link, useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
 import { REGISTER_FIRST_NAME, REGISTER_LAST_NAME, REGISTER_EMAIL, REGISTER_PASSWORD, REGISTER_RE_PASSWORD, MAIL_FORMAT, SnackBarVariants } from '../../../constants';
 import { authentificationAction, snackbarActionManager } from '../../../actions';
+import { GoogleLogin } from 'react-google-login';
+import Icon from '../GoogleIcon';
 
 const useStyles = makeStyles( ( theme: Theme ) => ( {
     form: {
@@ -30,6 +32,9 @@ const useStyles = makeStyles( ( theme: Theme ) => ( {
             borderColor: 'red'
         }
     },
+    googleButton: {
+
+    },
 
 } ) );
 
@@ -38,7 +43,7 @@ interface Props
 
 }
 
-const Form = ( props: Props ) =>
+const Form: React.FC<Props> = ( props: Props ) =>
 {
 
     const classes = useStyles();
@@ -121,6 +126,32 @@ const Form = ( props: Props ) =>
             return false;
         }
         return true;
+    };
+
+
+    const googleSuccess = async ( res: any ) =>
+    {
+        const result = res?.profileObj;
+        const token = res?.tokenId;
+
+        console.log( result );
+
+        const form = new FormData();
+
+        form.append( 'email', result.email );
+        form.append( 'password', result.googleId );
+        form.append( 'firstName', result.givenName );
+        form.append( 'lastName', result.familyName );
+        form.append( 'icon', result.imageUrl );
+
+
+        dispatch( authentificationAction.googleLogin( form, registerSuccess ) );
+    };
+
+    const googleError = ( error: any ) =>
+    {
+        dispatch( snackbarActionManager.show( { variant: SnackBarVariants.fail, message: error.message } ) );
+        console.log( error );
     };
 
     //fires the register request
@@ -288,7 +319,18 @@ const Form = ( props: Props ) =>
                 onClick={ signup }
             >
                 Sign Up
+            </Button>
+            <GoogleLogin
+                clientId="168208016917-nqhlde2rhcavae7jkvje20jvpeho1v56.apps.googleusercontent.com"
+                render={ ( renderProps ) => (
+                    <Button className={ classes.googleButton } color="primary" fullWidth onClick={ renderProps.onClick } disabled={ renderProps.disabled } startIcon={ <Icon /> } variant="contained">
+                        Google Sign In
                     </Button>
+                ) }
+                onSuccess={ googleSuccess }
+                onFailure={ googleError }
+                cookiePolicy="single_host_origin"
+            />
             <Grid container justify="flex-end">
                 <Grid item>
                     <Link to="/login" className={ classes.Link }>

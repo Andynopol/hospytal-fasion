@@ -13,7 +13,7 @@ const useStyles = makeStyles( ( theme ) => ( {
 
 
 //@bassically a flex grow component
-const Spacer = () =>
+const Spacer: React.FC = () =>
 {
     const classes = useStyles();
     return (

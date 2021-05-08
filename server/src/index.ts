@@ -1,5 +1,4 @@
 import express from 'express';
-import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import path from 'path';
@@ -9,7 +8,6 @@ import productsRouter from './routes/poroducts-routes.js';
 import usersRouter from './routes/users-routes.js';
 import dotenv from 'dotenv';
 
-import UserModel from './models/users-schema';
 
 const app = express();
 dotenv.config();

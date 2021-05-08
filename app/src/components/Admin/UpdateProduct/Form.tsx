@@ -1,11 +1,11 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 import { TextField, Grid, Button, IconButton } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import RestoreRoundedIcon from '@material-ui/icons/RestoreRounded';
 import SaveIcon from '@material-ui/icons/Save';
 import BrokenImageIcon from '@material-ui/icons/BrokenImage';
 
-import { FieldSelector, NoSrcAlert } from '../../../constants';
+import { FieldSelector } from '../../../constants';
 
 const useStyles = makeStyles( ( theme: Theme ) => ( {
     textFieldWrapper: {
@@ -57,7 +57,7 @@ interface Props
     openDialog?: ( title: string, content: string ) => void;
 }
 
-const Form = ( props: Props ) =>
+const Form: React.FC<Props> = ( props: Props ) =>
 {
     const { name, description, details, promotion, pieces, price, change, reset, update, removeImage, checkFields, fieldWarnings, src } = props;
 
