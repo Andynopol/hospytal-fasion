@@ -1,0 +1,2 @@
+(this.webpackJsonpapp=this.webpackJsonpapp||[]).push([[3],{255:function(e,i,t){"use strict";t.r(i);t(0);var s=t(232),c=t(72),a=t(2);i.default=function(e){var i=e._id,t=e.name,p=e.price,r=e.description,n=e.details,o=e.sale,d=e.stock,u=e.src,l=e.active;return Object(a.jsx)(s.a,{item:!0,xs:12,md:4,children:Object(a.jsx)(c.a,{_id:i,name:t,price:p,description:r,details:n,piecesLeft:d,promotion:o,src:u,active:l})})}}}]);
+//# sourceMappingURL=3.af129035.chunk.js.map
