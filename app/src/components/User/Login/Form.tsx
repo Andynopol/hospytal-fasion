@@ -69,16 +69,18 @@ const From = ( props: Props ) =>
     {
         const result = res?.profileObj;
         const token = res?.tokenId;
-        console.log( result );
-        // try
-        // {
-        //     dispatch( { type: 'LOGIN', payload: { result, token } } );
 
-        //     history.push( '/' );
-        // } catch ( error )
-        // {
-        //     console.log( error );
-        // }
+        localStorage.setItem( "profile", JSON.stringify( { result: null, token } ) );
+
+        const form = new FormData();
+
+        form.append( 'email', result.email );
+        form.append( 'password', result.googleId );
+        form.append( 'firstName', result?.givenName );
+        form.append( 'lastName', result?.familyName );
+        form.append( 'icon', result?.imageUrl );
+
+        dispatch( authentificationAction.googleLogin( form, successLogin, failedLogin ) );
 
     };
 

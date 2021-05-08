@@ -60,6 +60,40 @@ const login = (
         }
     };
 
+
+const googleLogin = (
+    credientials: FormData,
+    successCallback?: ( variant: SnackBarVariants, message: string ) => void,
+    failCallback?: ( variant: SnackBarVariants, message: string ) => void
+) => async ( dispatch: any ) =>
+    {
+        try
+        {
+            const { data } = await API.login( credientials );
+            if ( data.status === 'success' )
+            {
+                const user = data.result;
+                dispatch( { type: userActionTypes.LOGIN, payload: { result: user, token: data.token } } );
+                if ( successCallback )
+                {
+                    successCallback( SnackBarVariants.success, `Welcome ${ user.firstName } ${ user.lastName }` );
+                }
+
+            }
+            else
+            {
+                if ( failCallback )
+                {
+                    failCallback( SnackBarVariants.fail, data.message );
+                }
+            }
+
+        } catch ( error )
+        {
+            dispatch( register( credientials, successCallback, failCallback ) );
+        }
+    };
+
 const register = (
     credientials: FormData,
     successCallback?: ( variant: SnackBarVariants, message: string ) => void,
@@ -91,6 +125,7 @@ const register = (
                 variant: SnackBarVariants.fail,
                 message: error.message
             } ) );
+            dispatch( logout() );
             console.log( error );
         }
     };
@@ -111,6 +146,6 @@ const relog = ( user: User ) =>
 };
 
 
-const authentificationAction = { login, logout, register, relog };
+const authentificationAction = { login, logout, register, relog, googleLogin };
 
 export { authentificationAction };

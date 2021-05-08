@@ -4,9 +4,10 @@ import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
+import { makeStyles, withStyles, Theme } from '@material-ui/core/styles';
 import { authentificationAction } from '../../actions';
 import { Link, useHistory } from 'react-router-dom';
+import { Avatar } from '@material-ui/core';
 
 interface StyleMenuProps
 {
@@ -38,13 +39,17 @@ enum OptionsLinks
 }
 
 
-const useStyles = makeStyles( ( theme ) => ( {
+const useStyles = makeStyles( ( theme: Theme ) => ( {
   icon: {
     color: '#fafafa',
   },
   Link: {
     textDecoration: 'none',
     color: '#000',
+  },
+  avatar: {
+    width: theme.spacing( 3 ),
+    height: theme.spacing( 3 ),
   }
 } ) );
 
@@ -151,7 +156,7 @@ const LongMenu: React.FC = () =>
         aria-haspopup="true"
         onClick={ handleAccoutClick }
       >
-        <AccountCircleIcon className={ classes.icon } />
+        { profile && profile.icon ? <Avatar className={ classes.avatar } src={ profile.icon } /> : <AccountCircleIcon className={ classes.icon } /> }
       </IconButton>
       <StyledMenu
         id="long-menu"

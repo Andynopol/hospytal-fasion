@@ -10,7 +10,7 @@ export const auth = ( req: any, res: any, next: () => void ) =>
 
         if ( token && isCostumAuth )
         {
-            const decode: any = jwt.verify( token, 'test' );
+            const decode: any = jwt.verify( token, process.env.SECRET );
             req.userId = decode?.id;
         }
         else

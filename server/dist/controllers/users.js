@@ -17,7 +17,8 @@ export const login = async (req, res) => {
         const isPasswordCorrect = await bcrypt.compare(password, user.password);
         if (!isPasswordCorrect)
             return res.status(400).json({ status: 'fail', messasge: ErrorMessages.wrong_password });
-        const token = jwt.sign({ email: user.email, id: user._id }, 'test', { expiresIn: "1h" });
+        console.log(req.headers.authorization);
+        const token = req.headers.authorization ? req.headers.authorization : jwt.sign({ email: user.email, id: user._id }, process.env.SECRET, { expiresIn: "1h" });
         res.status(200).json({ status: 'success', result: user, token });
     }
     catch (error) {
@@ -42,7 +43,8 @@ export const register = async (req, res) => {
             icon: icon ? icon : ''
         };
         const result = await Users.create(newUser);
-        const token = jwt.sign({ email: result.email, id: result._id }, 'test', { expiresIn: "1h" });
+        console.log(req.headers.authorization);
+        const token = req.headers.authorization ? req.headers.authorization : jwt.sign({ email: result.email, id: result._id }, process.env.SECRET, { expiresIn: "1h" });
         res.status(200).json({ status: 'success', result, token });
     }
     catch (error) {
