@@ -9,6 +9,7 @@ import { useSelector, useDispatch } from 'react-redux';
 //links
 import PageNotFound from './NotFountComponent';
 import Home from './Home';
+import Product from './Product';
 import Nav from './Navigation';
 import AddProduct from './Admin/AddProduct';
 import UpdateProduct from './Admin/UpdateProduct';
@@ -100,6 +101,7 @@ const Main: React.FC = () =>
                         <Route path='/account' component={ AccountInfo } />
                         <Route path='/login' component={ Login } />
                         <Route path='/register' component={ Register } />
+                        <Route path='/product/:id' component={ Product } />
                         <Route path='*'>
                             <PageNotFound showNav={ setNavVisibility } />
                         </Route>

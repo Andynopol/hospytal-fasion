@@ -27,10 +27,7 @@ const ENTRYPOINT = `mongodb+srv://${ process.env.MONGO_USER }:${ process.env.MON
 app.use( express.static( path.join( __dirname, '../public' ) ) );
 
 
-app.get( '/', function ( req, res )
-{
-    res.sendFile( path.join( __dirname, '../public', 'index.html' ) );
-} );
+
 
 
 
@@ -51,6 +48,11 @@ mongoose.connect( ENTRYPOINT, { useUnifiedTopology: true, useNewUrlParser: true 
 
 mongoose.set( 'useFindAndModify', false );
 
+
+app.get( '/', function ( req, res )
+{
+    res.sendFile( path.join( __dirname, '../public', 'index.html' ) );
+} );
 
 //uncomment for production
 // app.get( '*', function ( req, res )

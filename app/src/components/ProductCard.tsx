@@ -2,17 +2,17 @@ import React, { useState } from 'react';
 import clsx from 'clsx';
 import { useSelector, useDispatch } from 'react-redux';
 import
-    {
-        Card,
-        CardHeader,
-        IconButton,
-        CardMedia,
-        CardContent,
-        Typography,
-        CardActions,
-        Collapse,
+{
+    Card,
+    CardHeader,
+    IconButton,
+    CardMedia,
+    CardContent,
+    Typography,
+    CardActions,
+    Collapse,
 
-    } from '@material-ui/core';
+} from '@material-ui/core';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import { makeStyles } from '@material-ui/core/styles';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
@@ -21,7 +21,7 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { red } from '@material-ui/core/colors';
 import BrokenImageIcon from '@material-ui/icons/BrokenImage';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 import { productsActions } from '../actions';
 
@@ -59,6 +59,9 @@ const useStyles = makeStyles( ( theme ) => ( {
     icon: {
         top: '-90px',
         position: 'relative',
+    },
+    pointerCursor: {
+        cursor: 'pointer',
     }
 } ) );
 
@@ -86,6 +89,7 @@ const ProductCard: React.FC<Props> = ( props: Props ) =>
     //bruteforce state of login
     const profile = useSelector( ( state: any ) => state.profile );
     const classes = useStyles();
+    const history = useHistory();
     const {
         _id,
         name,
@@ -117,44 +121,33 @@ const ProductCard: React.FC<Props> = ( props: Props ) =>
         }
     };
 
-    const headerAction = () =>
+    const linkToEditProduct = () =>
     {
-        if ( profile )
-        {
-            if ( profile.admin )
-            {
-                if ( active )
-                {
-                    return ( <Link to={ `/admin/product/${ _id }` }>
-                        <IconButton aria-label="settings">
-                            <MoreVertIcon />
-                        </IconButton>
-                    </Link> );
-                }
-                return ( <IconButton aria-label="settings">
-                    <MoreVertIcon />
-                </IconButton> );
-            }
-        }
-        return null;
+        history.push( `/admin/product/${ _id }` );
+    };
+
+    const linkToProductDetails = () =>
+    {
+        history.push( `/product/${ _id }` );
     };
 
     return (
         <Card className={ classes.root }>
             <CardHeader
                 action={
-                    headerAction()
+                    <IconButton onClick={ active ? linkToEditProduct : null } aria-label="settings">
+                        <MoreVertIcon />
+                    </IconButton>
                 }
                 title={ name }
                 subheader={ `${ price } RON` }
             />
 
-
             <CardMedia
-                className={ classes.media }
+                className={ active ? clsx( classes.media, classes.pointerCursor ) : classes.media }
+                onClick={ active ? linkToProductDetails : null }
                 children={ src ? null : <BrokenImageIcon className={ classes.icon } /> }
                 image={ src }
-                title="asd"
             />
 
 

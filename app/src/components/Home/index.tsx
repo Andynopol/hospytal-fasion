@@ -19,6 +19,7 @@ interface Product extends Document
     src: string,
 }
 
+
 const useStyles = makeStyles( () => ( {
     root: {
         paddingTop: '2rem',
