@@ -3,20 +3,14 @@ import { Grid } from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
-import classes from '*.module.css';
+
+import LeftContainer from './LeftContainer';
+import MediaContent from './MediaContent';
 
 const useStyles = makeStyles( ( theme: Theme ) => ( {
     root: {
         paddingTop: theme.spacing( 3 )
     },
-    imageWrapper: {
-
-    },
-    image: {
-        width: '100%',
-        height: '100%'
-    }
-
 } ) );
 
 interface Props
@@ -58,12 +52,8 @@ const Product: React.FC<Props> = ( props: Props ) =>
 
     return (
         <Grid container className={ classes.root }>
-            {/* image wrapper */ }
-            <Grid item sm={ 12 } md={ 5 }>
-                <img src={ product.src } className={ classes.image } alt="" />
-            </Grid>
-            {/* description wrapper
-             */ }
+            <LeftContainer children={ [ <MediaContent src={ product ? product.src : null } /> ] } />
+
         </Grid>
     );
 };

@@ -135,9 +135,12 @@ const ProductCard: React.FC<Props> = ( props: Props ) =>
         <Card className={ classes.root }>
             <CardHeader
                 action={
-                    <IconButton onClick={ active ? linkToEditProduct : null } aria-label="settings">
-                        <MoreVertIcon />
-                    </IconButton>
+                    ( profile && profile.admin ) ?
+                        <IconButton onClick={ active ? linkToEditProduct : null } aria-label="settings">
+                            <MoreVertIcon />
+                        </IconButton>
+                        : null
+
                 }
                 title={ name }
                 subheader={ `${ price } RON` }
